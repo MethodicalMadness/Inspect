@@ -53,8 +53,7 @@ public class LogManager {
             writer.write(String.format("%1s [%2s]:%3s\r\n", getDateTimeStamp(), logMessageTag, logMessage));
             writer.close();
             // Refresh the data so it can seen when the device is plugged in a
-            // computer. You may have to unplug and replug to see the latest
-            // changes
+            // computer.
             MediaScannerConnection.scanFile(context,
                     new String[] { logFile.toString() },
                     null,
