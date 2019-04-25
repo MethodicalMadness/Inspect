@@ -62,7 +62,7 @@ public class LogManager {
         }
         catch (IOException e)
         {
-            Log.e("com.eliaszanbaka.Logger", "Unable to log exception to file.");
+            Log.e("logTag", "Unable to log exception to file.");
         }
     }
 
