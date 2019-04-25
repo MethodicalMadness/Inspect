@@ -16,6 +16,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void printPDF(View view) {
         PrintManager printManager = (PrintManager) getSystemService(PRINT_SERVICE);
-        printManager.print("print_any_view_job_name", new ViewPrintAdapter(this, findViewById(R.id.relativeLayout)), null);
+        printManager.print("print_any_view_job_name", new ViewPrintAdapter(this, findViewById(R.id.linearLayoutVert)), null);
     }
 }
