@@ -45,7 +45,7 @@ public class LogManager {
         {
             // Gets the log file from the root of the primary storage. If it does
             // not exist, the file is created.
-            File logFile = new File(Environment.getExternalStorageDirectory(), "TestApplicationLog.txt");
+            File logFile = new File(Environment.getExternalStorageDirectory(), "Inspect.txt");
             if (!logFile.exists())
                 logFile.createNewFile();
             // Write the message to the log with a timestamp
