@@ -9,16 +9,18 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 public class LogManager {
 
     private static int e;
-    private File logFile = new File("log.txt");
+
 
 
     //Allows the classes to report an error//
-    public static void reportError(String reportError){
-
+    public static void reportError(String reportError, Throwable throwableException){
+        
     }
 
     //Reports the status of the error//
@@ -45,12 +47,13 @@ public class LogManager {
         {
             // Gets the log file from the root of the primary storage. If it does
             // not exist, the file is created.
-            File logFile = new File(Environment.getExternalStorageDirectory(), "Inspect.txt");
+            File logFile = new File(Environment.getExternalStorageDirectory(), "log.txt");
             if (!logFile.exists())
                 logFile.createNewFile();
             // Write the message to the log with a timestamp
             BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true));
-            writer.write(String.format("%1s [%2s]:%3s\r\n", getDateTimeStamp(), logMessageTag, logMessage));
+            Date currentTime = Calendar.getInstance().getTime();
+            writer.write(String.format("%1s [%2s]:%3s\r\n", "[" + currentTime + "]", logMessageTag, logMessage));
             writer.close();
             // Refresh the data so it can seen when the device is plugged in a
             // computer.
@@ -66,34 +69,9 @@ public class LogManager {
         }
     }
 
-
-
-
-    //Appends or adds errors to the error log//
-    public static void appendLog(){
-        try{
-            //BufferedWriter for performance, true to set append to file flag
-            BufferedWriter bw = new BufferedWriter(new FileWriter(logFile, true));
-            //variable "text" is a string to be appended
-            bw.append(text);
-            bw.newLine();
-            bw.close();
-        }
-        catch (IOException e){
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
     //Displays the error//
     public static void displayError(String displayError){
-
+        //TODO UI integration to be called from reportError()
     }
-
-    //Displays the status of the error//
-    public static void displayStatus(String displayStatus){
-
-    }
-
 
 }
