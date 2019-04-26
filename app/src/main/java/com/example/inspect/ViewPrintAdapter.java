@@ -42,7 +42,7 @@ public class ViewPrintAdapter extends PrintDocumentAdapter {
         PrintDocumentInfo.Builder builder = new PrintDocumentInfo
                 .Builder("print_output.pdf")
                 .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
-                .setPageCount(viewsList.size()` `);
+                .setPageCount(viewsList.size());
         PrintDocumentInfo info = builder.build();
         callback.onLayoutFinished(info, true);
     }
