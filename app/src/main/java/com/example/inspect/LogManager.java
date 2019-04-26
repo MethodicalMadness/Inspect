@@ -24,9 +24,10 @@ public class LogManager {
     }
 
     //Reports the status of the error
-    public static void reportStatus(String reportStatus){
-        
-
+    public static void reportStatus(Context context, String logStatusTag, String logStatus, Throwable throwableException){
+        int logResult = Log.e(logStatusTag, logStatus, throwableException);
+        if (logResult > 0)
+            logToFile(context, logStatusTag, logStatus + "\r\n" + Log.getStackTraceString(throwableException));
     }
 
 
