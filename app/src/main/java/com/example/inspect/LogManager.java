@@ -18,18 +18,19 @@ public class LogManager {
 
 
 
-    //Allows the classes to report an error//
-    public static void reportError(String reportError, Throwable throwableException){
-        
+    //Allows the classes to report an error
+    public static void wtf(String logMessageTag, String logMessage, Throwable throwableException){
+        throw new RuntimeException("Error:" + logMessage);
     }
 
-    //Reports the status of the error//
+    //Reports the status of the error
     public static void reportStatus(String reportStatus){
+        
 
     }
 
 
-    //Sends an error message and the exception to LogCat and to a log file//
+    //Sends an error message and the exception to LogCat and to a log file
     public static void e(Context context, String logMessageTag, String logMessage, Throwable throwableException)
     {
         if (!Log.isLoggable(logMessageTag, Log.ERROR))
@@ -40,14 +41,13 @@ public class LogManager {
             logToFile(context, logMessageTag, logMessage + "\r\n" + Log.getStackTraceString(throwableException));
     }
 
-    //Writes a message to the log file on the device//
+    //Writes a message to the log file on the device
     private static void logToFile(Context context, String logMessageTag, String logMessage)
     {
         try
         {
-            // Gets the log file from the root of the primary storage. If it does
-            // not exist, the file is created.
-            File logFile = new File(Environment.getExternalStorageDirectory(), "log.txt");
+            // Gets the log file from the root of the primary storage. If it does not exist, the file is created.
+            File logFile = new File(Environment.getExternalStorageDirectory(), "InspectLog.txt");
             if (!logFile.exists())
                 logFile.createNewFile();
             // Write the message to the log with a timestamp
@@ -55,8 +55,7 @@ public class LogManager {
             Date currentTime = Calendar.getInstance().getTime();
             writer.write(String.format("%1s [%2s]:%3s\r\n", "[" + currentTime + "]", logMessageTag, logMessage));
             writer.close();
-            // Refresh the data so it can seen when the device is plugged in a
-            // computer.
+            // Refresh the data so it can seen when the device is plugged into a computer.
             MediaScannerConnection.scanFile(context,
                     new String[] { logFile.toString() },
                     null,
@@ -69,7 +68,7 @@ public class LogManager {
         }
     }
 
-    //Displays the error//
+    //Displays the error
     public static void displayError(String displayError){
         //TODO UI integration to be called from reportError()
     }
