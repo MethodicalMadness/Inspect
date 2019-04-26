@@ -18,12 +18,12 @@ public class LogManager {
 
 
 
-    //Allows the classes to report an error
+    //Allows the classes to report and display an error
     public static void wtf(String logMessageTag, String logMessage, Throwable throwableException){
         throw new RuntimeException("Error:" + logMessage);
     }
 
-    //Reports the status of the error
+    //Reports error status to the log without displaying it
     public static void reportStatus(Context context, String logStatusTag, String logStatus, Throwable throwableException){
         int logResult = Log.e(logStatusTag, logStatus, throwableException);
         if (logResult > 0)
