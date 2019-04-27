@@ -28,7 +28,7 @@ public class LogManager {
         if (logResult > 0)
             logToFile(context, logStatusTag, logStatus);
     }
-    
+
     //Sends an error message and the exception to LogCat and to a log file
     public static void e(Context context, String logMessageTag, String logMessage, Throwable throwableException)
     {
