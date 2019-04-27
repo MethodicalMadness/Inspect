@@ -24,10 +24,10 @@ public class LogManager {
     }
 
     //Reports error status to the log without displaying it
-    public static void reportStatus(Context context, String logStatusTag, String logStatus, Throwable throwableException){
-        int logResult = Log.e(logStatusTag, logStatus, throwableException);
+    public static void reportStatus(Context context, String logStatusTag, String logStatus){
+        int logResult = Log.e(logStatusTag, logStatus);
         if (logResult > 0)
-            logToFile(context, logStatusTag, logStatus + "\r\n" + Log.getStackTraceString(throwableException));
+            logToFile(context, logStatusTag, logStatus);
     }
 
 
