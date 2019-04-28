@@ -1,4 +1,15 @@
 package com.example.inspect;
 
-public class TemplateMenu {
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class TemplateMenu extends AppCompatActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.template_menu);
+    }
+
+
 }
