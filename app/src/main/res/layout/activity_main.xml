@@ -52,7 +52,7 @@
             android:text="Start Inspection"
             app:layout_constraintBottom_toTopOf="@+id/btnCreateTemplate"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.556"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
