@@ -12,8 +12,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LogManager.reportStatus(getApplicationContext(), "TEST", "Test");
-        
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEST", "Test");
 
     }
 }

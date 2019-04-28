@@ -20,6 +20,7 @@ public class LogManager {
     //Allows the classes to report and display an error
     public static void wtf(String logMessageTag, String logMessage, Throwable throwableException){
         throw new RuntimeException("Error:" + logMessage);
+
     }
 
     //Reports error status to the log without displaying it
@@ -70,6 +71,8 @@ public class LogManager {
     //Displays the error
     public static void displayError(String displayError){
         //TODO UI integration to be called from reportError()
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "ERROR", "Error");
     }
 
 }
