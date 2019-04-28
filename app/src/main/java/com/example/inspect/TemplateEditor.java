@@ -7,7 +7,7 @@ public class TemplateEditor {
 
     //Saves template//
     public static void saveTemplate(){
-        LogManager.reportStatus(ContextManager.getInstance(this).doSomething(), "TEST", "Test");
+        Context context = App.getContext();
     }
 
     //Adds an element to the template//

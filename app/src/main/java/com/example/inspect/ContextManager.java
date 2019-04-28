@@ -1,11 +1,11 @@
-package com.example.inspect;
+/*package com.example.inspect;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
 
 public class ContextManager {
 
-    private static ContextManager instance;
+    private static volatile ContextManager instance;
     private final Context mContext;
 
     private ContextManager(@NonNull Context context) {
@@ -27,3 +27,4 @@ public class ContextManager {
         mContext.getPackageName();
     }
 }
+*/
