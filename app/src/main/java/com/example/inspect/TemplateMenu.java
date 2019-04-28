@@ -11,5 +11,4 @@ public class TemplateMenu extends AppCompatActivity {
         setContentView(R.layout.template_menu);
     }
 
-
 }

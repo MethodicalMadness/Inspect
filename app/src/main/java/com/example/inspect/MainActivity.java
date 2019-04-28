@@ -22,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    public void toLoadInspection(View view){
+        Intent intent = new Intent(MainActivity.this, LoadInspection.class);
+        startActivity(intent);
+    }
 
     public void newBlankTemplate(View view) {
         Intent intent = new Intent(this, TemplateEditor.class);

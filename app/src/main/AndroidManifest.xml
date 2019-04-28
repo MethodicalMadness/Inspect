@@ -17,6 +17,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".TemplateEditor"></activity>
+
+        <activity android:name=".LoadInspection"></activity>
+        <activity android:name=".TemplateMenu"></activity>
+
     </application>
 
 </manifest>
