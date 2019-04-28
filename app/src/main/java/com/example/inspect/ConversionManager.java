@@ -1,6 +1,15 @@
 package com.example.inspect;
 
 import android.content.Context;
+import android.graphics.*;
+import android.graphics.pdf.PdfDocument;
+import android.os.*;
+import android.print.*;
+import android.print.pdf.PrintedPdfDocument;
+import android.view.View;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 public class ConversionManager {
 
@@ -27,6 +36,4 @@ public class ConversionManager {
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATE", "Template");
     }
-
-
 }
