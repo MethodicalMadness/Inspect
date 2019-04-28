@@ -27,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void toManageTemplates(View view){
+        Intent intent = new Intent(MainActivity.this, ManageTemplateMenu.class);
+        startActivity(intent);
+    }
+
     public void newBlankTemplate(View view) {
         Intent intent = new Intent(this, TemplateEditor.class);
         startActivity(intent);
