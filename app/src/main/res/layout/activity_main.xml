@@ -1,12 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ParentConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/templateEditorBlank"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="newBlankTemplate"
-        android:text="New Form Template" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnCreateTemplate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:onClick="toTemplateMenu"
+            android:text="Create Template"
+            app:layout_constraintEnd_toEndOf="@+id/btnStartInspection"
+            app:layout_constraintStart_toStartOf="@+id/btnStartInspection"
+            app:layout_constraintTop_toBottomOf="@+id/btnStartInspection" />
+
+        <Button
+            android:id="@+id/btnManageTemplate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:onClick="toManageTemplates"
+            android:text="Manage Templates"
+            app:layout_constraintEnd_toEndOf="@+id/btnCreateTemplate"
+            app:layout_constraintStart_toStartOf="@+id/btnCreateTemplate"
+            app:layout_constraintTop_toBottomOf="@+id/btnCreateTemplate" />
+
+        <Button
+            android:id="@+id/btnStartInspection"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="8dp"
+            android:onClick="toLoadInspection"
+            android:text="Start Inspection"
+            app:layout_constraintBottom_toTopOf="@+id/btnCreateTemplate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnPrintExample"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:onClick="newBlankTemplate"
+            android:text="Print Example"
+            app:layout_constraintEnd_toEndOf="@+id/btnManageTemplate"
+            app:layout_constraintStart_toStartOf="@+id/btnManageTemplate"
+            app:layout_constraintTop_toBottomOf="@+id/btnManageTemplate"
+            tools:layout_conversion_absoluteHeight="48dp"
+            tools:layout_conversion_absoluteWidth="411dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
