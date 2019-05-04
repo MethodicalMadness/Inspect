@@ -2,6 +2,7 @@ package com.example.inspect;
 
 import android.content.Context;
 
+
 public class FileManager {
 
     //Creates a new template//
