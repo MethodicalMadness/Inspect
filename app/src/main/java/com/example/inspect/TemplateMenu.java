@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class TemplateMenu extends AppCompatActivity {
+    int index = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,10 +18,11 @@ public class TemplateMenu extends AppCompatActivity {
         //set up back btn
         configureBackBtn();
         //Create Array to display buttons
-        ArrayList<ModuleRef> buttonList = new ArrayList<ModuleRef>();
+        ArrayList<TemplateButtons> buttonList = new ArrayList<TemplateButtons>();
         //Add button to list
         Button btnName = (Button) findViewById(R.id.btnAddName);
-        buttonList.add(new ModuleRef("Template Name", "Name Template", btnName));
+        buttonList.add(new TemplateButtons("Template Name", "Name Template", btnName, index));
+        index++;
     }
 
     //Functionality for back button
@@ -32,6 +35,5 @@ public class TemplateMenu extends AppCompatActivity {
             }
         });
     }
-
 
 }

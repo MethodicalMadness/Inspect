@@ -2,23 +2,28 @@ package com.example.inspect;
 
 import android.widget.Button;
 
-public class ModuleRef {
+import java.lang.reflect.Method;
+
+public class TemplateButtons{
     String moduleName;
     String textOnBtn;
+    int indexForBtn;
     Button btnReference;
 
     //constructors
-    public ModuleRef(){
+    public TemplateButtons(){
         moduleName = "";
         textOnBtn = "Add New Module";
         btnReference = null;
+        indexForBtn = 0;
     }
 
-    public ModuleRef(String newModuleName, String newText, Button newBtn){
+    public TemplateButtons(String newModuleName, String newText, Button newBtn, int newIndex){
         moduleName = newModuleName;
         textOnBtn = newText;
         btnReference = newBtn;
         setNameForButton();
+        indexForBtn = newIndex;
     }
 
     //getters and setters
@@ -50,4 +55,16 @@ public class ModuleRef {
     public void setNameForButton(){
         btnReference.setText(textOnBtn);
     }
+
+    public int getIndexForBtn() {
+        return indexForBtn;
+    }
+
+    public void setIndexForBtn(int indexForBtn) {
+        this.indexForBtn = indexForBtn;
+    }
+
+    //Methods
+    //Create onClickListeners
+    
 }
