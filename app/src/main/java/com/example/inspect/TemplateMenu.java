@@ -20,7 +20,6 @@ public class TemplateMenu extends AppCompatActivity {
         //Add button to list
         Button btnName = (Button) findViewById(R.id.btnAddName);
         buttonList.add(new ModuleRef("Template Name", "Name Template", btnName));
-        btnName.setText(buttonList.get(0).getTextOnBtn());
     }
 
     //Functionality for back button

@@ -18,6 +18,7 @@ public class ModuleRef {
         moduleName = newModuleName;
         textOnBtn = newText;
         btnReference = newBtn;
+        setNameForButton();
     }
 
     //getters and setters
@@ -44,5 +45,9 @@ public class ModuleRef {
 
     public void setBtnReference(Button btnReference) {
         this.btnReference = btnReference;
+    }
+
+    public void setNameForButton(){
+        btnReference.setText(textOnBtn);
     }
 }
