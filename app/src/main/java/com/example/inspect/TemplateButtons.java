@@ -1,5 +1,6 @@
 package com.example.inspect;
 
+import android.view.View;
 import android.widget.Button;
 
 import java.lang.reflect.Method;
@@ -9,6 +10,7 @@ public class TemplateButtons{
     String textOnBtn;
     int indexForBtn;
     Button btnReference;
+
 
     //constructors
     public TemplateButtons(){
@@ -22,8 +24,9 @@ public class TemplateButtons{
         moduleName = newModuleName;
         textOnBtn = newText;
         btnReference = newBtn;
-        setNameForButton();
         indexForBtn = newIndex;
+        setNameForButton();
+        setIDforButton();
     }
 
     //getters and setters
@@ -52,10 +55,6 @@ public class TemplateButtons{
         this.btnReference = btnReference;
     }
 
-    public void setNameForButton(){
-        btnReference.setText(textOnBtn);
-    }
-
     public int getIndexForBtn() {
         return indexForBtn;
     }
@@ -65,6 +64,11 @@ public class TemplateButtons{
     }
 
     //Methods
-    //Create onClickListeners
-    
+    public void setNameForButton(){
+        this.btnReference.setText(textOnBtn);
+    }
+
+    public void setIDforButton(){
+        //try to program the ID into the button
+    }
 }

@@ -9,7 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class TemplateMenu extends AppCompatActivity {
+    //variables
     int index = 0;
+    //Create Array to display buttons
+    ArrayList<TemplateButtons> buttonList = new ArrayList<TemplateButtons>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -17,8 +20,7 @@ public class TemplateMenu extends AppCompatActivity {
         setContentView(R.layout.template_menu);
         //set up back btn
         configureBackBtn();
-        //Create Array to display buttons
-        ArrayList<TemplateButtons> buttonList = new ArrayList<TemplateButtons>();
+
         //Add button to list
         Button btnName = (Button) findViewById(R.id.btnAddName);
         buttonList.add(new TemplateButtons("Template Name", "Name Template", btnName, index));
@@ -32,6 +34,19 @@ public class TemplateMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+    }
+
+    //Create onClickListeners to add another button when current is clicked
+    public void setUpListeners(final int atIndex){
+        //Create an onClickListener for button at this index
+        buttonList.get(atIndex).getBtnReference().setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //Don't think this is right
+                Button newBtn = new Button(null);
+                buttonList.add(new TemplateButtons("Add New Module", "Add New Module", newBtn, atIndex+1));
+
             }
         });
     }
