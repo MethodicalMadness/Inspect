@@ -37,6 +37,8 @@ public class ViewPrintAdapter extends PrintDocumentAdapter {
         printedPdfDocument = new PrintedPdfDocument(context, newAttributes);
         if (cancellationSignal.isCanceled()) {
             callback.onLayoutCancelled();
+            Context context = App.getContext();
+            LogManager.reportStatus(context, "PRINT ADAPTER", "ViewPrintAdapter onLayout CANCELLED");
             return;
         }
         PrintDocumentInfo.Builder builder = new PrintDocumentInfo
@@ -45,6 +47,8 @@ public class ViewPrintAdapter extends PrintDocumentAdapter {
                 .setPageCount(viewsList.size());
         PrintDocumentInfo info = builder.build();
         callback.onLayoutFinished(info, true);
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "PRINT ADAPTER", "ViewPrintAdapter onCreate");
     }
 
     @Override

@@ -28,6 +28,8 @@ public class TemplateEditor extends AppCompatActivity{
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
         views.add(findViewById(R.id.scrollViewPage));
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor onCreate");
     }
 
     // Add the new field at bottom of layout.
@@ -35,6 +37,8 @@ public class TemplateEditor extends AppCompatActivity{
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.text_field, null);
         linearLayoutBody.addView(rowView, linearLayoutBody.getChildCount());
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor onAddField");
     }
 
     // Add the new page under previous.
@@ -47,49 +51,55 @@ public class TemplateEditor extends AppCompatActivity{
         linearLayoutPdf.addView(newView, linearLayoutPdf.getChildCount()-3);
         //focus on new page
         linearLayoutBody = newView.findViewById(R.id.linearLayoutBody);
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor onAddPage");
     }
 
     // Remove selected view
     public void onDelete(View view) {
         linearLayoutBody.removeView((View) view.getParent());
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor onDelete");
     }
 
     //Print the scrollView that holds the linearLayoutBody
     public void printPDF(View view) {
         PrintManager printManager = (PrintManager) getSystemService(PRINT_SERVICE);
         printManager.print("print_job_name", new ViewPrintAdapter(this, views), null);
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor printPDF");
     }
 
     //Saves template//
     public static void saveTemplate(){
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE", "Template");
+        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor saveTemplate");
     }
 
     //Adds an element to the template//
     public static void addElement() {
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE", "Template");
+        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor addElement");
 
     }
 
     //Adds a module to the template//
     public static void addModule(){
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE", "Template");
+        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor addModule");
 
     }
 
     //Removes an element from the template//
     public static void removeElement(){
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE", "Template");
+        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor removeElement");
     }
 
     //Removes a module from the template//
     public static void removeModule(){
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE", "Template");
+        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor removeModule");
     }
 
 
