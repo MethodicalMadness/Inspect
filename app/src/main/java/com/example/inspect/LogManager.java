@@ -44,15 +44,16 @@ public class LogManager {
     //Writes a message to the log file on the device
     private static void logToFile(Context context, String logMessageTag, String logMessage)
     {
+        //Absolute stored location will be /storage/emulated/0/InspectLog.txt
         try
         {
             // Gets the log file from the root of the primary storage. If it does not exist, the file is created.
             File logFile = new File(Environment.getExternalStorageDirectory().getPath(), "InspectLog.txt");
             if (!logFile.exists()) {
-                logFile.createNewFile();
+                logFile.mkdirs();
             }
             // Write the message to the log with a timestamp
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true));
             Date currentTime = Calendar.getInstance().getTime();
             writer.write(String.format("%1s [%2s]:%3s\r\n", "[" + currentTime + "]", logMessageTag + "", logMessage + ""));
             writer.close();
