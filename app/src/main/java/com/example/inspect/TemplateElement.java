@@ -1,33 +1,23 @@
 package com.example.inspect;
 
 
-import android.text.Layout;
-import android.view.View;
-
-
 public abstract class TemplateElement {
 
 
     private String type;
-    private Layout element;
 
 
-    public void setElement(Layout element){
-        this.element = element;
+    public String getType() {
+        return type;
     }
 
-    public Layout getElement(){
-        return element;
+    public void setType(String type) {
+        this.type = type;
     }
 
     //deconstructs the element (view) and returns the blueprints for saving
-    public String deconstructElement(){
-        String blueprint = "";
-        return blueprint;
-    }
+    public abstract String deconstructElement();
 
     //reconstructs element from the blueprints for loading
-    public void reconstructElement(String blueprint){
-
-    }
+    public abstract void reconstructElement();
 }

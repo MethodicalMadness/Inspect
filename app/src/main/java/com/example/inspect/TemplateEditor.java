@@ -2,13 +2,16 @@ package com.example.inspect;
 
 import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Context;
+import androidx.databinding.ObservableField;
+import androidx.databinding.Bindable;
 import android.os.Bundle;
 import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
+
+import com.example.inspect.databinding.TextFieldBinding;
+
 import java.util.ArrayList;
 
 
@@ -24,7 +27,6 @@ public class TemplateEditor extends AppCompatActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.template_editor);
-        //parentLinearLayout = findViewById(R.id.parent_linear_layout);
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
         views.add(findViewById(R.id.scrollViewPage));
@@ -32,9 +34,18 @@ public class TemplateEditor extends AppCompatActivity{
 
     // Add the new field at bottom of layout.
     public void onAddField(View view) {
+        //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View rowView = inflater.inflate(R.layout.text_field, null);
-        linearLayoutBody.addView(rowView, linearLayoutBody.getChildCount());
+        //instantiate our data object.
+        // TODO: add to page
+        ElementTextField elementTextField = new ElementTextField("New Label: ", "User filled data");
+        //we need to instantiate our xml fragment (text field) and bind it to the data object
+        TextFieldBinding textFieldBinding = TextFieldBinding.inflate(inflater, null,false);
+        textFieldBinding.setElementTextField(elementTextField);
+        //get new view (our xml fragment -the text field) and add it to current view
+        // TODO: probably remove when GUI is sorted, will be used for pdf export though...
+        View newView = textFieldBinding.getRoot();
+        linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
     }
 
     // Add the new page under previous.
@@ -91,6 +102,4 @@ public class TemplateEditor extends AppCompatActivity{
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATE", "Template");
     }
-
-
 }
