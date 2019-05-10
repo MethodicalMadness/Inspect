@@ -11,11 +11,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "Main Activity";
+    private static final int REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Context context = App.getContext();
         checkPermissions();
-        /*if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             System.out.println("EXTERNAL STORAGE WRITE ACCESS DENIED");
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
         } else{
@@ -33,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("EXTERNAL STORAGE WRITE ACCESS IS STILL DENIED");
         } else{
             System.out.println("EXTERNAL STORAGE WRITE ACCESS NOW GRANTED");
-        }*/
+        }
         LogManager.reportStatus(context, "TEST", "Test");
 
     }
@@ -74,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        checkPermissions();
-    }
+
+
+
 }
