@@ -6,10 +6,10 @@ import android.widget.Button;
 import java.lang.reflect.Method;
 
 public class TemplateButtons{
-    String moduleName;
-    String textOnBtn;
-    int indexForBtn;
-    Button btnReference;
+    private String moduleName;
+    private String textOnBtn;
+    private int indexForBtn;
+    private Button btnReference;
 
 
     //constructors
@@ -26,13 +26,13 @@ public class TemplateButtons{
         btnReference = newBtn;
         indexForBtn = newIndex;
         setNameForButton();
-        setIDforButton();
     }
 
     //getters and setters
 
     public String getModuleName() {
         return moduleName;
+
     }
 
     public void setModuleName(String moduleName) {
@@ -68,7 +68,4 @@ public class TemplateButtons{
         this.btnReference.setText(textOnBtn);
     }
 
-    public void setIDforButton(){
-        //try to program the ID into the button
-    }
 }
