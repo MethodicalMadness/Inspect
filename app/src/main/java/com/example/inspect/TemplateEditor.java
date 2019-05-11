@@ -2,25 +2,22 @@ package com.example.inspect;
 
 import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.ObservableField;
-import androidx.databinding.Bindable;
 import android.os.Bundle;
 import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.example.inspect.databinding.TextFieldBinding;
-
 import java.util.ArrayList;
 
 
 public class TemplateEditor extends AppCompatActivity{
 
-    //private LinearLayout parentLinearLayout;
     private LinearLayout linearLayoutPdf;
     private LinearLayout linearLayoutBody;
     private ArrayList<View> views  = new ArrayList<>();
+    private TemplatePage currentPage = new TemplatePage(0);
+    private Template template = new Template(currentPage);
 
 
     @Override
@@ -32,26 +29,32 @@ public class TemplateEditor extends AppCompatActivity{
         views.add(findViewById(R.id.scrollViewPage));
     }
 
+    // TODO: rework when GUI is sorted
     // Add the new field at bottom of layout.
     public void onAddField(View view) {
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //instantiate our data object.
-        // TODO: add to page
         ElementTextField elementTextField = new ElementTextField("New Label: ", "User filled data");
+        //add element data object to page
+        currentPage.addElement(elementTextField);
         //we need to instantiate our xml fragment (text field) and bind it to the data object
         TextFieldBinding textFieldBinding = TextFieldBinding.inflate(inflater, null,false);
         textFieldBinding.setElementTextField(elementTextField);
         //get new view (our xml fragment -the text field) and add it to current view
-        // TODO: probably remove when GUI is sorted, will be used for pdf export though...
         View newView = textFieldBinding.getRoot();
         linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
     }
 
+    // TODO: rework when GUI is sorted
     // Add the new page under previous.
     public void onAddPage(View view) {
+        //get index for new current page
+        int index = currentPage.getIndex() + 1;
+        currentPage = new TemplatePage(index);
+        //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View newView = inflater.inflate(R.layout.new_page, null);
+        View newView = inflater.inflate(R.layout.new_page, null);
         //Add ScrollView to the list so we keep track of the pages for printing
         views.add(newView.findViewById(R.id.scrollViewPage));
         //Add new page above the 3 buttons
@@ -60,6 +63,7 @@ public class TemplateEditor extends AppCompatActivity{
         linearLayoutBody = newView.findViewById(R.id.linearLayoutBody);
     }
 
+    // TODO: remove from page data object, rework when GUI is sorted
     // Remove selected view
     public void onDelete(View view) {
         linearLayoutBody.removeView((View) view.getParent());
@@ -72,9 +76,10 @@ public class TemplateEditor extends AppCompatActivity{
     }
 
     //Saves template//
-    public static void saveTemplate(){
+    public void saveTemplate(){
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE", "Template");
+        LogManager.reportStatus(context, "TEMPLATE", "Template Saving");
+        template.saveState();
     }
 
     //Adds an element to the template//

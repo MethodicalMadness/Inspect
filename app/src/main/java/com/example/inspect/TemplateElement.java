@@ -17,7 +17,4 @@ public abstract class TemplateElement {
 
     //deconstructs the element (view) and returns the blueprints for saving
     public abstract String deconstructElement();
-
-    //reconstructs element from the blueprints for loading
-    public abstract void reconstructElement();
 }

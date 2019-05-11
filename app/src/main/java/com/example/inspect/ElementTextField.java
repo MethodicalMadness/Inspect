@@ -32,11 +32,7 @@ public class ElementTextField extends TemplateElement{
 
     @Override
     public String deconstructElement() {
-        return null;
-    }
-
-    @Override
-    public void reconstructElement() {
-
+        String blueprintFragment = getLabel() + "," + getFill();
+        return blueprintFragment;
     }
 }

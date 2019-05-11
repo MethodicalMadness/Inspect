@@ -1,26 +1,37 @@
 package com.example.inspect;
 
-import android.view.View;
-
 import java.util.ArrayList;
+
 
 public class TemplatePage {
 
-    private ArrayList<TemplateElement> ElementList = new ArrayList<>();
+    private ArrayList<TemplateElement> elements = new ArrayList<>();
+    private int index;
 
     // constructor
-    public TemplatePage() {
+    public TemplatePage(int index) {
+        this.index = index;
+    }
 
+    public ArrayList<TemplateElement> getElements() {
+        return elements;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     // add element to this page
     public void addElement(TemplateElement element){
-        ElementList.add(element);
+        elements.add(element);
     }
 
     // remove an existing element from this page
     public void removeElement(int index){
-        ElementList.remove(index);
+        elements.remove(index);
     }
-
 }
