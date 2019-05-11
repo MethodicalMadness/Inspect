@@ -11,7 +11,7 @@ public class ElementParagraphField extends TemplateElement {
     public ElementParagraphField(String label, String fill) {
         this.label.set(label);
         this.fill.set(fill);
-        setType("paraField");
+        setType("2");
     }
 
     public String getLabel() {
@@ -32,7 +32,7 @@ public class ElementParagraphField extends TemplateElement {
 
     @Override
     public String deconstructElement() {
-        String blueprintFragment = getLabel() + "," + getFill();
+        String blueprintFragment = getType() + "," + getLabel() + "," + getFill();
         return blueprintFragment;
     }
 }

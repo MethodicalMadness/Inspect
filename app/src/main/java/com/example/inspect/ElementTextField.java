@@ -11,7 +11,7 @@ public class ElementTextField extends TemplateElement{
     public ElementTextField(String label, String fill) {
         this.label.set(label);
         this.fill.set(fill);
-        setType("textField");
+        setType("1");
     }
 
     public String getLabel() {
@@ -32,7 +32,7 @@ public class ElementTextField extends TemplateElement{
 
     @Override
     public String deconstructElement() {
-        String blueprintFragment = getLabel() + "," + getFill();
+        String blueprintFragment = getType() + "," + getLabel() + "," + getFill();
         return blueprintFragment;
     }
 }
