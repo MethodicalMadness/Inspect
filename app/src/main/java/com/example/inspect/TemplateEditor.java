@@ -2,29 +2,28 @@ package com.example.inspect;
 
 import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Context;
 import android.os.Bundle;
 import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import com.example.inspect.databinding.TextFieldBinding;
 import java.util.ArrayList;
 
 
 public class TemplateEditor extends AppCompatActivity{
 
-    //private LinearLayout parentLinearLayout;
     private LinearLayout linearLayoutPdf;
     private LinearLayout linearLayoutBody;
     private ArrayList<View> views  = new ArrayList<>();
+    private TemplatePage currentPage = new TemplatePage(0);
+    private Template template = new Template(currentPage);
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.template_editor);
-        //parentLinearLayout = findViewById(R.id.parent_linear_layout);
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
         views.add(findViewById(R.id.scrollViewPage));
@@ -32,19 +31,32 @@ public class TemplateEditor extends AppCompatActivity{
         LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor onCreate");
     }
 
+    // TODO: rework when GUI is sorted
     // Add the new field at bottom of layout.
     public void onAddField(View view) {
+        //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View rowView = inflater.inflate(R.layout.text_field, null);
-        linearLayoutBody.addView(rowView, linearLayoutBody.getChildCount());
-        Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor onAddField");
+        //instantiate our data object.
+        ElementTextField elementTextField = new ElementTextField("New Label: ", "User filled data");
+        //add element data object to page
+        currentPage.addElement(elementTextField);
+        //we need to instantiate our xml fragment (text field) and bind it to the data object
+        TextFieldBinding textFieldBinding = TextFieldBinding.inflate(inflater, null,false);
+        textFieldBinding.setElementTextField(elementTextField);
+        //get new view (our xml fragment -the text field) and add it to current view
+        View newView = textFieldBinding.getRoot();
+        linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
     }
 
+    // TODO: rework when GUI is sorted
     // Add the new page under previous.
     public void onAddPage(View view) {
+        //get index for new current page
+        int index = currentPage.getIndex() + 1;
+        currentPage = new TemplatePage(index);
+        //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View newView = inflater.inflate(R.layout.new_page, null);
+        View newView = inflater.inflate(R.layout.new_page, null);
         //Add ScrollView to the list so we keep track of the pages for printing
         views.add(newView.findViewById(R.id.scrollViewPage));
         //Add new page above the 3 buttons
@@ -55,6 +67,7 @@ public class TemplateEditor extends AppCompatActivity{
         LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor onAddPage");
     }
 
+    // TODO: remove from page data object, rework when GUI is sorted
     // Remove selected view
     public void onDelete(View view) {
         linearLayoutBody.removeView((View) view.getParent());
@@ -71,9 +84,10 @@ public class TemplateEditor extends AppCompatActivity{
     }
 
     //Saves template//
-    public static void saveTemplate(){
+    public void saveTemplate(){
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor saveTemplate");
+        LogManager.reportStatus(context, "TEMPLATE", "Template Saving");
+        template.saveState();
     }
 
     //Adds an element to the template//
@@ -101,6 +115,4 @@ public class TemplateEditor extends AppCompatActivity{
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor removeModule");
     }
-
-
 }
