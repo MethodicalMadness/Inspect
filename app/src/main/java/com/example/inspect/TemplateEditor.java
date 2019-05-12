@@ -84,10 +84,10 @@ public class TemplateEditor extends AppCompatActivity{
     }
 
     //Saves template//
-    public void saveTemplate(){
+    public void saveTemplate(String Filename){
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATE", "Template Saving");
-        template.saveState();
+        template.saveState(Filename);
     }
 
     //Adds an element to the template//
