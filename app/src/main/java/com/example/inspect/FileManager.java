@@ -1,7 +1,10 @@
 package com.example.inspect;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
+
+import static androidx.core.content.ContextCompat.startActivity;
 
 
 public class FileManager {
