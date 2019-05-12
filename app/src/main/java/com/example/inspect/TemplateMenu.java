@@ -1,5 +1,6 @@
 package com.example.inspect;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,8 @@ public class TemplateMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.template_menu);
         configureBackBtn();
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATEMENU", "onCreate");
     }
 
     public void configureBackBtn(){
@@ -22,6 +25,8 @@ public class TemplateMenu extends AppCompatActivity {
                 finish();
             }
         });
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATEMENU", "configureBackBtn");
     }
 
 }
