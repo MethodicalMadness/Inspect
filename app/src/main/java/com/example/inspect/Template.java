@@ -38,8 +38,6 @@ public class Template {
 
     //Saves current state of the template//
     public void saveState() {
-        Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE", "Template");
         String newline = System.getProperty("line.separator");
         String blueprint = "";
         //for each page
@@ -54,6 +52,8 @@ public class Template {
             }
         }
         // TODO: write to file
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATE", "saveState");
     }
 
     //Loads data from file and creates data objects related
@@ -87,7 +87,11 @@ public class Template {
                 }
             }
         } catch(FileNotFoundException e){
+            Context context = App.getContext();
+            LogManager.wtf("TEMPLATE", "loadState file not found error thrown", e);
             e.printStackTrace();
         }
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATE", "loadState");
     }
 }

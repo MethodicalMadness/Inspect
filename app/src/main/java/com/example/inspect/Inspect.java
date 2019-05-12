@@ -11,7 +11,7 @@ public class Inspect extends Application {
         super.onCreate();
         Fn.init(this);
         Context context = App.getContext();
-        LogManager.reportStatus(context, "INSPECTION", "Inspection");
+        LogManager.reportStatus(context, "INSPECT", "onCreate");
 
     }
 
