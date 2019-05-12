@@ -26,6 +26,7 @@ public class TemplateButtons{
         btnReference = newBtn;
         indexForBtn = newIndex;
         setNameForButton();
+        newBtn.setId(newIndex);
     }
 
     //getters and setters
