@@ -1,5 +1,6 @@
 package com.example.inspect;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,9 +36,10 @@ public class TemplateMenu extends AppCompatActivity {
         Button btnName = (Button) findViewById(R.id.btnAddName);
         moduleInfoList.add(new ModuleInfo("Name Template",index));
         btnName.setText(moduleInfoList.get(index).getModuleName());
-
         fragContainer = (ConstraintLayout) findViewById(R.id.fragContainer);
-
+      
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATEMENU", "onCreate");
     }
 
     //Functionality for back button
@@ -49,6 +51,8 @@ public class TemplateMenu extends AppCompatActivity {
                 finish();
             }
         });
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATEMENU", "configureBackBtn");
     }
 
     public void onAddField(View v) {
