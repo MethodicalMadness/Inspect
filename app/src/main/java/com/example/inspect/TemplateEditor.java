@@ -7,11 +7,7 @@ import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.inspect.databinding.TextFieldBinding;
-
 import java.util.ArrayList;
 
 
@@ -90,10 +86,10 @@ public class TemplateEditor extends AppCompatActivity{
     }
 
     //Saves template//
-    public void saveTemplate(){
+    public void saveTemplate(String Filename){
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEEDITOR", "saveTemplate");
-        template.saveState();
+        template.saveState(Filename);
     }
 
     //Adds an element to the template//
