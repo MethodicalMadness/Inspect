@@ -28,6 +28,7 @@ public class ViewPrintAdapter extends PrintDocumentAdapter {
     public ViewPrintAdapter(Context context, ArrayList<View> viewsList) {
         this.context = context;
         this.viewsList = viewsList;
+        LogManager.reportStatus(context, "VIEWPRINTADAPTER", "Constructor ViewPrintAdapter");
     }
 
     @Override
@@ -37,6 +38,8 @@ public class ViewPrintAdapter extends PrintDocumentAdapter {
         printedPdfDocument = new PrintedPdfDocument(context, newAttributes);
         if (cancellationSignal.isCanceled()) {
             callback.onLayoutCancelled();
+            Context context = App.getContext();
+            LogManager.reportStatus(context, "VIEWPRINTADAPTER", "onLayout CANCELLED");
             return;
         }
         PrintDocumentInfo.Builder builder = new PrintDocumentInfo
@@ -45,6 +48,8 @@ public class ViewPrintAdapter extends PrintDocumentAdapter {
                 .setPageCount(viewsList.size());
         PrintDocumentInfo info = builder.build();
         callback.onLayoutFinished(info, true);
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "VIEWPRINTADAPTER", "onLayout");
     }
 
     @Override
@@ -84,6 +89,7 @@ public class ViewPrintAdapter extends PrintDocumentAdapter {
             printedPdfDocument.writeTo(new FileOutputStream(
                     destination.getFileDescriptor()));
         } catch (IOException e) {
+            LogManager.wtf("VIEWPRINTADAPTER", "Constructor", e);
             callback.onWriteFailed(e.toString());
             return;
         } finally {
@@ -93,5 +99,7 @@ public class ViewPrintAdapter extends PrintDocumentAdapter {
         // signal the print framework the document is complete
         PageRange[] writtenPages = {PageRange.ALL_PAGES};
         callback.onWriteFinished(writtenPages);
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "VIEWPRINTADAPTER", "onWrite");
     }
 }
