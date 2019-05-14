@@ -28,7 +28,7 @@ public class TemplateEditor extends AppCompatActivity{
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
         views.add(findViewById(R.id.scrollViewPage));
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor onCreate");
+        LogManager.reportStatus(context, "TEMPLATEEDITOR", "onCreate");
     }
 
     // TODO: rework when GUI is sorted
@@ -46,6 +46,8 @@ public class TemplateEditor extends AppCompatActivity{
         //get new view (our xml fragment -the text field) and add it to current view
         View newView = textFieldBinding.getRoot();
         linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATEEDITOR", "onAddField");
     }
 
     // TODO: rework when GUI is sorted
@@ -64,7 +66,7 @@ public class TemplateEditor extends AppCompatActivity{
         //focus on new page
         linearLayoutBody = newView.findViewById(R.id.linearLayoutBody);
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor onAddPage");
+        LogManager.reportStatus(context, "TEMPLATEEDITOR", "onAddPage");
     }
 
     // TODO: remove from page data object, rework when GUI is sorted
@@ -72,47 +74,47 @@ public class TemplateEditor extends AppCompatActivity{
     public void onDelete(View view) {
         linearLayoutBody.removeView((View) view.getParent());
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor onDelete");
+        LogManager.reportStatus(context, "TEMPLATEEDITOR", "onDelete");
     }
 
     //Print the scrollView that holds the linearLayoutBody
-    public void printPDF(View view) {
+    public void printPdf(View view) {
         PrintManager printManager = (PrintManager) getSystemService(PRINT_SERVICE);
         printManager.print("print_job_name", new ViewPrintAdapter(this, views), null);
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor printPDF");
+        LogManager.reportStatus(context, "TEMPLATEEDITOR", "printPdf");
     }
 
     //Saves template//
     public void saveTemplate(String Filename){
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE", "Template Saving");
+        LogManager.reportStatus(context, "TEMPLATEEDITOR", "saveTemplate");
         template.saveState(Filename);
     }
 
     //Adds an element to the template//
     public static void addElement() {
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor addElement");
+        LogManager.reportStatus(context, "TEMPLATEEDITOR", "addElement");
 
     }
 
     //Adds a module to the template//
     public static void addModule(){
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor addModule");
+        LogManager.reportStatus(context, "TEMPLATEEDITOR", "addModule");
 
     }
 
     //Removes an element from the template//
     public static void removeElement(){
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor removeElement");
+        LogManager.reportStatus(context, "TEMPLATEEDITOR", "removeElement");
     }
 
     //Removes a module from the template//
     public static void removeModule(){
         Context context = App.getContext();
-        LogManager.reportStatus(context, "TEMPLATE EDIT", "TemplateEditor removeModule");
+        LogManager.reportStatus(context, "TEMPLATEEDITOR", "removeModule");
     }
 }

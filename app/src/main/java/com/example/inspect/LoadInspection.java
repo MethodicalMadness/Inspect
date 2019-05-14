@@ -1,5 +1,6 @@
 package com.example.inspect;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,8 @@ public class LoadInspection extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inspection_menu);
         configureBackBtn();
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "LOADINSPECTION", "onCreate");
     }
 
     public void configureBackBtn(){
@@ -23,5 +26,7 @@ public class LoadInspection extends AppCompatActivity {
                 finish();
             }
         });
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "LOADINSPECTION", "configureBackBtn");
     }
 }

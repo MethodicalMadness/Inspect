@@ -1,14 +1,14 @@
 package com.example.inspect;
 
 import android.content.Context;
-import android.media.MediaScannerConnection;
-import android.os.Environment;
 import android.util.Log;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -42,8 +42,59 @@ public class LogManager {
     }
 
     //Writes a message to the log file on the device
-    private static void logToFile(Context context, String logMessageTag, String logMessage)
-    {
+    private static void logToFile(Context context, String logMessageTag, String logMessage) {
+
+        Date currentTime = Calendar.getInstance().getTime();
+        final String STRING = new String((String.format("%1s [%2s]:%3s\r\n", "[" + currentTime + "]", logMessageTag + "", logMessage + "")));
+        try { // catches IOException below
+            //Date currentTime = Calendar.getInstance().getTime();
+            //final String STRING = new String((String.format("%1s [%2s]:%3s\r\n", "[" + currentTime + "]", logMessageTag + "", logMessage + "")));
+
+            // ##### Write a file to the disk #####
+            /* We have to use the openFileOutput()-method
+             * the ActivityContext provides, to
+             * protect your file from others and
+             * This is done for security-reasons.
+             * We chose MODE_WORLD_READABLE, because
+             *  we have nothing to hide in our file */
+            FileOutputStream fOut = context.openFileOutput("InspectLog.txt", Context.MODE_APPEND);
+            OutputStreamWriter osw = new OutputStreamWriter(fOut);
+
+            // Write the string to the file
+            osw.write(STRING);
+            /* ensure that everything is
+             * really written out and close */
+            osw.flush();
+            osw.close();
+        } catch (FileNotFoundException e2) {
+            e2.printStackTrace();
+        } catch (IOException e2) {
+            e2.printStackTrace();
+        }
+
+
+        try{
+            //Opens the file and puts the content into an array to test the string went in correctly
+            FileInputStream fileIn = context.openFileInput("InspectLog.txt");
+            InputStreamReader inputReader = new InputStreamReader(fileIn);
+            char[] inputBuffer = new char[STRING.length()];
+        // Fill the Buffer with data from the file and read
+            inputReader.read(inputBuffer);
+            String readString = new String(inputBuffer);
+/*
+        // Check if we read back the same chars that we had written out
+            boolean isTheSame = STRING.equals(readString);
+        // Prints out the above boolean to determine if the strings compared are the same
+            Log.i("File Reading stuff", "Success? " + isTheSame);
+*/
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+
+/*
+
         //Absolute stored location will be /storage/emulated/0/InspectLog.txt
         try
         {
@@ -68,13 +119,14 @@ public class LogManager {
         {
             Log.e("logTag", "Unable to log exception to file.");
         }
-    }
 
-    //Displays the error
+        */
+
+        //Displays the error
     public static void displayError(String displayError){
         //TODO UI integration to be called from reportError()
         Context context = App.getContext();
-        LogManager.reportStatus(context, "ERROR", "Error");
+        LogManager.reportStatus(context, "LOGMANAGER", "displayError");
     }
 
 }
