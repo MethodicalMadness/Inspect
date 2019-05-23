@@ -21,7 +21,16 @@
         <activity android:name=".LoadInspection"></activity>
         <activity android:name=".TemplateMenu"></activity>
         <activity android:name=".ManageTemplateMenu"></activity>
-
+        <provider
+            android:name="com.example.android.inspect"
+            android:authorities="com.example.Inspect"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:permission="android.permission.MANAGE_DOCUMENTS">
+            <intent-filter>
+                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+            </intent-filter>
+        </provider>
     </application>
 
     <uses-permission android:name="android.permission.CAMERA"/>
