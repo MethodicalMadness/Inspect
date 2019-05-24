@@ -1,6 +1,9 @@
 package com.example.inspect;
 
 import android.content.Context;
+import android.content.Intent;
+
+import androidx.core.app.ShareCompat;
 
 public class FileShareManager {
 
@@ -10,6 +13,8 @@ public class FileShareManager {
         LogManager.reportStatus(context, "FILESHAREMANAGER", "sendEmail");
 
     }
+
+
 
 
 }
