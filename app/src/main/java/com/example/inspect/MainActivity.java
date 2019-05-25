@@ -47,31 +47,11 @@ public class MainActivity<sizeIndex, nameIndex> extends AppCompatActivity {
     private Intent returnIntent;
 
 
-    /*
-     * Get the file's content URI from the incoming Intent,
-     * then query the server app to get the file's display name
-     * and size.
-     */
-    Uri returnUri = returnIntent.getData();
-    Cursor returnCursor =
-            getContentResolver().query(returnUri, null, null, null, null);
-    /*
-     * Get the column indexes of the data in the Cursor,
-     * move to the first row in the Cursor, get the data,
-     * and display it.
-     */
-    int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-    int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
-    returnCursor.moveToFirst();
-    TextView nameView = (TextView) findViewById(R.id.filename_text);
-    TextView sizeView = (TextView) findViewById(R.id.filesize_text);
-    nameView.setText(returnCursor.getString(nameIndex));
-    sizeView.setText(Long.toString(returnCursor.getLong(sizeIndex)));
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
         requestFileIntent = new Intent(Intent.ACTION_PICK);
         requestFileIntent.setType("image/jpg");
         checkPermissions();
@@ -175,6 +155,27 @@ public class MainActivity<sizeIndex, nameIndex> extends AppCompatActivity {
                         }
                     }
                 });
+
+        /*
+         * Get the file's content URI from the incoming Intent,
+         * then query the server app to get the file's display name
+         * and size.
+         */
+        Uri returnUri = returnIntent.getData();
+        Cursor returnCursor =
+                getContentResolver().query(returnUri, null, null, null, null);
+        /*
+         * Get the column indexes of the data in the Cursor,
+         * move to the first row in the Cursor, get the data,
+         * and display it.
+         */
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+        returnCursor.moveToFirst();
+        TextView nameView = (TextView) findViewById(R.id.filename_text);
+        TextView sizeView = (TextView) findViewById(R.id.filesize_text);
+        nameView.setText(returnCursor.getString(nameIndex));
+        sizeView.setText(Long.toString(returnCursor.getLong(sizeIndex)));
     }
 
     /*
