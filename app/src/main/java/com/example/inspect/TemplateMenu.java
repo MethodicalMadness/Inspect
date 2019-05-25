@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 public class TemplateMenu extends AppCompatActivity {
 
-    private ConstraintLayout fragmentContainer2;
+    private LinearLayout fragmentContainer2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class TemplateMenu extends AppCompatActivity {
         configureBackBtn();
 
         //parent container for content
-        fragmentContainer2 = (ConstraintLayout) findViewById(R.id.fragmentContainer2);
+        fragmentContainer2 = (LinearLayout) findViewById(R.id.fragmentContainer2);
 
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEMENU", "onCreate");
@@ -59,7 +60,6 @@ public class TemplateMenu extends AppCompatActivity {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View fragment = inflater.inflate(R.layout.fragement_template_module, null);
-        // Add the new row before the add field button.
         fragmentContainer2.addView(fragment, fragmentContainer2.getChildCount() - 1);
     }
 
