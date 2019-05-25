@@ -51,6 +51,7 @@ public class TemplateMenu extends AppCompatActivity {
 
     public void editButton(){
         //TODO: Create pop up that allows user to add a name to the template
+
     }
 
     public void onAddField(View v) {
