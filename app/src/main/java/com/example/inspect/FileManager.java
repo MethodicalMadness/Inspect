@@ -19,7 +19,7 @@ import java.io.OutputStreamWriter;
 
 
 public class FileManager extends AppCompatActivity {
-
+    private static final int READ_REQUEST_CODE = 42;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,12 +56,37 @@ public class FileManager extends AppCompatActivity {
     public void loadTemplate(View view) {
         System.out.println("I HAVE STARTED LOAD");
         Intent intent = new Intent(this, FileManager.class);
+        System.out.println("I HAVE DONE INTENT");
         Bundle bundle = intent.getExtras();
+        System.out.println("I HAVE GOT BUNDLE");
         Context context = App.getContext();
-        Activity activity = (Activity) context;
+        System.out.println("I HAVE GOT CONTEXT");
+        Activity activity = this;
+        System.out.println("I HAVE GOT ACTIVITY");
         StorageAccess.performFileSearch(activity, bundle);
+        System.out.println("I HAVE DONE FILE SEARCH");
         //startActivity(intent);
         LogManager.reportStatus(context, "FILEMANAGER", "loadTemplate");
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+
+        // The ACTION_OPEN_DOCUMENT intent was sent with the request code
+        // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
+        // response to some other intent, and the code below shouldn't run at all.
+
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            // The document selected by the user won't be returned in the intent.
+            // Instead, a URI to that document will be contained in the return intent
+            // provided to this method as a parameter.
+            // Pull that URI using resultData.getData().
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+            }
+        }
     }
 
     //Loads the saved state of the template
