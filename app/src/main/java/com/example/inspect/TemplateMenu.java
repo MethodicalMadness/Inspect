@@ -44,6 +44,7 @@ public class TemplateMenu extends AppCompatActivity {
                 finish();
             }
         });
+
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEMENU", "configureBackBtn");
     }
@@ -53,11 +54,11 @@ public class TemplateMenu extends AppCompatActivity {
     }
 
     public void onAddField(View v) {
-        //TODO: add fragment into the container
+
         //TODO: get input from the module menu
         //TODO: save input and display it
         //TODO: remove item from list
-
+        //add element to list
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View fragment = inflater.inflate(R.layout.fragement_template_module, null);
         fragmentContainer2.addView(fragment, fragmentContainer2.getChildCount() - 1);
