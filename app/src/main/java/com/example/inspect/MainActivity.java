@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         checkPermissions();
         Context context = App.getContext();
         LogManager.reportStatus(context, "MAINACTIVITY", "onCreate");
-        FileManager.loadTemplate();
 
     }
 

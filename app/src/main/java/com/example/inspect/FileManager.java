@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
@@ -16,9 +17,8 @@ import java.io.OutputStreamWriter;
 
 
 
-public abstract class FileManager extends AppCompatActivity {
+public class FileManager extends AppCompatActivity {
 
-    private static final int READ_REQUEST_CODE = 42;
 
     //Creates a new template
     public static void createTemplate(String filename, String blueprint){
@@ -44,25 +44,11 @@ public abstract class FileManager extends AppCompatActivity {
 
     //Loads a template
     public void loadTemplate() {
+        Intent intent = new Intent(this, FileManager.class);
+        Bundle bundle = intent.getExtras();
         Context context = App.getContext();
-        LogManager.reportStatus(context, "FILEMANAGER", "loadTemplate");
-
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("image/*");
-
-        startActivityForResult(intent, READ_REQUEST_CODE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent resultData){
-        if(requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            Uri uri = null;
-            if(resultData != null){
-                uri = resultData.getData();
-
-            }
-        }
+        Activity activity = (Activity) context;
+        StorageAccess.performFileSearch(activity, bundle);
     }
 
     //Loads the saved state of the template
