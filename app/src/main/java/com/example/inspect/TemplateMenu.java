@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 public class TemplateMenu extends AppCompatActivity {
 
+    private ConstraintLayout fragmentContainer2;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -25,7 +27,8 @@ public class TemplateMenu extends AppCompatActivity {
         //set up back btn
         configureBackBtn();
 
-        //configure button
+        //parent container for content
+        fragmentContainer2 = (ConstraintLayout) findViewById(R.id.fragmentContainer2);
 
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEMENU", "onCreate");
@@ -44,5 +47,20 @@ public class TemplateMenu extends AppCompatActivity {
         LogManager.reportStatus(context, "TEMPLATEMENU", "configureBackBtn");
     }
 
+    public void editButton(){
+        //TODO: Create pop up that allows user to add a name to the template
+    }
+
+    public void onAddField(View v) {
+        //TODO: add fragment into the container
+        //TODO: get input from the module menu
+        //TODO: save input and display it
+        //TODO: remove item from list
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View fragment = inflater.inflate(R.layout.fragement_template_module, null);
+        // Add the new row before the add field button.
+        fragmentContainer2.addView(fragment, fragmentContainer2.getChildCount() - 1);
+    }
 
 }
