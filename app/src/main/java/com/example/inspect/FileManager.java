@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +20,15 @@ import java.io.OutputStreamWriter;
 
 public class FileManager extends AppCompatActivity {
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.file_manager);
+        configureBackBtn();
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "FILEMANAGER", "onCreate");
+    }
 
     //Creates a new template
     public static void createTemplate(String filename, String blueprint){
@@ -43,12 +53,15 @@ public class FileManager extends AppCompatActivity {
     }
 
     //Loads a template
-    public void loadTemplate() {
+    public void loadTemplate(View view) {
+        System.out.println("I HAVE STARTED LOAD");
         Intent intent = new Intent(this, FileManager.class);
         Bundle bundle = intent.getExtras();
         Context context = App.getContext();
         Activity activity = (Activity) context;
         StorageAccess.performFileSearch(activity, bundle);
+        //startActivity(intent);
+        LogManager.reportStatus(context, "FILEMANAGER", "loadTemplate");
     }
 
     //Loads the saved state of the template
@@ -75,5 +88,15 @@ public class FileManager extends AppCompatActivity {
         LogManager.reportStatus(context, "FILEMANAGER", "openPdf");
     }
 
-
+    public void configureBackBtn(){
+        Button backBtn = (Button)findViewById(R.id.btnBack);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "FILEMANAGER", "configureBackBtn");
+    }
 }
