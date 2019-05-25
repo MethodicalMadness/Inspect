@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.inspect">
 
     <application
@@ -9,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name="com.example.inspect.App">
+        android:name="com.example.inspect.App"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,16 +24,6 @@
         <activity android:name=".TemplateMenu"></activity>
         <activity android:name=".ManageTemplateMenu"></activity>
         <activity android:name=".FileManager"></activity>
-        <provider
-            android:name="com.example.inspect.StorageAccess"
-            android:authorities="com.example.Inspect"
-            android:exported="true"
-            android:grantUriPermissions="true"
-            android:permission="android.permission.MANAGE_DOCUMENTS">
-            <intent-filter>
-                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
-            </intent-filter>
-        </provider>
     </application>
 
     <uses-permission android:name="android.permission.CAMERA"/>
