@@ -1,6 +1,8 @@
 package com.example.inspect;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,17 +56,37 @@ public class TemplateMenu extends AppCompatActivity {
 
     }
 
-    public void configureResetBtn(){
+    public void configureResetBtn(View v){
         Button resetBtn = (Button)findViewById(R.id.btnReset);
+        Context context = this;
 
-        resetBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick (View v){
-                Context context = App.getContext();
-                AlertDialogHelper alertReset = new AlertDialogHelper(context, null, "Are you sure you want to reset the template?", "Yes", "Cancel");
-                alertReset.run(alertReset);
-            }
+        //create new alert with message
+        AlertDialog.Builder aBuilder = new AlertDialog.Builder(context);
+        aBuilder.setMessage("Do you want to reset the template?");
+        aBuilder.setCancelable(true);
+
+        //positive button on alert - resets view
+        aBuilder.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //NOTE: this may not work when we start saving states
+                        recreate();
+                    }
         });
+
+        //negative button on alert - does nothing
+        aBuilder.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        //shows the alert
+        AlertDialog alertPopUp = aBuilder.create();
+        alertPopUp.show();
     }
 
     public void onAddField(View v) {
