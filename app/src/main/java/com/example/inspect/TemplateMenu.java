@@ -49,9 +49,22 @@ public class TemplateMenu extends AppCompatActivity {
         LogManager.reportStatus(context, "TEMPLATEMENU", "configureBackBtn");
     }
 
-    public void editButton(){
+    public void configureEditNameButton(){
         //TODO: Create pop up that allows user to add a name to the template
 
+    }
+
+    public void configureResetBtn(){
+        Button resetBtn = (Button)findViewById(R.id.btnReset);
+
+        resetBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick (View v){
+                Context context = App.getContext();
+                AlertDialogHelper alertReset = new AlertDialogHelper(context, null, "Are you sure you want to reset the template?", "Yes", "Cancel");
+                alertReset.run(alertReset);
+            }
+        });
     }
 
     public void onAddField(View v) {
