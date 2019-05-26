@@ -23,7 +23,7 @@
         <activity android:name=".ManageTemplateMenu"></activity>
         <activity
             android:name=".FileSelectActivity"
-            android:label="@File Selector" >
+            android:label="/@File Selector" >
             <intent-filter>
                 <action
                     android:name="android.intent.action.PICK"/>
@@ -44,12 +44,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
-
-
-
-
-
     </application>
+
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
 
 
 
