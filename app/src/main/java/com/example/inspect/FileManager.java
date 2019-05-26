@@ -54,38 +54,32 @@ public class FileManager extends AppCompatActivity {
 
     //Loads a template
     public void loadTemplate(View view) {
-        System.out.println("I HAVE STARTED LOAD");
         Intent intent = new Intent(this, FileManager.class);
-        System.out.println("I HAVE DONE INTENT");
         Bundle bundle = intent.getExtras();
-        System.out.println("I HAVE GOT BUNDLE");
         Context context = App.getContext();
-        System.out.println("I HAVE GOT CONTEXT");
         Activity activity = this;
-        System.out.println("I HAVE GOT ACTIVITY");
-        StorageAccess.performFileSearch(activity, bundle);
-        System.out.println("I HAVE DONE FILE SEARCH");
-        //startActivity(intent);
         LogManager.reportStatus(context, "FILEMANAGER", "loadTemplate");
+        StorageAccess.performFileSearch(activity, bundle);
+        LogManager.reportStatus(context, "FILEMANAGER", "loadTemplate post StorageAccess");
     }
-    
+
     @Override
-    public void onActivityResult(int requestCode, int resultCode,
-                                 Intent resultData) {
-
-        // The ACTION_OPEN_DOCUMENT intent was sent with the request code
-        // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
-        // response to some other intent, and the code below shouldn't run at all.
-
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult closed SAF view");
+        // This should grab the URI value of the file selected in StorageAccess for use
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            // The document selected by the user won't be returned in the intent.
-            // Instead, a URI to that document will be contained in the return intent
-            // provided to this method as a parameter.
-            // Pull that URI using resultData.getData().
+            LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
             Uri uri = null;
             if (resultData != null) {
+                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData not null");
                 uri = resultData.getData();
+                //uri is to be used to access files within other sections of the program ie. loading a specific template or sharing an output
+            } else{
+                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData is null. Operation cancelled");
             }
+        } else{
+            LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult cancelled - resultCode is not RESULT_OK or requestCode does not equal the READ_REQUEST_CODE");
         }
     }
 

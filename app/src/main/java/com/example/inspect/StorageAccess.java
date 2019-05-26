@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.os.ParcelFileDescriptor;
@@ -21,21 +20,20 @@ public class StorageAccess extends DocumentsProvider {
     private static final int READ_REQUEST_CODE = 42;
 
     public static void performFileSearch(Activity activity, Bundle bundle) {
-        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
-        // browser.
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file browser
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
-        // Filter to only show results that can be "opened", such as a
-        // file (as opposed to a list of contacts or timezones)
+        // Filter to only show results that can be "opened", such as a file (as opposed to a list of contacts or timezones)
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
-        // Filter to show only images, using the image MIME data type.
-        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
-        // To search for all documents available via installed storage providers,
-        // it would be "*/*".
+        // Filter to show all files. Will filter when we have the MIME type for what files we will be using
+        // Will become intent.setType("MIMEDATATYPE/*")
         intent.setType("*/*");
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "STORAGEACCESS", "performFileSearch");
 
         startActivityForResult(activity, intent, READ_REQUEST_CODE, bundle);
+        LogManager.reportStatus(context, "STORAGEACCESS", "performFileSearch Completed");
     }
 
     @Override
