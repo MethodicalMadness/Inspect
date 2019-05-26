@@ -38,13 +38,11 @@ public class PhotoManager extends AppCompatActivity {
 
     }
 
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = (Bitmap)data.getExtras().get("data");
         imageView.setImageBitmap(bitmap);
     }
-
 
     //Allows you to alter/edit the photo//
     public static void alterPhoto() {
