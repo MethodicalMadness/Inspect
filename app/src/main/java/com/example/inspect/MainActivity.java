@@ -53,6 +53,13 @@ public class MainActivity extends AppCompatActivity {
         LogManager.reportStatus(context, "MAINACTIVITY", "toManageTemplates");
     }
 
+    public void toPhotoManager(View view){
+        Intent intent = new Intent(MainActivity.this, PhotoManager.class);
+        startActivity(intent);
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "MAINACTIVITY", "toPhotoManager");
+    }
+
     public void newBlankTemplate(View view) {
         Intent intent = new Intent(this, TemplateEditor.class);
         startActivity(intent);

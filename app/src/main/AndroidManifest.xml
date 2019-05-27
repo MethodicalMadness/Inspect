@@ -21,6 +21,7 @@
         <activity android:name=".LoadInspection"></activity>
         <activity android:name=".TemplateMenu"></activity>
         <activity android:name=".ManageTemplateMenu"></activity>
+        <activity android:name=".PhotoManager"></activity>
         <activity
             android:name=".FileSelectActivity"
             android:label="/@File Selector" >
