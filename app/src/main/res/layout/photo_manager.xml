@@ -17,12 +17,22 @@
 
     <Button
         android:id="@+id/btnCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#555"
+        android:text="Open Camera"
+        android:textColor="#FFF" />
+
+    <Button
+        android:id="@+id/btnGallery"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#555"
         android:textColor="#FFF"
-        android:text="Open Camera" />
+        android:text="Open Gallery"
+        />
 
 
 
