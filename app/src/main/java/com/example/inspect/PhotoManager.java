@@ -24,6 +24,7 @@ public class PhotoManager extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photo_manager);
+        configureBackBtn();
         Context context = App.getContext();
         LogManager.reportStatus(context, "PHOTOMANAGER", "takePhoto");
 
@@ -71,6 +72,18 @@ public class PhotoManager extends AppCompatActivity {
     public static void alterPhoto() {
         Context context = App.getContext();
         LogManager.reportStatus(context, "PHOTOMANAGER", "alterPhoto");
+    }
+
+    public void configureBackBtn(){
+        Button backBtn = (Button)findViewById(R.id.btnBack);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "PHOTOMANAGER", "configureBackBtn");
     }
 
 

@@ -230,7 +230,7 @@ public class FileSelectActivity extends MainActivity {
             }
         });
         Context context = App.getContext();
-        LogManager.reportStatus(context, "FILE_SELECT_ACTIVITY", "configureBackBtn");
+        LogManager.reportStatus(context, "FILESELECTACTIVITY", "configureBackBtn");
     }
 
 }
