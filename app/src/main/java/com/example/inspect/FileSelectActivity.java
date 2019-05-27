@@ -11,6 +11,7 @@ import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -41,6 +42,7 @@ public class FileSelectActivity extends MainActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.filepaths);
+        configureBackBtn();
 
         requestFileIntent = new Intent(Intent.ACTION_PICK);
         requestFileIntent.setType("image/jpg");
@@ -218,4 +220,17 @@ public class FileSelectActivity extends MainActivity {
          */
         startActivityForResult(requestFileIntent, 0);
     }
+
+    public void configureBackBtn(){
+        Button backBtn = (Button)findViewById(R.id.btnBack);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "FILE_SELECT_ACTIVITY", "configureBackBtn");
+    }
+
 }

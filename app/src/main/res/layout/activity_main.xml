@@ -79,6 +79,20 @@
             app:layout_constraintEnd_toEndOf="@+id/btnPrintExample"
             app:layout_constraintStart_toStartOf="@+id/btnPrintExample"
             app:layout_constraintTop_toBottomOf="@+id/btnPrintExample" />
+
+        <Button
+            android:id="@+id/btnFileShareManager"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="76dp"
+            android:onClick="toPhotoManager"
+            android:text="File Share Manager"
+            app:layout_constraintEnd_toEndOf="@+id/btnPrintExample"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/btnPrintExample"
+            app:layout_constraintTop_toBottomOf="@+id/btnPrintExample" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
