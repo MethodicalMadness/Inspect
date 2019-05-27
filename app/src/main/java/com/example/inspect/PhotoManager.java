@@ -19,7 +19,7 @@ public class PhotoManager extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
     Uri imageUri;
 
-    //Allows you to take a photo with the camera or select a photo from the image gallery//
+    //Allows you to take a photo with the camera or get a photo from the image gallery//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +59,7 @@ public class PhotoManager extends AppCompatActivity {
         }
     }
 
-    //Allows you to open image gallery//
+    //Allows you to get photo from image gallery//
     private void openGallery(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
