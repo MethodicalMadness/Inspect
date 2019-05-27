@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,6 +9,18 @@
     android:paddingRight="16dp"
     android:paddingTop="16dp"
     android:weightSum="10">
+
+    <TextView
+        android:id="@+id/txtViewHeader"
+        android:layout_width="243dp"
+        android:layout_height="221dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStarts="16dp"
+        android:focusableInTouchMode="false"
+        android:text="Photo Manager"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -39,6 +52,16 @@
         android:textColor="#FFF"
         android:text="Open Gallery"
         />
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="50dp"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 
