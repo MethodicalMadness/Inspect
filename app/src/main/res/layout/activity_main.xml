@@ -79,5 +79,6 @@
             app:layout_constraintEnd_toEndOf="@+id/btnPrintExample"
             app:layout_constraintStart_toStartOf="@+id/btnPrintExample"
             app:layout_constraintTop_toBottomOf="@+id/btnPrintExample" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
