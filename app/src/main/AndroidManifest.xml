@@ -23,6 +23,29 @@
         <activity android:name=".LoadInspection"></activity>
         <activity android:name=".TemplateMenu"></activity>
         <activity android:name=".ManageTemplateMenu"></activity>
+        <activity android:name=".PhotoManager"></activity>
+        <activity
+            android:name=".FileSelectActivity"
+            android:label="/@File Selector" >
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.PICK"/>
+                <category
+                    android:name="android.intent.category.DEFAULT"/>
+                <category
+                    android:name="android.intent.category.OPENABLE"/>
+                <data android:mimeType="text/plain"/>
+                <data android:mimeType="image/*"/>
+            </intent-filter>
+        </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
         <activity android:name=".FileManager"></activity>
         <provider
             android:name="com.example.inspect.StorageAccess"
@@ -36,9 +59,16 @@
         </provider>
     </application>
 
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
+
+
+
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+
 </manifest>

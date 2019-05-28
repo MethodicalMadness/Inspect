@@ -32,27 +32,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //setting up menu activities
-    public void toTemplateMenu(View view){
+    public void toTemplateMenu(View view) {
         Intent intent = new Intent(MainActivity.this, TemplateMenu.class);
         startActivity(intent);
         Context context = App.getContext();
         LogManager.reportStatus(context, "MAINACTIVITY", "toTemplateMenu");
     }
 
-    public void toLoadInspection(View view){
+    public void toLoadInspection(View view) {
         Intent intent = new Intent(MainActivity.this, LoadInspection.class);
         startActivity(intent);
         Context context = App.getContext();
         LogManager.reportStatus(context, "MAINACTIVITY", "toLoadInspection");
     }
 
-    public void toManageTemplates(View view){
+    public void toManageTemplates(View view) {
         Intent intent = new Intent(MainActivity.this, ManageTemplateMenu.class);
         startActivity(intent);
         Context context = App.getContext();
         LogManager.reportStatus(context, "MAINACTIVITY", "toManageTemplates");
     }
 
+    public void toPhotoManager(View view){
+        Intent intent = new Intent(MainActivity.this, PhotoManager.class);
+        startActivity(intent);
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "MAINACTIVITY", "toPhotoManager");
+    }
+  
     public void toFileManager(View view) {
         Intent intent = new Intent(MainActivity.this, FileManager.class);
         startActivity(intent);
@@ -67,25 +74,23 @@ public class MainActivity extends AppCompatActivity {
         LogManager.reportStatus(context, "MAINACTIVITY", "newBlankTemplate");
     }
 
-    private void checkPermissions(){
+    void checkPermissions() {
         Context context = App.getContext();
         LogManager.reportStatus(context, "MAINACTIVITY", "checkPermissions");
         String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA};
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[0]) == PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[0]) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[1]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[2]) == PackageManager.PERMISSION_GRANTED){
+                && ContextCompat.checkSelfPermission(this.getApplicationContext(), permissions[2]) == PackageManager.PERMISSION_GRANTED) {
             Context context2 = App.getContext();
             LogManager.reportStatus(context2, "MAINACTIVITY", "checkPermissions PERMISSIONS PASSED CORRECTLY");
-        } else{
+        } else {
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
             Context context2 = App.getContext();
             LogManager.reportStatus(context2, "MAINACTIVITY", "checkPermissions PERMISSIONS REQUESTED");
         }
     }
-
-
 
 
 }
