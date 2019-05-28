@@ -64,6 +64,7 @@ public class Template {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        FileManager.createTemplate(filename, blueprint);
         // TODO: write to file
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATE", "saveState");
