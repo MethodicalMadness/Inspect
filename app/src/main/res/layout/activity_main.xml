@@ -57,7 +57,21 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/btnPrintExample"
+            android:id="@+id/btnFileManager"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:onClick="toFileManager"
+            android:text="File Manager"
+            app:layout_constraintEnd_toEndOf="@+id/btnPrintExample2"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/btnPrintExample2"
+            app:layout_constraintTop_toBottomOf="@+id/btnPrintExample2"
+            tools:layout_conversion_absoluteHeight="48dp"
+            tools:layout_conversion_absoluteWidth="411dp" />
+
+        <Button
+            android:id="@+id/btnPrintExample2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

@@ -53,6 +53,13 @@ public class MainActivity extends AppCompatActivity {
         LogManager.reportStatus(context, "MAINACTIVITY", "toManageTemplates");
     }
 
+    public void toFileManager(View view) {
+        Intent intent = new Intent(MainActivity.this, FileManager.class);
+        startActivity(intent);
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "MAINACTIVITY", "toFileManager");
+    }
+
     public void newBlankTemplate(View view) {
         Intent intent = new Intent(this, TemplateEditor.class);
         startActivity(intent);
