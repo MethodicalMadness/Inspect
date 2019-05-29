@@ -31,7 +31,7 @@ public class PhotoManager extends AppCompatActivity {
 
         Button btnCamera = (Button)findViewById(R.id.btnCamera);
         Button btnGallery = (Button)findViewById(R.id.btnGallery);
-        ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        imageView = (ImageView)findViewById(R.id.imageView);
 
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,17 +44,15 @@ public class PhotoManager extends AppCompatActivity {
 
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                openGallery();
+            public void onClick(View v) {openGallery();
             }
         });
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-        imageView.setImageBitmap(bitmap);
         if (resultCode == RESULT_OK && resultCode == PICK_IMAGE){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
