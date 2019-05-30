@@ -17,7 +17,7 @@ public class PhotoManager extends AppCompatActivity {
 
     private ImageView imageView;
     private static final int PICK_IMAGE = 100;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Uri imageUri;
 
     //Allows you to take a photo with the camera or get a photo from the image gallery//
@@ -52,11 +52,11 @@ public class PhotoManager extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == PICK_IMAGE){
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
         }
-        else if (resultCode == REQUEST_IMAGE_CAPTURE){
+        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
