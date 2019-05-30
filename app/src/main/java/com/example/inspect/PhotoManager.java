@@ -17,6 +17,7 @@ public class PhotoManager extends AppCompatActivity {
 
     private ImageView imageView;
     private static final int PICK_IMAGE = 100;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     private Uri imageUri;
 
     //Allows you to take a photo with the camera or get a photo from the image gallery//
@@ -35,15 +36,14 @@ public class PhotoManager extends AppCompatActivity {
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 0);
-
+                openCamera();
             }
         });
 
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {openGallery();
+            public void onClick(View v) {
+                openGallery();
             }
         });
 
@@ -52,10 +52,15 @@ public class PhotoManager extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        //if (resultCode == RESULT_OK && resultCode == PICK_IMAGE){
+        if (resultCode == PICK_IMAGE){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
-        //}
+        }
+        else if (resultCode == REQUEST_IMAGE_CAPTURE){
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+        }
     }
 
     //Allows you to get photo from image gallery//
@@ -64,6 +69,13 @@ public class PhotoManager extends AppCompatActivity {
         startActivityForResult(gallery, PICK_IMAGE);
         Context context = App.getContext();
         LogManager.reportStatus(context, "PHOTOMANAGER", "getPhotoFromGallery");
+    }
+
+    private void openCamera(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "PHOTOMANAGER", "getPhotoFromCamera");
     }
 
     //Allows you to alter/edit the photo//
