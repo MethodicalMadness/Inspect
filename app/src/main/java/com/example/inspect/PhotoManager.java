@@ -10,15 +10,14 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 
 public class PhotoManager extends AppCompatActivity {
 
-    ImageView imageView;
+    private ImageView imageView;
     private static final int PICK_IMAGE = 100;
-    Uri imageUri;
+    private Uri imageUri;
 
     //Allows you to take a photo with the camera or get a photo from the image gallery//
     @Override
@@ -53,10 +52,10 @@ public class PhotoManager extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && resultCode == PICK_IMAGE){
+        //if (resultCode == RESULT_OK && resultCode == PICK_IMAGE){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
-        }
+        //}
     }
 
     //Allows you to get photo from image gallery//
