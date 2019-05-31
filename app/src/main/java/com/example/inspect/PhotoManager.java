@@ -81,13 +81,6 @@ public class PhotoManager extends AppCompatActivity {
         LogManager.reportStatus(context, "PHOTOMANAGER", "getPhotoFromGallery");
     }
 
-    //Allows you to open the camera and take a photo//
-    private void openCamera(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-        Context context = App.getContext();
-        LogManager.reportStatus(context, "PHOTOMANAGER", "getPhotoFromCamera");
-    }
 
     private File createImageFile() throws IOException {
         // Create an image file name
