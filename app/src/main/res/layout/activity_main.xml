@@ -90,8 +90,8 @@
             android:layout_marginTop="16dp"
             android:onClick="toPhotoManager"
             android:text="Photo Manager"
-            app:layout_constraintEnd_toEndOf="@+id/btnPrintExample"
-            app:layout_constraintStart_toStartOf="@+id/btnPrintExample"
-            app:layout_constraintTop_toBottomOf="@+id/btnPrintExample" />
+            app:layout_constraintEnd_toEndOf="@+id/btnFileManager"
+            app:layout_constraintStart_toStartOf="@+id/btnFileManager"
+            app:layout_constraintTop_toBottomOf="@+id/btnFileManager" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
