@@ -26,8 +26,8 @@ public class PhotoManager extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Uri imageUri;
-    String currentPhotoPath;
-    static final int REQUEST_TAKE_PHOTO = 1;
+    private String currentPhotoPath;
+    private static final int REQUEST_TAKE_PHOTO = 2;
 
 
     //Allows you to take a photo with the camera or get a photo from the image gallery//
@@ -62,14 +62,22 @@ public class PhotoManager extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        Context context = App.getContext();
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
+            LogManager.reportStatus(context, "PHOTOMANAGER", "imagePickedFromGallery");
         }
         else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
+            LogManager.reportStatus(context, "PHOTOMANAGER", "gotPhotoFromCamera");
+        }
+        else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
+            imageUri = data.getData();
+            imageView.setImageURI(imageUri);
+            LogManager.reportStatus(context, "PHOTOMANAGER", "gotPhotoFromCamera");
         }
     }
 
@@ -100,20 +108,24 @@ public class PhotoManager extends AppCompatActivity {
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Context context = App.getContext();
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
+                LogManager.reportStatus(context, "PHOTOMANAGER", "createdImageFile");
             } catch (IOException ex) {
                 // Error occurred while creating the File
+                LogManager.reportStatus(context, "PHOTOMANAGER", "failedToCreateImageFile");
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
                         photoFile);
+                LogManager.reportStatus(context, "PHOTOMANAGER", "photoUriRetrieved");
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
