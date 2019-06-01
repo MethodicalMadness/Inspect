@@ -17,7 +17,7 @@ public class TemplateEditor extends AppCompatActivity{
     private LinearLayout linearLayoutBody;
     private ArrayList<View> views  = new ArrayList<>();
     private TemplatePage currentPage = new TemplatePage(0);
-    private Template template = new Template(currentPage);
+    private TemplateExample templateExample = new TemplateExample(currentPage);
 
 
     @Override
@@ -86,34 +86,34 @@ public class TemplateEditor extends AppCompatActivity{
         LogManager.reportStatus(context, "TEMPLATEEDITOR", "printPdf");
     }
 
-    //Saves template//
+    //Saves templateExample//
     public void saveTemplate(String Filename){
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEEDITOR", "saveTemplate");
-        template.saveState(Filename);
+        templateExample.saveState(Filename);
     }
 
-    //Adds an element to the template//
+    //Adds an element to the templateExample//
     public static void addElement() {
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEEDITOR", "addElement");
 
     }
 
-    //Adds a module to the template//
+    //Adds a module to the templateExample//
     public static void addModule(){
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEEDITOR", "addModule");
 
     }
 
-    //Removes an element from the template//
+    //Removes an element from the templateExample//
     public static void removeElement(){
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEEDITOR", "removeElement");
     }
 
-    //Removes a module from the template//
+    //Removes a module from the templateExample//
     public static void removeModule(){
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEEDITOR", "removeModule");
