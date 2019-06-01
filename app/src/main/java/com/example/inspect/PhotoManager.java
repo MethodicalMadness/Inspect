@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.core.content.FileProvider;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -91,16 +91,12 @@ public class PhotoManager extends AppCompatActivity {
 
 
     private File createImageFile() throws IOException {
+        Context context = App.getContext();
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
+        String imageFileName = "Inspect_" + timeStamp + "_.jpg";
+        File storageDir = new File(context.getFilesDir(), "images");
+        File image = new File(storageDir, imageFileName);
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
@@ -108,6 +104,7 @@ public class PhotoManager extends AppCompatActivity {
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePictureIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Context context = App.getContext();
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -123,9 +120,9 @@ public class PhotoManager extends AppCompatActivity {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.android.fileprovider",
+                        "com.example.inspect.fileprovider",
                         photoFile);
-                LogManager.reportStatus(context, "PHOTOMANAGER", "photoUriRetrieved");
+                LogManager.reportStatus(context, "PHOTOMANAGER", "photoUriRetrieved: " + photoURI);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
