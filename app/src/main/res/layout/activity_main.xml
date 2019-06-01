@@ -87,11 +87,12 @@
             android:id="@+id/btnPhotoManager"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="80dp"
             android:onClick="toPhotoManager"
             android:text="Photo Manager"
-            app:layout_constraintEnd_toEndOf="@+id/btnPrintExample"
-            app:layout_constraintStart_toStartOf="@+id/btnPrintExample"
-            app:layout_constraintTop_toBottomOf="@+id/btnPrintExample" />
+            app:layout_constraintEnd_toEndOf="@+id/btnPrintExample2"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/btnPrintExample2"
+            app:layout_constraintTop_toBottomOf="@+id/btnPrintExample2" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
