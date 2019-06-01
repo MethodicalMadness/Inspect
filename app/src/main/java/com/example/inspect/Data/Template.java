@@ -6,12 +6,16 @@ import androidx.room.TypeConverters;
 
 import java.util.ArrayList;
 
+//Database
 @Entity
 public class Template {
     @PrimaryKey
     private int id;
     private String name;
+    @TypeConverters(ModuleTypeConverter.class)
+    private ArrayList<Modules> templateModules;
 
+    //getter and setters
     public int getId() {
         return id;
     }
@@ -35,7 +39,4 @@ public class Template {
     public void setTemplateModules(ArrayList<Modules> templateModules) {
         this.templateModules = templateModules;
     }
-
-    @TypeConverters(ModuleTypeConverter.class)
-    private ArrayList<Modules> templateModules;
 }

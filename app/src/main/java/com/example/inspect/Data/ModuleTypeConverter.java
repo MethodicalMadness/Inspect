@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
+//Convert array to a string and vice versa
 public class ModuleTypeConverter {
 
     private static Gson gson = new Gson();
