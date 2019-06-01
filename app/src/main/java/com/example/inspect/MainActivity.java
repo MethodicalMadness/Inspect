@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         checkPermissions();
         Context context = App.getContext();
+
+        //TODO: load modules into a list here
+
         LogManager.reportStatus(context, "MAINACTIVITY", "onCreate");
 
     }
