@@ -39,7 +39,7 @@ public class TemplateMenu extends AppCompatActivity {
 
     //Functionality for back button
     public void configureBackBtn(){
-        Button backBtn = (Button)findViewById(R.id.btnBack);
+        Button backBtn = (Button)findViewById(R.id.btnTemplateBack);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,7 +57,7 @@ public class TemplateMenu extends AppCompatActivity {
     }
 
     public void configureResetBtn(View v){
-        Button resetBtn = (Button)findViewById(R.id.btnReset);
+        Button resetBtn = (Button)findViewById(R.id.btnTemplateReset);
         Context context = this;
 
         //create new alert with message

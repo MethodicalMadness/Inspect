@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txtViewHeader"
+            android:id="@+id/tvFileManagerHeader"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -43,10 +43,10 @@
             android:text="Load Template"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtViewHeader" />
+            app:layout_constraintTop_toBottomOf="@+id/tvFileManagerHeader" />
 
         <Button
-            android:id="@+id/btnBack"
+            android:id="@+id/btnFileManagerBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"

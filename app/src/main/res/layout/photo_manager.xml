@@ -11,7 +11,7 @@
     android:weightSum="10">
 
     <TextView
-        android:id="@+id/txtViewHeader"
+        android:id="@+id/txtPhotoManagerHeader"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_marginTop="16dp"
@@ -53,7 +53,7 @@
         />
 
     <Button
-        android:id="@+id/btnBack"
+        android:id="@+id/btnPhotoManagerBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="50dp"

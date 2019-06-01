@@ -30,13 +30,13 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/btnSubmit"
+            app:layout_constraintBottom_toTopOf="@+id/btnModSubmit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTestModHeader" />
 
         <Button
-            android:id="@+id/btnSubmit"
+            android:id="@+id/btnModSubmit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -58,7 +58,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/btnBack"
+            android:id="@+id/btnModBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

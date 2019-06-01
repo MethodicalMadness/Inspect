@@ -222,7 +222,7 @@ public class FileSelectActivity extends MainActivity {
     }
 
     public void configureBackBtn(){
-        Button backBtn = (Button)findViewById(R.id.btnBack);
+        Button backBtn = (Button)findViewById(R.id.btnFileManagerBack);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
