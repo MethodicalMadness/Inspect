@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main Activity";
     private static final int REQUEST_CODE = 1;
 
+    Button btnShare;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,22 @@ public class MainActivity extends AppCompatActivity {
         checkPermissions();
         Context context = App.getContext();
         LogManager.reportStatus(context, "MAINACTIVITY", "onCreate");
+
+        //Creating share button
+        btnShare = (Button)findViewById(R.id.btnShare);
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                String shareBody = "Your body here";
+                String shareSub = "Your subject here";
+                myIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
+                myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(myIntent, "Share via"));
+            }
+
+        });
 
     }
 
