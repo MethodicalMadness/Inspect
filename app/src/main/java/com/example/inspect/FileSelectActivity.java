@@ -37,12 +37,31 @@ public class FileSelectActivity extends MainActivity {
     private ParcelFileDescriptor inputPFD;
     private Intent returnIntent;
 
+    Button btnShare;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.filepaths);
+        setContentView(R.layout.activity_main);
         configureBackBtn();
+
+        //Creating share button
+        btnShare = (Button)findViewById(R.id.btnShare);
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                String shareBody = "Your body here";
+                String shareSub = "Your subject here";
+                myIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
+                myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(myIntent, "Share via"));
+            }
+
+        });
+
 
         requestFileIntent = new Intent(Intent.ACTION_PICK);
         requestFileIntent.setType("image/jpg");

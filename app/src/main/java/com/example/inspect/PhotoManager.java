@@ -59,6 +59,7 @@ public class PhotoManager extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
@@ -81,6 +82,7 @@ public class PhotoManager extends AppCompatActivity {
         }
     }
 
+
     //Allows you to get photo from image gallery//
     private void openGallery(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -101,6 +103,7 @@ public class PhotoManager extends AppCompatActivity {
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -129,6 +132,7 @@ public class PhotoManager extends AppCompatActivity {
         }
     }
 
+
     //Add photo to gallery//
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -137,6 +141,7 @@ public class PhotoManager extends AppCompatActivity {
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
     }
+
 
     //Decode a scaled image//
     private void setPic() {
@@ -164,11 +169,13 @@ public class PhotoManager extends AppCompatActivity {
         imageView.setImageBitmap(bitmap);
     }
 
+
     //Allows you to alter/edit the photo//
     public static void alterPhoto() {
         Context context = App.getContext();
         LogManager.reportStatus(context, "PHOTOMANAGER", "alterPhoto");
     }
+
 
     public void configureBackBtn(){
         Button backBtn = (Button)findViewById(R.id.btnBack);
