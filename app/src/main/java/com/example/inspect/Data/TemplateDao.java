@@ -3,17 +3,21 @@ package com.example.inspect.Data;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.TypeConverters;
 
 import java.util.ArrayList;
+import java.util.List;
 
+@TypeConverters({ModuleTypeConverter.class})
 @Dao
 interface TemplateDao {
     //Queries
-    @Query("Select name from Template")
+    @Query("SELECT name FROM Template")
     public String getTemplateName();
 
-    @Query("Select templateModules from template")
-    public ArrayList<Modules> getModules();
+    //ERROR CAUSED HERE
+    @Query("SELECT template_modules FROM template")
+    public List<Modules> getModules();
 
     //Insert
 

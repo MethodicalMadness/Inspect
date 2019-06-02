@@ -1,10 +1,12 @@
 package com.example.inspect;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import android.Manifest;
 import android.content.Context;
@@ -14,6 +16,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+
+import com.example.inspect.Data.TemplateDatabase;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         checkPermissions();
         Context context = App.getContext();
+
+        //database
+        RoomDatabase.Builder db = Room.databaseBuilder(this, TemplateDatabase.class, "template_database");
 
         //TODO: load modules into a list here
 

@@ -1,5 +1,6 @@
 package com.example.inspect.Data;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
@@ -12,8 +13,15 @@ public class Template {
     @PrimaryKey
     private int id;
     private String name;
-    @TypeConverters(ModuleTypeConverter.class)
+    @TypeConverters({ModuleTypeConverter.class})
+    @ColumnInfo(name = "template_modules")
     private ArrayList<Modules> templateModules;
+
+    public Template(int id, String name, ArrayList<Modules> templateModules) {
+        this.id = id;
+        this.name = name;
+        this.templateModules = templateModules;
+    }
 
     //getter and setters
     public int getId() {
@@ -33,10 +41,16 @@ public class Template {
     }
 
     public ArrayList<Modules> getTemplateModules() {
+        if (templateModules == null) {
+            templateModules = new ArrayList<>();
+            return templateModules;
+        }
+
         return templateModules;
     }
 
     public void setTemplateModules(ArrayList<Modules> templateModules) {
+
         this.templateModules = templateModules;
     }
 }
