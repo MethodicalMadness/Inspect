@@ -5,15 +5,22 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+
+import java.io.File;
+import java.net.URI;
+import java.net.URLConnection;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
         btnShare = (Button)findViewById(R.id.btnShare);
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
+
+                //Sharing plain text (Working)
                 Intent myIntent = new Intent(Intent.ACTION_SEND);
                 myIntent.setType("text/plain");
                 String shareBody = "Your body here";
@@ -43,11 +52,50 @@ public class MainActivity extends AppCompatActivity {
                 myIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
                 myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(myIntent, "Share via"));
+
+                //Attempt # 1: Sharing text file (Failed Attempt)
+                /*
+                File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("text/*");
+                sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.getAbsolutePath()));
+                startActivity(Intent.createChooser(sharingIntent, "Share file via"));*/
+
+                //Attempt # 2: Sharing a PDF file (Failed Attempt - Errors within code)
+                /*
+                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+                File fileWithinMyDir = new File(myFilePath);
+                URI fileUri = FileProvider.getUriForFile(this,
+                        "com.example.inspect.fileprovider",
+                        fileWithinMyDir);;
+                if(fileWithinMyDir.exists()) {
+                    intentShareFile.setType("Inspect/pdf");
+                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+ myFilePath));
+
+                    intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
+                            "Sharing File...");
+                    intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
+
+                    startActivity(Intent.createChooser(intentShareFile, "Share File via"));
+                }*/
+
+                //Attempt #3: Sharing a text file (Unsure if this works)
+                /*File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
+                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+                intentShareFile.setType(URLConnection.guessContentTypeFromName(file.getName()));
+                intentShareFile.putExtra(Intent.EXTRA_STREAM,
+                        Uri.parse("content://"+file.getAbsolutePath()));
+                intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject");
+                intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File Description");
+                startActivity(Intent.createChooser(intentShareFile, "Share File via"));*/
             }
 
         });
 
+
+
     }
+
 
     //setting up menu activities
     public void toTemplateMenu(View view) {
