@@ -12,8 +12,8 @@ interface TemplateDao {
     public String getTemplateName();
 
     //ERROR CAUSED HERE
-    @Query("SELECT * FROM template INNER JOIN templatemodules ON template.moduleId = templateModules.moduleId")
-    public ArrayList<String> moduleNames();
+    //@Query("SELECT * FROM template INNER JOIN templatemodules ON template.moduleId = templateModules.id")
+    //public String moduleNames();
 
 
     //Insert

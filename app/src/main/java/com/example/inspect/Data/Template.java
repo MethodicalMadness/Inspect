@@ -3,6 +3,7 @@ package com.example.inspect.Data;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
@@ -10,8 +11,9 @@ import androidx.room.PrimaryKey;
 @Entity (foreignKeys = {
         @ForeignKey(
                 entity = TemplateModules.class,
-                parentColumns = "moduleId",
-                childColumns = "moduleName"
+                parentColumns = "id",
+                childColumns = "moduleId",
+                onDelete = ForeignKey.CASCADE
         )
 })
 public class Template {

@@ -1,27 +1,28 @@
 package com.example.inspect.Data;
 
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(indices = {@Index(value = {"id"}, unique = true)})
 public class TemplateModules {
     @PrimaryKey
-    private int moduleId;
+    private int id;
     private String moduleName;
 
     //constructor
-    public TemplateModules(int moduleId, String moduleName) {
-        this.moduleId = moduleId;
+    public TemplateModules(int id, String moduleName) {
+        this.id = id;
         this.moduleName = moduleName;
     }
 
     //getters and setters
-    public int getModuleId() {
-        return moduleId;
+    public int getId() {
+        return id;
     }
 
-    public void setModuleId(int moduleId) {
-        this.moduleId = moduleId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getModuleName() {
