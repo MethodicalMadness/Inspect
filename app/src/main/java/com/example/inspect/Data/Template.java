@@ -2,34 +2,38 @@ package com.example.inspect.Data;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
-import java.util.ArrayList;
 
 //Database
-@Entity
+@Entity (foreignKeys = {
+        @ForeignKey(
+                entity = TemplateModules.class,
+                parentColumns = "moduleId",
+                childColumns = "moduleName"
+        )
+})
 public class Template {
-    @PrimaryKey
-    private int id;
+    @PrimaryKey(autoGenerate = true)
+    private int templateId;
     private String name;
-    @TypeConverters({ModuleTypeConverter.class})
-    @ColumnInfo(name = "template_modules")
-    private ArrayList<Modules> templateModules;
+    private int moduleId;
 
-    public Template(int id, String name, ArrayList<Modules> templateModules) {
-        this.id = id;
+    //constructor
+    public Template(int templateId, String name, int moduleId) {
+        this.templateId = templateId;
         this.name = name;
-        this.templateModules = templateModules;
+        this.moduleId = moduleId;
     }
 
-    //getter and setters
-    public int getId() {
-        return id;
+    //setters and getters
+    public int getTemplateId() {
+        return templateId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTemplateId(int templateId) {
+        this.templateId = templateId;
     }
 
     public String getName() {
@@ -40,17 +44,11 @@ public class Template {
         this.name = name;
     }
 
-    public ArrayList<Modules> getTemplateModules() {
-        if (templateModules == null) {
-            templateModules = new ArrayList<>();
-            return templateModules;
-        }
-
-        return templateModules;
+    public int getModuleId() {
+        return moduleId;
     }
 
-    public void setTemplateModules(ArrayList<Modules> templateModules) {
-
-        this.templateModules = templateModules;
+    public void setModuleId(int moduleId) {
+        this.moduleId = moduleId;
     }
 }

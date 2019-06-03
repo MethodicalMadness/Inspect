@@ -1,14 +1,10 @@
 package com.example.inspect.Data;
 
 import androidx.room.Dao;
-import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.TypeConverters;
 
 import java.util.ArrayList;
-import java.util.List;
 
-@TypeConverters({ModuleTypeConverter.class})
 @Dao
 interface TemplateDao {
     //Queries
@@ -16,8 +12,9 @@ interface TemplateDao {
     public String getTemplateName();
 
     //ERROR CAUSED HERE
-    @Query("SELECT template_modules FROM template")
-    public List<Modules> getModules();
+    @Query("SELECT * FROM template INNER JOIN templatemodules ON template.moduleId = templateModules.moduleId")
+    public ArrayList<String> moduleNames();
+
 
     //Insert
 
