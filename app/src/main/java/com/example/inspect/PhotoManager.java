@@ -64,6 +64,7 @@ public class PhotoManager extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         Context context = App.getContext();
+        data.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
@@ -76,9 +77,19 @@ public class PhotoManager extends AppCompatActivity {
             LogManager.reportStatus(context, "PHOTOMANAGER", "gotPhotoFromCamera");
         }
         else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
-            imageUri = data.getData();
-            imageView.setImageURI(imageUri);
-            LogManager.reportStatus(context, "PHOTOMANAGER", "gotPhotoFromCamera");
+            if(data.getData() != null) {
+                imageUri = data.getData();
+            }
+            if (imageUri != null) {
+                imageView.setImageURI(imageUri);
+                LogManager.reportStatus(context, "PHOTOMANAGER", "gotUriFromCamera");
+            }
+            else{
+                LogManager.reportStatus(context, "PHOTOMANAGER", "uriFromDataIsNull");
+            }
+        }
+        else if (requestCode != RESULT_OK){
+            LogManager.reportStatus(context, "PHOTOMANAGER", "couldNotGetPhoto");
         }
     }
 
@@ -136,6 +147,7 @@ public class PhotoManager extends AppCompatActivity {
                 LogManager.reportStatus(context, "PHOTOMANAGER", "photoUriRetrieved: " + photoURI);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                imageUri = photoURI;
             }
         }
     }
