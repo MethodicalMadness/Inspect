@@ -97,8 +97,16 @@ public class PhotoManager extends AppCompatActivity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "Inspect_" + timeStamp + "_.jpg";
-        File storageDir = new File(context.getFilesDir(), "images");
-        File image = new File(storageDir, imageFileName);
+        File storageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "images");
+        // Create the storage directory if it does not exist
+        if (!storageDir.exists()) {
+            if (!storageDir.mkdirs()) {
+                LogManager.reportStatus(context, "PHOTOMANAGER", "failedToCreateDirectory");
+                return null;
+            }
+        }
+        // Create file
+        File image = new File(storageDir.getPath() + File.separator + imageFileName);
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
