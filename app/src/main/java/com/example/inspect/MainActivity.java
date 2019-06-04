@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("text/*");
-                sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.getAbsolutePath()));
+                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(exportPath));;
                 startActivity(Intent.createChooser(sharingIntent, "Share file via"));*/
 
                 //Attempt # 2: Sharing a PDF file (Failed Attempt - Errors within code)
@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 if(fileWithinMyDir.exists()) {
                     intentShareFile.setType("Inspect/pdf");
                     intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+ myFilePath));
-
                     intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                             "Sharing File...");
                     intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
@@ -80,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 }*/
 
                 //Attempt #3: Sharing a text file (Unsure if this works)
-                /*File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
+                /*
+                File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
                 Intent intentShareFile = new Intent(Intent.ACTION_SEND);
                 intentShareFile.setType(URLConnection.guessContentTypeFromName(file.getName()));
                 intentShareFile.putExtra(Intent.EXTRA_STREAM,
