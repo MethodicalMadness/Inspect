@@ -64,6 +64,7 @@ public class PhotoManager extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         Context context = App.getContext();
+        data.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
@@ -76,9 +77,19 @@ public class PhotoManager extends AppCompatActivity {
             LogManager.reportStatus(context, "PHOTOMANAGER", "gotPhotoFromCamera");
         }
         else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
-            imageUri = data.getData();
-            imageView.setImageURI(imageUri);
-            LogManager.reportStatus(context, "PHOTOMANAGER", "gotPhotoFromCamera");
+            if(data.getData() != null) {
+                imageUri = data.getData();
+            }
+            if (imageUri != null) {
+                imageView.setImageURI(imageUri);
+                LogManager.reportStatus(context, "PHOTOMANAGER", "gotUriFromCamera");
+            }
+            else{
+                LogManager.reportStatus(context, "PHOTOMANAGER", "uriFromDataIsNull");
+            }
+        }
+        else if (requestCode != RESULT_OK){
+            LogManager.reportStatus(context, "PHOTOMANAGER", "couldNotGetPhoto");
         }
     }
 
@@ -97,8 +108,16 @@ public class PhotoManager extends AppCompatActivity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "Inspect_" + timeStamp + "_.jpg";
-        File storageDir = new File(context.getFilesDir(), "images");
-        File image = new File(storageDir, imageFileName);
+        File storageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "images");
+        // Create the storage directory if it does not exist
+        if (!storageDir.exists()) {
+            if (!storageDir.mkdirs()) {
+                LogManager.reportStatus(context, "PHOTOMANAGER", "failedToCreateDirectory");
+                return null;
+            }
+        }
+        // Create file
+        File image = new File(storageDir.getPath() + File.separator + imageFileName);
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
@@ -128,6 +147,7 @@ public class PhotoManager extends AppCompatActivity {
                 LogManager.reportStatus(context, "PHOTOMANAGER", "photoUriRetrieved: " + photoURI);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                imageUri = photoURI;
             }
         }
     }

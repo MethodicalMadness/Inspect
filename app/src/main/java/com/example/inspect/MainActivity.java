@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
-
 import java.io.File;
 import java.net.URI;
 import java.net.URLConnection;
@@ -27,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Main Activity";
     private static final int REQUEST_CODE = 1;
-
     Button btnShare;
 
     @Override
@@ -152,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             Context context2 = App.getContext();
             LogManager.reportStatus(context2, "MAINACTIVITY", "checkPermissions PERMISSIONS PASSED CORRECTLY");
         } else {
-            ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
+            ActivityCompat.requestPermissions(MainActivity.this, permissions, REQUEST_CODE);
             Context context2 = App.getContext();
             LogManager.reportStatus(context2, "MAINACTIVITY", "checkPermissions PERMISSIONS REQUESTED");
         }
