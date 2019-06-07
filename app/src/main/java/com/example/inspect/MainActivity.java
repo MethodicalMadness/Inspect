@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import android.Manifest;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.*;
 import java.io.File;
 import java.net.URI;
@@ -85,9 +87,33 @@ public class MainActivity extends AppCompatActivity {
                 intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject");
                 intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File Description");
                 startActivity(Intent.createChooser(intentShareFile, "Share File via"));*/
+
+
+                //Attempt # 4: Sharing files (Failed attempt - errors within code)
+                /*
+                File directory = new File(Environment.getExternalStorageDirectory() + File.separator + BuildConfig.APPLICATION_ID + File.separator + DIRECTORY_VIDEO);
+                Object mediaModel;
+                String fileName = mediaModel.getContentPath().substring(mediaModel.getContentPath().lastIndexOf('/') + 1, mediaModel.getContentPath().length());
+                File fileWithinMyDir = new File(directory, fileName);
+                if (fileWithinMyDir.exists()) {
+                    Uri fileUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", fileWithinMyDir);
+                    Intent intent = ShareCompat.IntentBuilder.from(this)
+                            .setStream(fileUri) // uri from FileProvider
+                            .setType("text/html")
+                            .getIntent()
+                            .setAction(Intent.ACTION_SEND) //Change if needed
+                            .setDataAndType(fileUri, "video/*")
+                            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(intent);*/
+
+
             }
+            
+            
 
         });
+
+
 
 
 
