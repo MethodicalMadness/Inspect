@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         Context context = App.getContext();
         LogManager.reportStatus(context, "MAINACTIVITY", "onCreate");
 
+
         //Creating share button
         btnShare = (Button)findViewById(R.id.btnShare);
         btnShare.setOnClickListener(new View.OnClickListener() {
