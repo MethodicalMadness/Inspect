@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -131,15 +132,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //Attempt # 5: Sharing a file (Unsure if this works)
+    //Attempt # 5: Sharing a file (this works)
     private void shareFile(String filePath) {
-
+        Context context = App.getContext();
         File f = new File(filePath);
-
-        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
         File fileWithinMyDir = new File(filePath);
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+        intentShareFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //bypass restrictions
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
         if (fileWithinMyDir.exists()) {
+            LogManager.reportStatus(context, "MAINACTIVITY", "fileExists");
             intentShareFile.setType("text/*");
             intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filePath));
             intentShareFile.putExtra(Intent.EXTRA_SUBJECT, "Inspect File Share: " + f.getName());
@@ -147,25 +152,17 @@ public class MainActivity extends AppCompatActivity {
 
             this.startActivity(Intent.createChooser(intentShareFile, f.getName()));
         }
+        else{
+            LogManager.reportStatus(context, "MAINACTIVITY", "fileDoesNotExist");
+        }
     }
 
+    // get hard coded file
     private String createTextFile() throws IOException {
         Context context = App.getContext();
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String textFileName = "Inspect_" + timeStamp + "_.txt";
         File storageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "images");
-        // Create the storage directory if it does not exist
-        if (!storageDir.exists()) {
-            if (!storageDir.mkdirs()) {
-                LogManager.reportStatus(context, "MAINACTIVITY", "failedToCreateDirectory");
-                return null;
-            }
-        }
-        // Create file
-        File text = new File(storageDir.getPath() + File.separator + textFileName);
-        // Save a file: path for use with ACTION_VIEW intents
-        currentTextPath = text.getAbsolutePath();
+        currentTextPath = storageDir.getPath() + File.separator + "text.txt";
+        LogManager.reportStatus(context, "MAINACTIVITY", "gotTextFile");
         return currentTextPath;
     }
 
