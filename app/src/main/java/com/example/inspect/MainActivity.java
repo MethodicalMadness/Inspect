@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(intentShareFile, "Share File via"));*/
 
 
-                //Attempt # 4: Sharing files (Failed attempt - errors within code)
+                //Attempt # 4: Sharing files (Failed attempt - Errors within code)
                 /*
                 File directory = new File(Environment.getExternalStorageDirectory() + File.separator + BuildConfig.APPLICATION_ID + File.separator + DIRECTORY_VIDEO);
                 Object mediaModel;
