@@ -119,6 +119,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Attempt # 5: Sharing a file (Unsure if this works)
+    private void shareFile(String filePath) {
+
+        File f = new File(filePath);
+
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+        File fileWithinMyDir = new File(filePath);
+
+        if (fileWithinMyDir.exists()) {
+            intentShareFile.setType("text/*");
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filePath));
+            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, "Inspect File Share: " + f.getName());
+            intentShareFile.putExtra(Intent.EXTRA_TEXT, "Inspect File Share: " + f.getName());
+
+            this.startActivity(Intent.createChooser(intentShareFile, f.getName()));
+        }
+    }
+
 
     //setting up menu activities
     public void toTemplateMenu(View view) {
