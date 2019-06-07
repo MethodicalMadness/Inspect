@@ -19,15 +19,19 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Main Activity";
     private static final int REQUEST_CODE = 1;
-    Button btnShare;
+    private Button btnShare;
+    private String currentTextPath = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +47,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                String textFilePath = null;
+                try {
+                    textFilePath = createTextFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                shareFile(textFilePath);
+                /*
                 //Sharing plain text (Working)
                 Intent myIntent = new Intent(Intent.ACTION_SEND);
                 myIntent.setType("text/plain");
@@ -53,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(myIntent, "Share via"));
 
                 //Attempt # 1: Sharing text file (Failed Attempt)
-                /*
+
                 File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("text/*");
@@ -135,6 +147,26 @@ public class MainActivity extends AppCompatActivity {
 
             this.startActivity(Intent.createChooser(intentShareFile, f.getName()));
         }
+    }
+
+    private String createTextFile() throws IOException {
+        Context context = App.getContext();
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String textFileName = "Inspect_" + timeStamp + "_.txt";
+        File storageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "images");
+        // Create the storage directory if it does not exist
+        if (!storageDir.exists()) {
+            if (!storageDir.mkdirs()) {
+                LogManager.reportStatus(context, "MAINACTIVITY", "failedToCreateDirectory");
+                return null;
+            }
+        }
+        // Create file
+        File text = new File(storageDir.getPath() + File.separator + textFileName);
+        // Save a file: path for use with ACTION_VIEW intents
+        currentTextPath = text.getAbsolutePath();
+        return currentTextPath;
     }
 
 
