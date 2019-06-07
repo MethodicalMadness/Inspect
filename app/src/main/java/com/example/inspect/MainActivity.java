@@ -41,8 +41,7 @@ public class MainActivity extends AppCompatActivity {
         checkPermissions();
         Context context = App.getContext();
         LogManager.reportStatus(context, "MAINACTIVITY", "onCreate");
-
-
+        
         //Creating share button
         btnShare = (Button)findViewById(R.id.btnShare);
         btnShare.setOnClickListener(new View.OnClickListener() {
@@ -56,80 +55,10 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 shareFile(textFilePath);
-                /*
-                //Sharing plain text (Working)
-                Intent myIntent = new Intent(Intent.ACTION_SEND);
-                myIntent.setType("text/plain");
-                String shareBody = "Your body here";
-                String shareSub = "Your subject here";
-                myIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
-                myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(myIntent, "Share via"));
-
-                //Attempt # 1: Sharing text file (Failed Attempt)
-
-                File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
-                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                sharingIntent.setType("text/*");
-                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(exportPath));;
-                startActivity(Intent.createChooser(sharingIntent, "Share file via"));*/
-
-                //Attempt # 2: Sharing a PDF file (Failed Attempt - Errors within code)
-                /*
-                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                File fileWithinMyDir = new File(myFilePath);
-                URI fileUri = FileProvider.getUriForFile(this,
-                        "com.example.inspect.fileprovider",
-                        fileWithinMyDir);;
-                if(fileWithinMyDir.exists()) {
-                    intentShareFile.setType("Inspect/pdf");
-                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+ myFilePath));
-                    intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
-                            "Sharing File...");
-                    intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
-
-                    startActivity(Intent.createChooser(intentShareFile, "Share File via"));
-                }*/
-
-                //Attempt #3: Sharing a text file (Unsure if this works)
-                /*
-                File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
-                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                intentShareFile.setType(URLConnection.guessContentTypeFromName(file.getName()));
-                intentShareFile.putExtra(Intent.EXTRA_STREAM,
-                        Uri.parse("content://"+file.getAbsolutePath()));
-                intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject");
-                intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File Description");
-                startActivity(Intent.createChooser(intentShareFile, "Share File via"));*/
-
-
-                //Attempt # 4: Sharing files (Failed attempt - Errors within code)
-                /*
-                File directory = new File(Environment.getExternalStorageDirectory() + File.separator + BuildConfig.APPLICATION_ID + File.separator + DIRECTORY_VIDEO);
-                Object mediaModel;
-                String fileName = mediaModel.getContentPath().substring(mediaModel.getContentPath().lastIndexOf('/') + 1, mediaModel.getContentPath().length());
-                File fileWithinMyDir = new File(directory, fileName);
-                if (fileWithinMyDir.exists()) {
-                    Uri fileUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", fileWithinMyDir);
-                    Intent intent = ShareCompat.IntentBuilder.from(this)
-                            .setStream(fileUri) // uri from FileProvider
-                            .setType("text/html")
-                            .getIntent()
-                            .setAction(Intent.ACTION_SEND) //Change if needed
-                            .setDataAndType(fileUri, "video/*")
-                            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(intent);*/
-
 
             }
-            
-            
 
         });
-
-
-
-
 
     }
 
