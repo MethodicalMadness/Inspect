@@ -87,11 +87,25 @@
             android:id="@+id/btnPhotoManager"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="80dp"
             android:onClick="toPhotoManager"
             android:text="Photo Manager"
             app:layout_constraintEnd_toEndOf="@+id/btnFileManager"
             app:layout_constraintStart_toStartOf="@+id/btnFileManager"
             app:layout_constraintTop_toBottomOf="@+id/btnFileManager" />
+
+        <Button
+            android:id="@+id/btnShare"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Share"
+            app:layout_constraintEnd_toEndOf="@+id/btnPhotoManager"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/btnPhotoManager"
+            app:layout_constraintTop_toBottomOf="@+id/btnPhotoManager"
+            tools:layout_conversion_absoluteHeight="48dp"
+            tools:layout_conversion_absoluteWidth="411dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

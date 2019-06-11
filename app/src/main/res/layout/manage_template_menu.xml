@@ -32,7 +32,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/btnEditTemplate"
+            android:id="@+id/btnCreateTemplate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -49,9 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="View Template"
-            app:layout_constraintEnd_toEndOf="@+id/btnEditTemplate"
-            app:layout_constraintStart_toStartOf="@+id/btnEditTemplate"
-            app:layout_constraintTop_toBottomOf="@+id/btnEditTemplate" />
+            app:layout_constraintEnd_toEndOf="@+id/btnCreateTemplate"
+            app:layout_constraintStart_toStartOf="@+id/btnCreateTemplate"
+            app:layout_constraintTop_toBottomOf="@+id/btnCreateTemplate" />
 
         <Button
             android:id="@+id/btnManageTemplateBack"

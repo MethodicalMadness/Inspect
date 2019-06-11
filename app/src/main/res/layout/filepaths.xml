@@ -2,10 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <paths>
+        <files-path android:path="Android/data/com.example.inspect/files/Documents/" android:name="documents" />
+    </paths>
     <paths>
         <files-path android:path="images/" android:name="myimages" />
     </paths>
-
 
     <TextView
         android:id="@+id/filename_text"
@@ -18,8 +21,4 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="filesize_text" />
-
-
-
-
 </LinearLayout>
