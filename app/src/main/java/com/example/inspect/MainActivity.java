@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import android.Manifest;
@@ -13,19 +14,25 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Main Activity";
     private static final int REQUEST_CODE = 1;
-    Button btnShare;
+    private Button btnShare;
+    private String currentTextPath = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,56 +48,52 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //Sharing plain text (Working)
-                Intent myIntent = new Intent(Intent.ACTION_SEND);
-                myIntent.setType("text/plain");
-                String shareBody = "Your body here";
-                String shareSub = "Your subject here";
-                myIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub);
-                myIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(myIntent, "Share via"));
+                String textFilePath = null;
+                try {
+                    textFilePath = createTextFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                shareFile(textFilePath);
 
-                //Attempt # 1: Sharing text file (Failed Attempt)
-                /*
-                File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
-                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                sharingIntent.setType("text/*");
-                sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file.getAbsolutePath()));
-                startActivity(Intent.createChooser(sharingIntent, "Share file via"));*/
-
-                //Attempt # 2: Sharing a PDF file (Failed Attempt - Errors within code)
-                /*
-                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                File fileWithinMyDir = new File(myFilePath);
-                URI fileUri = FileProvider.getUriForFile(this,
-                        "com.example.inspect.fileprovider",
-                        fileWithinMyDir);;
-                if(fileWithinMyDir.exists()) {
-                    intentShareFile.setType("Inspect/pdf");
-                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+ myFilePath));
-
-                    intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
-                            "Sharing File...");
-                    intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
-
-                    startActivity(Intent.createChooser(intentShareFile, "Share File via"));
-                }*/
-
-                //Attempt #3: Sharing a text file (Unsure if this works)
-                /*File file = new File(Environment.getExternalStorageDirectory().toString() + "/" + "abc.txt");
-                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                intentShareFile.setType(URLConnection.guessContentTypeFromName(file.getName()));
-                intentShareFile.putExtra(Intent.EXTRA_STREAM,
-                        Uri.parse("content://"+file.getAbsolutePath()));
-                intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject");
-                intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File Description");
-                startActivity(Intent.createChooser(intentShareFile, "Share File via"));*/
             }
 
         });
 
+    }
 
+    //Attempt # 5: Sharing a file (this works)
+    private void shareFile(String filePath) {
+        Context context = App.getContext();
+        File f = new File(filePath);
+        File fileWithinMyDir = new File(filePath);
+        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+        intentShareFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //bypass restrictions
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
+        if (fileWithinMyDir.exists()) {
+            LogManager.reportStatus(context, "MAINACTIVITY", "fileExists");
+            intentShareFile.setType("text/*");
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filePath));
+            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, "Inspect File Share: " + f.getName());
+            intentShareFile.putExtra(Intent.EXTRA_TEXT, "Inspect File Share: " + f.getName());
+
+            this.startActivity(Intent.createChooser(intentShareFile, f.getName()));
+        }
+        else{
+            LogManager.reportStatus(context, "MAINACTIVITY", "fileDoesNotExist");
+        }
+    }
+
+    // get hard coded file
+    private String createTextFile() throws IOException {
+        Context context = App.getContext();
+        File storageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "images");
+        currentTextPath = storageDir.getPath() + File.separator + "text.txt";
+        LogManager.reportStatus(context, "MAINACTIVITY", "gotTextFile");
+        return currentTextPath;
     }
 
 
