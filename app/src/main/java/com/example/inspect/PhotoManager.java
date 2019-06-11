@@ -4,21 +4,31 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 
 public class PhotoManager extends AppCompatActivity {
 
-    ImageView imageView;
+    private ImageView imageView;
     private static final int PICK_IMAGE = 100;
-    Uri imageUri;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private Uri imageUri;
+    private String currentPhotoPath;
+    private static final int REQUEST_TAKE_PHOTO = 2;
+
 
     //Allows you to take a photo with the camera or get a photo from the image gallery//
     @Override
@@ -31,14 +41,12 @@ public class PhotoManager extends AppCompatActivity {
 
         Button btnCamera = (Button)findViewById(R.id.btnCamera);
         Button btnGallery = (Button)findViewById(R.id.btnGallery);
-        ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        imageView = (ImageView)findViewById(R.id.imageView);
 
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 0);
-
+                dispatchTakePictureIntent();
             }
         });
 
@@ -48,18 +56,43 @@ public class PhotoManager extends AppCompatActivity {
                 openGallery();
             }
         });
+
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap = (Bitmap)data.getExtras().get("data");
-        imageView.setImageBitmap(bitmap);
-        if (resultCode == RESULT_OK && resultCode == PICK_IMAGE){
+        Context context = App.getContext();
+        data.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
+            LogManager.reportStatus(context, "PHOTOMANAGER", "imagePickedFromGallery");
+        }
+        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+            LogManager.reportStatus(context, "PHOTOMANAGER", "gotPhotoFromCamera");
+        }
+        else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
+            if(data.getData() != null) {
+                imageUri = data.getData();
+            }
+            if (imageUri != null) {
+                imageView.setImageURI(imageUri);
+                LogManager.reportStatus(context, "PHOTOMANAGER", "gotUriFromCamera");
+            }
+            else{
+                LogManager.reportStatus(context, "PHOTOMANAGER", "uriFromDataIsNull");
+            }
+        }
+        else if (requestCode != RESULT_OK){
+            LogManager.reportStatus(context, "PHOTOMANAGER", "couldNotGetPhoto");
         }
     }
+
 
     //Allows you to get photo from image gallery//
     private void openGallery(){
@@ -69,11 +102,100 @@ public class PhotoManager extends AppCompatActivity {
         LogManager.reportStatus(context, "PHOTOMANAGER", "getPhotoFromGallery");
     }
 
+
+    private File createImageFile() throws IOException {
+        Context context = App.getContext();
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "Inspect_" + timeStamp + "_.jpg";
+        File storageDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "images");
+        // Create the storage directory if it does not exist
+        if (!storageDir.exists()) {
+            if (!storageDir.mkdirs()) {
+                LogManager.reportStatus(context, "PHOTOMANAGER", "failedToCreateDirectory");
+                return null;
+            }
+        }
+        // Create file
+        File image = new File(storageDir.getPath() + File.separator + imageFileName);
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePictureIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Context context = App.getContext();
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+                LogManager.reportStatus(context, "PHOTOMANAGER", "createdImageFile");
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                LogManager.reportStatus(context, "PHOTOMANAGER", "failedToCreateImageFile");
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.inspect.fileprovider",
+                        photoFile);
+                LogManager.reportStatus(context, "PHOTOMANAGER", "photoUriRetrieved: " + photoURI);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                imageUri = photoURI;
+            }
+        }
+    }
+
+
+    //Add photo to gallery//
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
+
+    //Decode a scaled image//
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = imageView.getWidth();
+        int targetH = imageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.Options boptions = null;
+        BitmapFactory.decodeFile(currentPhotoPath, boptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, boptions);
+        imageView.setImageBitmap(bitmap);
+    }
+
+
     //Allows you to alter/edit the photo//
     public static void alterPhoto() {
         Context context = App.getContext();
         LogManager.reportStatus(context, "PHOTOMANAGER", "alterPhoto");
     }
+
 
     public void configureBackBtn(){
         Button backBtn = (Button)findViewById(R.id.btnBack);
