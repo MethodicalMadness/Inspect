@@ -90,10 +90,9 @@
             android:layout_marginTop="80dp"
             android:onClick="toPhotoManager"
             android:text="Photo Manager"
-            app:layout_constraintEnd_toEndOf="@+id/btnPrintExample2"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/btnPrintExample2"
-            app:layout_constraintTop_toBottomOf="@+id/btnPrintExample2" />
+            app:layout_constraintEnd_toEndOf="@+id/btnFileManager"
+            app:layout_constraintStart_toStartOf="@+id/btnFileManager"
+            app:layout_constraintTop_toBottomOf="@+id/btnFileManager" />
 
         <Button
             android:id="@+id/btnShare"
@@ -107,7 +106,6 @@
             app:layout_constraintTop_toBottomOf="@+id/btnPhotoManager"
             tools:layout_conversion_absoluteHeight="48dp"
             tools:layout_conversion_absoluteWidth="411dp" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

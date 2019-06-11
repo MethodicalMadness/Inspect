@@ -1,11 +1,13 @@
 package com.example.inspect;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 import androidx.core.content.FileProvider;
 import android.Manifest;
 import android.content.Context;
@@ -26,6 +28,8 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.example.inspect.Data.TemplateDatabase;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         checkPermissions();
         Context context = App.getContext();
+
+        //database
+        RoomDatabase.Builder db = Room.databaseBuilder(this, TemplateDatabase.class, "template_database");
+
+        //TODO: load modules into a list here
+
         LogManager.reportStatus(context, "MAINACTIVITY", "onCreate");
 
         //Creating share button
