@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.provider.DocumentsContract;
 import android.provider.DocumentsProvider;
 
 import androidx.annotation.Nullable;
@@ -31,6 +34,10 @@ public class StorageAccess extends DocumentsProvider {
         intent.setType("*/*");
         Context context = App.getContext();
         LogManager.reportStatus(context, "STORAGEACCESS", "performFileSearch");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.getDataDirectory());
+        }
 
         startActivityForResult(activity, intent, READ_REQUEST_CODE, bundle);
         LogManager.reportStatus(context, "STORAGEACCESS", "performFileSearch Completed");

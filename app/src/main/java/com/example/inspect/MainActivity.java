@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 shareFile(textFilePath);
-
             }
 
         });
@@ -79,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
             intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filePath));
             intentShareFile.putExtra(Intent.EXTRA_SUBJECT, "Inspect File Share: " + f.getName());
             intentShareFile.putExtra(Intent.EXTRA_TEXT, "Inspect File Share: " + f.getName());
-
             this.startActivity(Intent.createChooser(intentShareFile, f.getName()));
         }
         else{
@@ -95,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         LogManager.reportStatus(context, "MAINACTIVITY", "gotTextFile");
         return currentTextPath;
     }
-
 
     //setting up menu activities
     public void toTemplateMenu(View view) {
@@ -157,6 +154,4 @@ public class MainActivity extends AppCompatActivity {
             LogManager.reportStatus(context2, "MAINACTIVITY", "checkPermissions PERMISSIONS REQUESTED");
         }
     }
-
-
 }
