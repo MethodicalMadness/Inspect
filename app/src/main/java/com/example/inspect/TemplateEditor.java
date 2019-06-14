@@ -15,7 +15,7 @@ public class TemplateEditor extends AppCompatActivity{
 
     private LinearLayout linearLayoutPdf;
     private LinearLayout linearLayoutBody;
-    private ArrayList<View> views  = new ArrayList<>();
+    private ArrayList<View> pageViews = new ArrayList<>();
     private TemplatePage currentPage = new TemplatePage(0);
     private TemplateExample templateExample = new TemplateExample(currentPage);
 
@@ -27,9 +27,15 @@ public class TemplateEditor extends AppCompatActivity{
         setContentView(R.layout.template_editor);
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
-        views.add(findViewById(R.id.scrollViewPage));
+        if(pageViews.size() == 0){
+            onAddPage(null);
+        }
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEEDITOR", "onCreate");
+    }
+
+    public void onAddHeading(View view){
+
     }
 
     // TODO: rework when GUI is sorted
@@ -61,7 +67,7 @@ public class TemplateEditor extends AppCompatActivity{
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View newView = inflater.inflate(R.layout.new_page, null);
         //Add ScrollView to the list so we keep track of the pages for printing
-        views.add(newView.findViewById(R.id.scrollViewPage));
+        pageViews.add(newView.findViewById(R.id.scrollViewPage));
         //Add new page above the 3 buttons
         linearLayoutPdf.addView(newView, linearLayoutPdf.getChildCount()-3);
         //focus on new page
@@ -81,7 +87,7 @@ public class TemplateEditor extends AppCompatActivity{
     //Print the scrollView that holds the linearLayoutBody
     public void printPdf(View view) {
         PrintManager printManager = (PrintManager) getSystemService(PRINT_SERVICE);
-        printManager.print("print_job_name", new ViewPrintAdapter(this, views), null);
+        printManager.print("print_job_name", new ViewPrintAdapter(this, pageViews), null);
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEEDITOR", "printPdf");
     }

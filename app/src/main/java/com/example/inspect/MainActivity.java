@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void toLoadInspection(View view) {
-        Intent intent = new Intent(MainActivity.this, LoadInspection.class);
+        Intent intent = new Intent(MainActivity.this, Inspector.class);
         startActivity(intent);
         Context context = App.getContext();
         LogManager.reportStatus(context, "MAINACTIVITY", "toLoadInspection");
