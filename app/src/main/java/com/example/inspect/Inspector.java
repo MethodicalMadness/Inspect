@@ -11,6 +11,8 @@ import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import com.example.inspect.databinding.HeadingFieldBinding;
 import com.example.inspect.databinding.TextFieldBinding;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,7 +55,24 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "savedInstance");
     }
 
-    // TODO: rework when GUI is sorted
+    // Add the new field at bottom of layout.
+    public void addHeadingField(String label) {
+        //inflater needed to "inflate" layouts
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //instantiate our data object.
+        ElementHeadingField elementHeadingField = new ElementHeadingField(label);
+        //add element data object to page
+        currentPage.addElement(elementHeadingField);
+        //we need to instantiate our xml fragment (text field) and bind it to the data object
+        HeadingFieldBinding headingFieldBinding = HeadingFieldBinding.inflate(inflater, null,false);
+        headingFieldBinding.setElementHeadingField(elementHeadingField);
+        //get new view (our xml fragment -the text field) and add it to current view
+        View newView = headingFieldBinding.getRoot();
+        linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "INSPECTOR", "onAddHeadingField");
+    }
+
     // Add the new field at bottom of layout.
     public void addTextField(String label, String fill) {
         //inflater needed to "inflate" layouts
@@ -72,7 +91,6 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "onAddField");
     }
 
-    // TODO: rework when GUI is sorted
     // Add a new page
     public void addPage() {
         //get index for new current page
@@ -129,13 +147,29 @@ public class Inspector extends AppCompatActivity{
             else {
                 //element[0] is the type, following values are specific to the element
                 String[] element = currentLine.split(splitBy);
+                //add text field
                 if (Integer.valueOf(element[0]) == 1){
                     LogManager.reportStatus(context, "INSPECTOR", "addingTextField");
                     addTextField(element[1],element[2]);
                 }
-                else if (Integer.valueOf(element[0]) == 2) {
-
+                //add paragraph
+                else if (Integer.valueOf(element[0]) == 3) {
+                    LogManager.reportStatus(context, "INSPECTOR", "addingParaField");
                 }
+                //add heading
+                else if (Integer.valueOf(element[0]) == 4) {
+                    LogManager.reportStatus(context, "INSPECTOR", "addingHeadingField");
+                    addHeadingField(element[1]);
+                }
+                //add spacer
+                else if (Integer.valueOf(element[0]) == 5) {
+                    LogManager.reportStatus(context, "INSPECTOR", "addingSpacerField");
+                }
+                //add photo
+                else if (Integer.valueOf(element[0]) == 6) {
+                    LogManager.reportStatus(context, "INSPECTOR", "addingPhotoField");
+                }
+                //shouldn't get here ever
                 else{
                     //ignore
                 }

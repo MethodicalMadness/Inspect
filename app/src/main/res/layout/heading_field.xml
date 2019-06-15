@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="elementHeadingField"
+            type="com.example.inspect.ElementHeadingField" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/label"
+            android:editable="false"
+            android:focusable="false"
+            android:layout_width="65dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".5"
+            android:ems="10"
+            android:inputType="text"
+            android:singleLine="true"
+            android:text="@={elementHeadingField.label}" />
+
+    </LinearLayout>
+</layout>
