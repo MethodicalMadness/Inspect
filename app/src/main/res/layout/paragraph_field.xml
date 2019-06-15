@@ -32,6 +32,6 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:textAlignment="viewStart"
-            android:text="@={elementParagraghField.label}" />
+            android:text="@={elementParagraghField.fill}" />
     </LinearLayout>
 </layout>

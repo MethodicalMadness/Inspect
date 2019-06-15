@@ -28,7 +28,20 @@ public class Inspector extends AppCompatActivity{
     private ArrayList<View> pageViews = new ArrayList<>();
     private TemplatePage currentPage;
     private TemplateExample templateExample = new TemplateExample(null);
-    private String blueprint = "0\n" + "1,Name,Burt";
+    // default value for testing
+    private String blueprint = "0\n" +
+            "3,Inspection\n" +
+            "4,Spacer\n" +
+            "1,Inspector,Name\n" +
+            "1,Employee ID,XXX-XXX\n" +
+            "4,Spacer\n" +
+            "3,Address\n" +
+            "1,Street,*\n" +
+            "1,Suburb,*\n" +
+            "1,State,*\n" +
+            "1,Postcode,XXXX\n" +
+            "4,Spacer\n" +
+            "2,Details,Description of problem\n";
 
 
     @Override
@@ -39,8 +52,6 @@ public class Inspector extends AppCompatActivity{
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
         Intent intent = this.getIntent();
-        //Uri fileUri = Uri.parse(myIntent.getExtras().getString("fileUri"));
-        //retrieveBlueprint(fileUri);
         blueprint = intent.getExtras().getString("blueprint");
         loadString(blueprint);
         LogManager.reportStatus(context, "INSPECTOR", "onCreate");
@@ -199,6 +210,7 @@ public class Inspector extends AppCompatActivity{
                 //add spacer
                 else if (Integer.valueOf(element[0]) == 4) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingSpacerField");
+                    addSpacer();
                 }
                 //add photo
                 else if (Integer.valueOf(element[0]) == 5) {

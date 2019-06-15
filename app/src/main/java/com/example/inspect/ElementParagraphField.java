@@ -24,7 +24,7 @@ public class ElementParagraphField extends TemplateElement {
     public void setLabel(String label) {
         if (!this.label.equals(label)){
             this.label.set(label);
-            notifyPropertyChanged(BR.label);
+            //notifyPropertyChanged(BR.label);
         }
     }
 
@@ -37,7 +37,7 @@ public class ElementParagraphField extends TemplateElement {
     public void setFill(String fill) {
         if (!this.fill.equals(fill)) {
             this.fill.set(fill);
-            notifyPropertyChanged(BR.fill);
+            //notifyPropertyChanged(BR.fill);
         }
     }
 
