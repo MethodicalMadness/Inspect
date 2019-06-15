@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.inspect.databinding.HeadingFieldBinding;
+import com.example.inspect.databinding.ParagraphFieldBinding;
 import com.example.inspect.databinding.TextFieldBinding;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,7 +56,7 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "savedInstance");
     }
 
-    // Add the new field at bottom of layout.
+    // Add the field
     public void addHeadingField(String label) {
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -73,7 +74,7 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "onAddHeadingField");
     }
 
-    // Add the new field at bottom of layout.
+    // Add the field
     public void addTextField(String label, String fill) {
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -88,7 +89,25 @@ public class Inspector extends AppCompatActivity{
         View newView = textFieldBinding.getRoot();
         linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
         Context context = App.getContext();
-        LogManager.reportStatus(context, "INSPECTOR", "onAddField");
+        LogManager.reportStatus(context, "INSPECTOR", "onTextField");
+    }
+
+    // Add the field
+    public void addParagraphField(String label, String fill) {
+        //inflater needed to "inflate" layouts
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //instantiate our data object.
+        ElementParagraphField elementParagraphField = new ElementParagraphField(label, fill);
+        //add element data object to page
+        currentPage.addElement(elementParagraphField);
+        //we need to instantiate our xml fragment (text field) and bind it to the data object
+        ParagraphFieldBinding paragraphFieldBinding = ParagraphFieldBinding.inflate(inflater, null,false);
+        paragraphFieldBinding.setElementParagraghField(elementParagraphField);
+        //get new view (our xml fragment -the text field) and add it to current view
+        View newView = paragraphFieldBinding.getRoot();
+        linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "INSPECTOR", "onAddParagraphField");
     }
 
     // Add a new page
@@ -114,6 +133,21 @@ public class Inspector extends AppCompatActivity{
         linearLayoutBody = newView.findViewById(R.id.linearLayoutBody);
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "onAddPage");
+    }
+
+    //add the field
+    public void addSpacer(){
+        //inflater needed to "inflate" layouts
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //instantiate our data object.
+        ElementSpacerField elementSpacerField = new ElementSpacerField();
+        //add element data object to page
+        currentPage.addElement(elementSpacerField);
+        //get new view (our xml fragment -the text field) and add it to current view
+        View newView = inflater.inflate(R.layout.spacer_field, null);
+        linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "INSPECTOR", "onAddSpacerField");
     }
 
     //Print the scrollView that holds the linearLayoutBody
@@ -153,20 +187,21 @@ public class Inspector extends AppCompatActivity{
                     addTextField(element[1],element[2]);
                 }
                 //add paragraph
-                else if (Integer.valueOf(element[0]) == 3) {
+                else if (Integer.valueOf(element[0]) == 2) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingParaField");
+                    addParagraphField(element[1],element[2]);
                 }
                 //add heading
-                else if (Integer.valueOf(element[0]) == 4) {
+                else if (Integer.valueOf(element[0]) == 3) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingHeadingField");
                     addHeadingField(element[1]);
                 }
                 //add spacer
-                else if (Integer.valueOf(element[0]) == 5) {
+                else if (Integer.valueOf(element[0]) == 4) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingSpacerField");
                 }
                 //add photo
-                else if (Integer.valueOf(element[0]) == 6) {
+                else if (Integer.valueOf(element[0]) == 5) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingPhotoField");
                 }
                 //shouldn't get here ever
