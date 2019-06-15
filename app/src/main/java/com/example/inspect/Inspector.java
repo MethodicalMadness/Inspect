@@ -2,16 +2,19 @@ package com.example.inspect;
 
 import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import com.example.inspect.databinding.TextFieldBinding;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class Inspector extends AppCompatActivity{
@@ -21,24 +24,35 @@ public class Inspector extends AppCompatActivity{
     private ArrayList<View> pageViews = new ArrayList<>();
     private TemplatePage currentPage;
     private TemplateExample templateExample = new TemplateExample(null);
-    private String saveString = "0\n" + "1,Name,Neo";
+    private String blueprint = "0\n" + "1,Name,Burt";
+    private int doOnce = 0;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Context context = App.getContext();
         setContentView(R.layout.inspection_loaded);
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
-        loadString(saveString);
-        Context context = App.getContext();
+        if(doOnce == 0){
+            doOnce = 1;
+            Intent myIntent = this.getIntent();
+            //Uri fileUri = Uri.parse(myIntent.getExtras().getString("fileUri"));
+            //retrieveBlueprint(fileUri);
+            blueprint = myIntent.getExtras().getString("blueprint");
+            loadString(blueprint);
+        }else{
+            loadString(blueprint);
+        }
+
         LogManager.reportStatus(context, "INSPECTOR", "onCreate");
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        saveString = templateExample.createBlueprint();
+        blueprint = templateExample.createBlueprint();
     }
 
     // TODO: rework when GUI is sorted
@@ -98,21 +112,39 @@ public class Inspector extends AppCompatActivity{
     public void saveTemplate(String Filename){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "savingTemplate");
-        saveString = templateExample.createBlueprint();
-        FileManager.createTemplate(Filename, saveString);
+        blueprint = templateExample.createBlueprint();
+        FileManager.createTemplate(Filename, blueprint);
     }
 
-    //Adds an element to the templateExample//
-    public static void loadTemplate() {
+    //retrieve bp from uri
+    public void retrieveBlueprint(Uri fileUri) {
         Context context = App.getContext();
-        LogManager.reportStatus(context, "INSPECTOR", "loadTemplate");
-
+        blueprint = "";
+        if(fileUri.getPath() != null){
+            LogManager.reportStatus(context, "INSPECTOR", "filePath=" + fileUri.getPath());
+        }
+        try (Scanner scanner = new Scanner(new File(fileUri.getPath()))) {
+            while (scanner.hasNextLine()) {
+                String currentLine = scanner.nextLine();
+                blueprint += currentLine;
+                if (scanner.hasNextLine()) {
+                    blueprint += "\n";
+                }
+            }
+            LogManager.reportStatus(context, "INSPECTOR", "retrievedBlueprintFromFile");
+            loadString(blueprint);
+        } catch(FileNotFoundException e){
+            context = App.getContext();
+            LogManager.reportStatus(context, "INSPECTOR", "retrieveBlueprint:FileNotFound");
+            e.printStackTrace();
+        }
     }
 
-    public void loadString(String saveString){
+
+    public void loadString(String blueprint){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "loading");
-        Scanner scanner = new Scanner(saveString);
+        Scanner scanner = new Scanner(blueprint);
         String splitBy = ",";
         while (scanner.hasNextLine()) {
             String currentLine = scanner.nextLine();
@@ -130,6 +162,9 @@ public class Inspector extends AppCompatActivity{
                 }
                 else if (Integer.valueOf(element[0]) == 2) {
 
+                }
+                else{
+                    //ignore
                 }
             }
         }

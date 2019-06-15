@@ -11,12 +11,14 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
-
+import java.util.Scanner;
 
 
 public class FileManager extends AppCompatActivity {
@@ -59,9 +61,9 @@ public class FileManager extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         Context context = App.getContext();
         Activity activity = this;
-        LogManager.reportStatus(context, "FILEMANAGER", "loadTemplate");
+        LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
         StorageAccess.performFileSearch(activity, bundle);
-        LogManager.reportStatus(context, "FILEMANAGER", "loadTemplate post StorageAccess");
+        LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
         //TODO whatever it is with the template to load
 
     }
@@ -90,11 +92,34 @@ public class FileManager extends AppCompatActivity {
     }
 
     //Loads the saved state of the template
-    public static String loadSavedState(){
+    public void loadSavedState(){
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "loadSavedState");
-
-        return null;
+        String blueprint = "";
+        try (InputStream textFileStream = getContentResolver().openInputStream(uri)){
+            Scanner scanner = new Scanner(textFileStream);
+            while (scanner.hasNextLine()) {
+                String currentLine = scanner.nextLine();
+                blueprint += currentLine;
+                if (scanner.hasNextLine()) {
+                    blueprint += "\n";
+                }
+            }
+            scanner.close();
+            LogManager.reportStatus(context, "FILEMANAGER", "retrievedBlueprintFromFile");
+            //open inspect, passing uri through the intent
+            Intent intent = new Intent(FileManager.this, Inspector.class);
+            intent.putExtra("blueprint", blueprint);
+            startActivity(intent);
+            LogManager.reportStatus(context, "FILEMANAGER", "openingInspector");
+            this.finish();
+        } catch(FileNotFoundException e){
+            LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint:FileNotFound");
+            e.printStackTrace();
+        } catch (IOException e) {
+            LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint:IOException");
+            e.printStackTrace();
+        }
     }
 
     //Deletes a template or pdf
