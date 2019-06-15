@@ -2,6 +2,7 @@ package com.example.inspect;
 
 import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.Bindable;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -25,7 +26,6 @@ public class Inspector extends AppCompatActivity{
     private TemplatePage currentPage;
     private TemplateExample templateExample = new TemplateExample(null);
     private String blueprint = "0\n" + "1,Name,Burt";
-    private int doOnce = 0;
 
 
     @Override
@@ -35,17 +35,11 @@ public class Inspector extends AppCompatActivity{
         setContentView(R.layout.inspection_loaded);
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
-        if(doOnce == 0){
-            doOnce = 1;
-            Intent myIntent = this.getIntent();
-            //Uri fileUri = Uri.parse(myIntent.getExtras().getString("fileUri"));
-            //retrieveBlueprint(fileUri);
-            blueprint = myIntent.getExtras().getString("blueprint");
-            loadString(blueprint);
-        }else{
-            loadString(blueprint);
-        }
-
+        Intent intent = this.getIntent();
+        //Uri fileUri = Uri.parse(myIntent.getExtras().getString("fileUri"));
+        //retrieveBlueprint(fileUri);
+        blueprint = intent.getExtras().getString("blueprint");
+        loadString(blueprint);
         LogManager.reportStatus(context, "INSPECTOR", "onCreate");
     }
 
@@ -53,6 +47,10 @@ public class Inspector extends AppCompatActivity{
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         blueprint = templateExample.createBlueprint();
+        Intent intent = this.getIntent();
+        intent.putExtra("blueprint", blueprint);
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "INSPECTOR", "savedInstance");
     }
 
     // TODO: rework when GUI is sorted
@@ -115,31 +113,6 @@ public class Inspector extends AppCompatActivity{
         blueprint = templateExample.createBlueprint();
         FileManager.createTemplate(Filename, blueprint);
     }
-
-    //retrieve bp from uri
-    public void retrieveBlueprint(Uri fileUri) {
-        Context context = App.getContext();
-        blueprint = "";
-        if(fileUri.getPath() != null){
-            LogManager.reportStatus(context, "INSPECTOR", "filePath=" + fileUri.getPath());
-        }
-        try (Scanner scanner = new Scanner(new File(fileUri.getPath()))) {
-            while (scanner.hasNextLine()) {
-                String currentLine = scanner.nextLine();
-                blueprint += currentLine;
-                if (scanner.hasNextLine()) {
-                    blueprint += "\n";
-                }
-            }
-            LogManager.reportStatus(context, "INSPECTOR", "retrievedBlueprintFromFile");
-            loadString(blueprint);
-        } catch(FileNotFoundException e){
-            context = App.getContext();
-            LogManager.reportStatus(context, "INSPECTOR", "retrieveBlueprint:FileNotFound");
-            e.printStackTrace();
-        }
-    }
-
 
     public void loadString(String blueprint){
         Context context = App.getContext();

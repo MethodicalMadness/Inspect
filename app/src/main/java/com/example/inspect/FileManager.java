@@ -107,7 +107,7 @@ public class FileManager extends AppCompatActivity {
             }
             scanner.close();
             LogManager.reportStatus(context, "FILEMANAGER", "retrievedBlueprintFromFile");
-            //open inspect, passing uri through the intent
+            //open inspect, passing blueprint through the intent
             Intent intent = new Intent(FileManager.this, Inspector.class);
             intent.putExtra("blueprint", blueprint);
             startActivity(intent);

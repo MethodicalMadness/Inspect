@@ -1,5 +1,6 @@
 package com.example.inspect;
 
+import androidx.databinding.Bindable;
 import androidx.databinding.ObservableField;
 
 
@@ -14,20 +15,30 @@ public class ElementParagraphField extends TemplateElement {
         setType("2");
     }
 
+    @Bindable
     public String getLabel() {
         return this.label.get();
     }
 
+    @Bindable
     public void setLabel(String label) {
-        this.label.set(label);
+        if (!this.label.equals(label)){
+            this.label.set(label);
+            notifyPropertyChanged(BR.label);
+        }
     }
 
+    @Bindable
     public String getFill() {
         return this.fill.get();
     }
 
+    @Bindable
     public void setFill(String fill) {
-        this.fill.set(fill);
+        if (!this.fill.equals(fill)) {
+            this.fill.set(fill);
+            notifyPropertyChanged(BR.fill);
+        }
     }
 
     @Override
@@ -35,4 +46,5 @@ public class ElementParagraphField extends TemplateElement {
         String blueprintFragment = getType() + "," + getLabel() + "," + getFill();
         return blueprintFragment;
     }
+
 }
