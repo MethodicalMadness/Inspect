@@ -87,7 +87,7 @@ public class Inspector extends AppCompatActivity{
     }
 
     //Print the scrollView that holds the linearLayoutBody
-    public void printPdf() {
+    public void printPdf(View view) {
         PrintManager printManager = (PrintManager) getSystemService(PRINT_SERVICE);
         printManager.print("print_job_name", new ViewPrintAdapter(this, pageViews), null);
         Context context = App.getContext();
@@ -97,8 +97,9 @@ public class Inspector extends AppCompatActivity{
     //Saves templateExample//
     public void saveTemplate(String Filename){
         Context context = App.getContext();
-        LogManager.reportStatus(context, "INSPECTOR", "saveTemplate");
-        templateExample.saveState(Filename);
+        LogManager.reportStatus(context, "INSPECTOR", "savingTemplate");
+        saveString = templateExample.createBlueprint();
+        FileManager.createTemplate(Filename, saveString);
     }
 
     //Adds an element to the templateExample//
@@ -133,6 +134,10 @@ public class Inspector extends AppCompatActivity{
             }
         }
         LogManager.reportStatus(context, "INSPECTOR", "finishedLoading");
+    }
+
+    public void onSave(View view){
+        saveTemplate("temp.txt");
     }
 
     public void onBack(View view){

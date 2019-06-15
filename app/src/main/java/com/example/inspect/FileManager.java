@@ -34,12 +34,14 @@ public class FileManager extends AppCompatActivity {
 
     //Creates a new template
     public static void createTemplate(String filename, String blueprint){
+        System.out.println("Called the createTemplate");
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "createTemplate");
 
         try{
-            FileOutputStream fOut = context.openFileOutput(filename, Context.MODE_APPEND);
+            FileOutputStream fOut = new FileOutputStream(new File(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + filename), true);
             OutputStreamWriter osw = new OutputStreamWriter(fOut);
+
             osw.write(blueprint);
             osw.flush();
             osw.close();
@@ -51,7 +53,6 @@ public class FileManager extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
     //Loads a template
     public void loadTemplate(View view) {
         Intent intent = new Intent(this, FileManager.class);
@@ -75,7 +76,9 @@ public class FileManager extends AppCompatActivity {
             if (resultData != null) {
                 LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData not null");
                 uri = resultData.getData();
+                loadSavedState();
                 LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
+
                 //uri is to be used to access files within other sections of the program ie. loading a specific template or sharing an output
             } else{
                 LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData is null. Operation cancelled");
@@ -87,9 +90,11 @@ public class FileManager extends AppCompatActivity {
     }
 
     //Loads the saved state of the template
-    public static void loadSavedState(){
+    public static String loadSavedState(){
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "loadSavedState");
+
+        return null;
     }
 
     //Deletes a template or pdf
