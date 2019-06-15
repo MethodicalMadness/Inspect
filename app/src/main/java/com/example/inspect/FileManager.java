@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import java.io.OutputStreamWriter;
 
 public class FileManager extends AppCompatActivity {
     private static final int READ_REQUEST_CODE = 42;
+    Uri uri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,14 +34,12 @@ public class FileManager extends AppCompatActivity {
 
     //Creates a new template
     public static void createTemplate(String filename, String blueprint){
-        System.out.println("Called the createTemplate");
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "createTemplate");
 
         try{
             FileOutputStream fOut = context.openFileOutput(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + filename, Context.MODE_APPEND);
             OutputStreamWriter osw = new OutputStreamWriter(fOut);
-
             osw.write(blueprint);
             osw.flush();
             osw.close();
@@ -62,6 +61,8 @@ public class FileManager extends AppCompatActivity {
         LogManager.reportStatus(context, "FILEMANAGER", "loadTemplate");
         StorageAccess.performFileSearch(activity, bundle);
         LogManager.reportStatus(context, "FILEMANAGER", "loadTemplate post StorageAccess");
+        //TODO whatever it is with the template to load
+
     }
 
     @Override
@@ -71,10 +72,10 @@ public class FileManager extends AppCompatActivity {
         // This should grab the URI value of the file selected in StorageAccess for use
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
-            Uri uri = null;
             if (resultData != null) {
                 LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData not null");
                 uri = resultData.getData();
+                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
                 //uri is to be used to access files within other sections of the program ie. loading a specific template or sharing an output
             } else{
                 LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData is null. Operation cancelled");
@@ -82,6 +83,7 @@ public class FileManager extends AppCompatActivity {
         } else{
             LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult cancelled - resultCode is not RESULT_OK or requestCode does not equal the READ_REQUEST_CODE");
         }
+
     }
 
     //Loads the saved state of the template
@@ -91,9 +93,29 @@ public class FileManager extends AppCompatActivity {
     }
 
     //Deletes a template or pdf
-    public static void deleteObject(){
+    public void deleteObject(){
+        //Get information for the SAF method call
+        Intent intent = new Intent(this, FileManager.class);
+        Bundle bundle = intent.getExtras();
         Context context = App.getContext();
+        Activity activity = this;
         LogManager.reportStatus(context, "FILEMANAGER", "deleteObject");
+        //Call the SAF - Uri will be returned to global var uri
+        StorageAccess.performFileSearch(activity, bundle);
+        LogManager.reportStatus(context, "FILEMANAGER", "deleteObject post StorageAccess");
+        //Delete file
+        boolean confirmDelete = false;
+        //TODO Add confirmation of deletion below this comment to make if statement valid
+        File file = new File(uri.getPath());
+        if(!confirmDelete) {
+            if (file.exists()) {
+                if (file.delete()) {
+                    LogManager.reportStatus(context, "FILEMANAGER", "deleteObject File has been deleted");
+                } else {
+                    LogManager.reportStatus(context, "FILEMANAGER", "deleteObject File was not deleted");
+                }
+            }
+        }
     }
 
     //Updates the list of files found in the storage directory to be displayed in the UI
@@ -109,7 +131,7 @@ public class FileManager extends AppCompatActivity {
     }
 
     public void configureBackBtn(){
-        Button backBtn = (Button)findViewById(R.id.btnBack);
+        Button backBtn = (Button)findViewById(R.id.btnFileManagerBack);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

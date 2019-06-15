@@ -15,7 +15,7 @@ public class ManageTemplateMenu extends AppCompatActivity {
     }
 
     public void configureBackBtn(){
-        Button backBtn = (Button)findViewById(R.id.btnBack);
+        Button backBtn = (Button)findViewById(R.id.btnManageTemplateBack);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

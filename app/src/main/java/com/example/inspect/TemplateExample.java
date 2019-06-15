@@ -13,14 +13,14 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 
-public class Template {
+public class TemplateExample {
 
     private ArrayList<TemplatePage> templatePages = new ArrayList<>();
 
-    public Template() {
+    public TemplateExample() {
     }
 
-    public Template(TemplatePage templatePage) {
+    public TemplateExample(TemplatePage templatePage) {
         addPage(templatePage);
     }
 

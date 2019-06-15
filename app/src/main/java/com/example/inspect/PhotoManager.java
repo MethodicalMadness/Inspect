@@ -198,7 +198,7 @@ public class PhotoManager extends AppCompatActivity {
 
 
     public void configureBackBtn(){
-        Button backBtn = (Button)findViewById(R.id.btnBack);
+        Button backBtn = (Button)findViewById(R.id.btnPhotoManagerBack);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
