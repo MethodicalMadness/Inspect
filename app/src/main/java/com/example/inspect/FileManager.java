@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,7 +38,7 @@ public class FileManager extends AppCompatActivity {
         LogManager.reportStatus(context, "FILEMANAGER", "createTemplate");
 
         try{
-            FileOutputStream fOut = context.openFileOutput(filename, Context.MODE_APPEND);
+            FileOutputStream fOut = context.openFileOutput(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + filename, Context.MODE_APPEND);
             OutputStreamWriter osw = new OutputStreamWriter(fOut);
 
             osw.write(blueprint);
