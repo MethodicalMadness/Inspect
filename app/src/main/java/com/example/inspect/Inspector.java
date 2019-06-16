@@ -2,27 +2,31 @@ package com.example.inspect;
 
 import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.Bindable;
-
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-
 import com.example.inspect.databinding.HeadingFieldBinding;
 import com.example.inspect.databinding.ParagraphFieldBinding;
 import com.example.inspect.databinding.TextFieldBinding;
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 
 public class Inspector extends AppCompatActivity{
 
+    private ImageButton imageButton;
+    private String imageUriString;
     private LinearLayout linearLayoutPdf;
     private LinearLayout linearLayoutBody;
     private ArrayList<View> pageViews = new ArrayList<>();
@@ -41,7 +45,10 @@ public class Inspector extends AppCompatActivity{
             "1,State,*\n" +
             "1,Postcode,XXXX\n" +
             "4,Spacer\n" +
-            "2,Details,Description of problem\n";
+            "2,Details,Description of problem\n" +
+            "1\n" +
+            "5,Image\n";
+
 
 
     @Override
@@ -52,7 +59,13 @@ public class Inspector extends AppCompatActivity{
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
         Intent intent = this.getIntent();
-        blueprint = intent.getExtras().getString("blueprint");
+        if(intent.hasExtra("blueprint")) {
+            blueprint = intent.getExtras().getString("blueprint");
+        }
+        if(intent.hasExtra("imageUriString")) {
+            imageUriString = intent.getExtras().getString("imageUriString");
+            LogManager.reportStatus(context, "INSPECTOR", "imageUriStringRetrieved");
+        }
         loadString(blueprint);
         LogManager.reportStatus(context, "INSPECTOR", "onCreate");
     }
@@ -161,6 +174,50 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "onAddSpacerField");
     }
 
+    // Add the field
+    public void addImageField() {
+        Context context = App.getContext();
+        //inflater needed to "inflate" layouts
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //instantiate our data object.
+        ElementImageField elementImageField = new ElementImageField();
+        //add element data object to page
+        currentPage.addElement(elementImageField);
+        //get new view (our xml fragment -the text field) and add it to current view
+        View newView = inflater.inflate(R.layout.image_field, null);
+        linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
+        //set listener
+        imageButton = (ImageButton)findViewById(R.id.camera_button);
+        //set image if we have one defined
+        if (imageUriString != null){
+            Uri uri = Uri.parse(imageUriString);
+            LogManager.reportStatus(context, "INSPECTOR", "parsingImageUri");
+            try{
+                InputStream inputStream = this.getContentResolver().openInputStream(uri);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 1;
+                Bitmap preview_bitmap = BitmapFactory.decodeStream(inputStream,null,options);
+                Drawable image = new BitmapDrawable(getResources(),preview_bitmap);
+                imageButton.setBackground(image);
+                LogManager.reportStatus(context, "INSPECTOR", "imageSet");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                LogManager.reportStatus(context, "INSPECTOR", "imageNotFound");
+            }
+        }else{
+            LogManager.reportStatus(context, "INSPECTOR", "imageUriStringIsEmpty");
+        }
+        LogManager.reportStatus(context, "INSPECTOR", "onAddImageField");
+    }
+
+    public void openCamera(View view){
+        Intent intent = new Intent(Inspector.this, PhotoManager.class);
+        intent.putExtra("blueprint", blueprint);
+        saveTemplate("temp.txt");
+        startActivity(intent);
+    }
+
+
     //Print the scrollView that holds the linearLayoutBody
     public void printPdf(View view) {
         PrintManager printManager = (PrintManager) getSystemService(PRINT_SERVICE);
@@ -177,6 +234,7 @@ public class Inspector extends AppCompatActivity{
         FileManager.createTemplate(Filename, blueprint);
     }
 
+    //parse blueprint and build layout hierarchy
     public void loadString(String blueprint){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "loading");
@@ -214,7 +272,8 @@ public class Inspector extends AppCompatActivity{
                 }
                 //add photo
                 else if (Integer.valueOf(element[0]) == 5) {
-                    LogManager.reportStatus(context, "INSPECTOR", "addingPhotoField");
+                    LogManager.reportStatus(context, "INSPECTOR", "addingImageField");
+                    addImageField();
                 }
                 //shouldn't get here ever
                 else{
@@ -225,10 +284,12 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "finishedLoading");
     }
 
+    //button click on save
     public void onSave(View view){
         saveTemplate("temp.txt");
     }
 
+    //button click on back
     public void onBack(View view){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "Back");
