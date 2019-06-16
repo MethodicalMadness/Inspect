@@ -13,8 +13,6 @@
 
         <EditText
             android:id="@+id/label"
-            android:editable="false"
-            android:focusable="false"
             android:layout_width="65dp"
             android:layout_height="match_parent"
             android:layout_weight=".5"

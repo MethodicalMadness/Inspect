@@ -22,6 +22,7 @@ import java.util.Scanner;
 
 
 public class FileManager extends AppCompatActivity {
+    private boolean isInspecting = false;
     private static final int READ_REQUEST_CODE = 42;
     Uri uri;
 
@@ -30,6 +31,11 @@ public class FileManager extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.file_manager);
         configureBackBtn();
+        Intent intent = this.getIntent();
+        //get mode from intent
+        if(intent.hasExtra("isInspecting")){
+            isInspecting = intent.getExtras().getBoolean("isInspecting");
+        }
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "onCreate");
     }
@@ -56,17 +62,31 @@ public class FileManager extends AppCompatActivity {
         }
     }
     //Loads a template
-    public void loadTemplate(View view) {
+    public void loadTemplateToInspect(View view) {
         Intent intent = new Intent(this, FileManager.class);
+        isInspecting = true;
+        intent.putExtra("isInspecting", isInspecting);
         Bundle bundle = intent.getExtras();
         Context context = App.getContext();
         Activity activity = this;
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
         StorageAccess.performFileSearch(activity, bundle);
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
-        //TODO whatever it is with the template to load
-
     }
+
+    //Loads a template
+    public void loadTemplateToEdit(View view) {
+        Intent intent = new Intent(this, FileManager.class);
+        isInspecting = false;
+        intent.putExtra("isInspecting", isInspecting);
+        Bundle bundle = intent.getExtras();
+        Context context = App.getContext();
+        Activity activity = this;
+        LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
+        StorageAccess.performFileSearch(activity, bundle);
+        LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
@@ -110,6 +130,7 @@ public class FileManager extends AppCompatActivity {
             //open inspect, passing blueprint through the intent
             Intent intent = new Intent(FileManager.this, Inspector.class);
             intent.putExtra("blueprint", blueprint);
+            intent.putExtra("isInspecting", this.isInspecting);
             startActivity(intent);
             LogManager.reportStatus(context, "FILEMANAGER", "openingInspector");
             this.finish();
@@ -170,5 +191,16 @@ public class FileManager extends AppCompatActivity {
         });
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "configureBackBtn");
+    }
+
+    //open inspect, passing blueprint and mode through the intent
+    public void onCreateNewTemplate(View view){
+        Context context = App.getContext();
+        isInspecting = false;
+        Intent intent = new Intent(FileManager.this, Inspector.class);
+        intent.putExtra("isInspecting", isInspecting);
+        startActivity(intent);
+        LogManager.reportStatus(context, "FILEMANAGER", "openingEditor");
+        this.finish();
     }
 }

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import com.example.inspect.databinding.HeadingFieldBinding;
@@ -25,6 +26,7 @@ import java.util.Scanner;
 
 public class Inspector extends AppCompatActivity{
 
+    private boolean isInspecting = false;
     private ImageButton imageButton;
     private String imageUriString;
     private LinearLayout linearLayoutPdf;
@@ -32,6 +34,8 @@ public class Inspector extends AppCompatActivity{
     private ArrayList<View> pageViews = new ArrayList<>();
     private TemplatePage currentPage;
     private TemplateExample templateExample = new TemplateExample(null);
+    private String blueprint = "0\n";
+    /*
     // default value for testing
     private String blueprint = "0\n" +
             "3,Inspection\n" +
@@ -48,7 +52,7 @@ public class Inspector extends AppCompatActivity{
             "2,Details,Description of problem\n" +
             "1\n" +
             "5,Image\n";
-
+            */
 
 
     @Override
@@ -59,13 +63,22 @@ public class Inspector extends AppCompatActivity{
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
         Intent intent = this.getIntent();
+        //get blueprint from intent
         if(intent.hasExtra("blueprint")) {
             blueprint = intent.getExtras().getString("blueprint");
         }
+        //get image from intent
         if(intent.hasExtra("imageUriString")) {
             imageUriString = intent.getExtras().getString("imageUriString");
             LogManager.reportStatus(context, "INSPECTOR", "imageUriStringRetrieved");
         }
+        //get mode from intent
+        if(intent.hasExtra("isInspecting")){
+            isInspecting = intent.getExtras().getBoolean("isInspecting");
+        }
+        //template editor needs editing tools
+        addTools();
+        //load bp
         loadString(blueprint);
         LogManager.reportStatus(context, "INSPECTOR", "onCreate");
     }
@@ -78,6 +91,17 @@ public class Inspector extends AppCompatActivity{
         intent.putExtra("blueprint", blueprint);
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "savedInstance");
+    }
+
+    // add editing tools
+    private void addTools(){
+        if (!isInspecting){
+            //inflater needed to "inflate" layouts
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View newView = inflater.inflate(R.layout.edit_menu, null);
+            //Add tools under doc
+            linearLayoutPdf.addView(newView, linearLayoutPdf.getChildCount()-3);
+        }
     }
 
     // Add the field
@@ -93,6 +117,10 @@ public class Inspector extends AppCompatActivity{
         headingFieldBinding.setElementHeadingField(elementHeadingField);
         //get new view (our xml fragment -the text field) and add it to current view
         View newView = headingFieldBinding.getRoot();
+        if (isInspecting){
+            EditText editText = newView.findViewById(R.id.label);
+            editText.setFocusable(false);
+        }
         linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "onAddHeadingField");
@@ -111,6 +139,10 @@ public class Inspector extends AppCompatActivity{
         textFieldBinding.setElementTextField(elementTextField);
         //get new view (our xml fragment -the text field) and add it to current view
         View newView = textFieldBinding.getRoot();
+        if (isInspecting){
+            EditText editText = newView.findViewById(R.id.label);
+            editText.setFocusable(false);
+        }
         linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "onTextField");
@@ -129,6 +161,10 @@ public class Inspector extends AppCompatActivity{
         paragraphFieldBinding.setElementParagraghField(elementParagraphField);
         //get new view (our xml fragment -the text field) and add it to current view
         View newView = paragraphFieldBinding.getRoot();
+        if (isInspecting){
+            EditText editText = newView.findViewById(R.id.label);
+            editText.setFocusable(false);
+        }
         linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "onAddParagraphField");
@@ -151,8 +187,12 @@ public class Inspector extends AppCompatActivity{
         View newView = inflater.inflate(R.layout.new_page, null);
         //Add ScrollView to the list so we keep track of the pages for printing
         pageViews.add(newView.findViewById(R.id.scrollViewPage));
-        //Add new page above the 3 buttons
-        linearLayoutPdf.addView(newView, linearLayoutPdf.getChildCount()-3);
+        //Add new page under last
+        int children = 3;
+        if(!isInspecting){
+            children = 4;
+        }
+        linearLayoutPdf.addView(newView, linearLayoutPdf.getChildCount()-children);
         //focus on new page
         linearLayoutBody = newView.findViewById(R.id.linearLayoutBody);
         Context context = App.getContext();
@@ -213,10 +253,17 @@ public class Inspector extends AppCompatActivity{
     public void openCamera(View view){
         Intent intent = new Intent(Inspector.this, PhotoManager.class);
         intent.putExtra("blueprint", blueprint);
+        intent.putExtra("isInspecting", isInspecting);
         saveTemplate("temp.txt");
         startActivity(intent);
     }
 
+    // Remove selected view
+    public void onDelete(View view) {
+        linearLayoutBody.removeView((View) view.getParent());
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "TEMPLATEEDITOR", "onDelete");
+    }
 
     //Print the scrollView that holds the linearLayoutBody
     public void printPdf(View view) {
@@ -294,6 +341,30 @@ public class Inspector extends AppCompatActivity{
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "Back");
         finish();
+    }
+
+    public void onAddPage(View view){
+        addPage();
+    }
+
+    public void onAddText(View view){
+        addTextField("label:", "");
+    }
+
+    public void onAddHeading(View view){
+        addHeadingField("HEADING");
+    }
+
+    public void onAddParagraph(View view){
+        addParagraphField("Question?", "Answer");
+    }
+
+    public void onAddCamera(View view){
+        addImageField();
+    }
+
+    public void onAddSpacer(View view){
+        addSpacer();
     }
 }
 
