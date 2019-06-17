@@ -26,6 +26,7 @@ import java.util.Scanner;
 
 public class Inspector extends AppCompatActivity{
 
+    private String filename;
     private boolean isInspecting = false;
     private ImageButton imageButton;
     private String imageUriString;
@@ -75,6 +76,10 @@ public class Inspector extends AppCompatActivity{
         //get mode from intent
         if(intent.hasExtra("isInspecting")){
             isInspecting = intent.getExtras().getBoolean("isInspecting");
+        }
+        //get filename from intent
+        if(intent.hasExtra("filename")){
+            filename = intent.getExtras().getString("filename");
         }
         //template editor needs editing tools
         addTools();
@@ -254,7 +259,8 @@ public class Inspector extends AppCompatActivity{
         Intent intent = new Intent(Inspector.this, PhotoManager.class);
         intent.putExtra("blueprint", blueprint);
         intent.putExtra("isInspecting", isInspecting);
-        saveTemplate("temp.txt");
+        intent.putExtra("filename", filename);
+        saveTemplate(filename);
         startActivity(intent);
     }
 
@@ -333,7 +339,7 @@ public class Inspector extends AppCompatActivity{
 
     //button click on save
     public void onSave(View view){
-        saveTemplate("temp.txt");
+        saveTemplate(filename);
     }
 
     //button click on back

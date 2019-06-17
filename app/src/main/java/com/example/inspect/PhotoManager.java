@@ -214,10 +214,12 @@ public class PhotoManager extends AppCompatActivity {
         Intent intent = this.getIntent();
         String blueprint = intent.getExtras().getString("blueprint");
         boolean isInspecting = intent.getExtras().getBoolean("isInspecting");
+        String filename = intent.getExtras().getString("filename");
         newIntent.putExtra("blueprint", blueprint);
         if (imageUri != null){
             newIntent.putExtra("imageUriString", imageUri.toString());
             newIntent.putExtra("isInspecting", isInspecting);
+            newIntent.putExtra("filename", filename);
         }
         startActivity(newIntent);
         finish();

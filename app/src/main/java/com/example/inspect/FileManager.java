@@ -3,11 +3,15 @@ package com.example.inspect;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -127,10 +131,13 @@ public class FileManager extends AppCompatActivity {
             }
             scanner.close();
             LogManager.reportStatus(context, "FILEMANAGER", "retrievedBlueprintFromFile");
+            //get filename from uri
+            String filename = getFileName(uri);
             //open inspect, passing blueprint through the intent
             Intent intent = new Intent(FileManager.this, Inspector.class);
             intent.putExtra("blueprint", blueprint);
             intent.putExtra("isInspecting", this.isInspecting);
+            intent.putExtra("filename", filename);
             startActivity(intent);
             LogManager.reportStatus(context, "FILEMANAGER", "openingInspector");
             this.finish();
@@ -141,6 +148,29 @@ public class FileManager extends AppCompatActivity {
             LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint:IOException");
             e.printStackTrace();
         }
+    }
+
+    //parse uri to retrieve filename
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 
     //Deletes a template or pdf
@@ -196,11 +226,19 @@ public class FileManager extends AppCompatActivity {
     //open inspect, passing blueprint and mode through the intent
     public void onCreateNewTemplate(View view){
         Context context = App.getContext();
+        EditText filenameEditText = findViewById(R.id.filename_text);
+        String filename = filenameEditText.getText().toString() + ".txt";
         isInspecting = false;
         Intent intent = new Intent(FileManager.this, Inspector.class);
         intent.putExtra("isInspecting", isInspecting);
+        intent.putExtra("filename", filename);
         startActivity(intent);
         LogManager.reportStatus(context, "FILEMANAGER", "openingEditor");
         this.finish();
+    }
+
+    public void showFilename(View view){
+        LinearLayout layout= findViewById(R.id.filename_layout);
+        layout.setVisibility(View.VISIBLE);
     }
 }
