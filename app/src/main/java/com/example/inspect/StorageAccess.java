@@ -20,9 +20,8 @@ import static androidx.core.app.ActivityCompat.startActivityForResult;
 
 
 public class StorageAccess extends DocumentsProvider {
-    private static final int READ_REQUEST_CODE = 42;
 
-    public static void performFileSearch(Activity activity, Bundle bundle) {
+    public static void performFileSearch(Activity activity, Bundle bundle, int requestCode) {
         // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file browser
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
@@ -39,7 +38,7 @@ public class StorageAccess extends DocumentsProvider {
             intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.getDataDirectory());
         }
 
-        startActivityForResult(activity, intent, READ_REQUEST_CODE, bundle);
+        startActivityForResult(activity, intent, requestCode, bundle);
         LogManager.reportStatus(context, "STORAGEACCESS", "performFileSearch Completed");
     }
 

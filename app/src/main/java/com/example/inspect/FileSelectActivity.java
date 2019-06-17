@@ -165,9 +165,9 @@ public class FileSelectActivity extends MainActivity {
         int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
         returnCursor.moveToFirst();
         TextView nameView = (TextView) findViewById(R.id.filename_text);
-        TextView sizeView = (TextView) findViewById(R.id.filesize_text);
+        //TextView sizeView = (TextView) findViewById(R.id.filesize_text);
         nameView.setText(returnCursor.getString(nameIndex));
-        sizeView.setText(Long.toString(returnCursor.getLong(sizeIndex)));
+        //sizeView.setText(Long.toString(returnCursor.getLong(sizeIndex)));
     }
 
     /*

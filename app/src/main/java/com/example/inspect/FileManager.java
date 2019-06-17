@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.OpenableColumns;
 import android.view.View;
 import android.widget.Button;
@@ -15,19 +16,21 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.URLConnection;
 import java.util.Scanner;
 
 
 public class FileManager extends AppCompatActivity {
     private boolean isInspecting = false;
-    private static final int READ_REQUEST_CODE = 42;
+    private static final int READ_REQUEST_CODE = 1;
+    private static final int SHARE_REQUEST_CODE = 2;
+    private static final int DELETE_REQUEST_CODE = 3;
     Uri uri;
 
     @Override
@@ -53,7 +56,6 @@ public class FileManager extends AppCompatActivity {
         try{
             FileOutputStream fOut = new FileOutputStream(new File(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + filename), false);
             OutputStreamWriter osw = new OutputStreamWriter(fOut);
-
             osw.write(blueprint);
             osw.flush();
             osw.close();
@@ -74,7 +76,7 @@ public class FileManager extends AppCompatActivity {
         Context context = App.getContext();
         Activity activity = this;
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
-        StorageAccess.performFileSearch(activity, bundle);
+        StorageAccess.performFileSearch(activity, bundle, READ_REQUEST_CODE);
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
     }
 
@@ -87,8 +89,19 @@ public class FileManager extends AppCompatActivity {
         Context context = App.getContext();
         Activity activity = this;
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
-        StorageAccess.performFileSearch(activity, bundle);
+        StorageAccess.performFileSearch(activity, bundle, READ_REQUEST_CODE);
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
+    }
+
+    //Share a file
+    public void onShare(View view){
+        Intent intent = new Intent(this, FileManager.class);
+        Bundle bundle = intent.getExtras();
+        Context context = App.getContext();
+        Activity activity = this;
+        LogManager.reportStatus(context, "FILEMANAGER", "retrieveFileToShare");
+        StorageAccess.performFileSearch(activity, bundle, SHARE_REQUEST_CODE);
+        LogManager.reportStatus(context, "FILEMANAGER", "retrieveFileToShare post StorageAccess");
     }
 
 
@@ -101,13 +114,30 @@ public class FileManager extends AppCompatActivity {
             LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
             if (resultData != null) {
                 LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData not null");
-                uri = resultData.getData();
-                loadSavedState();
-                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
-
                 //uri is to be used to access files within other sections of the program ie. loading a specific template or sharing an output
-            } else{
+                uri = resultData.getData();
+                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
+                loadSavedState();
+            } else {
                 LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData is null. Operation cancelled");
+            }
+        } else if (requestCode == SHARE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
+            if (resultData != null) {
+                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData not null");
+                uri = resultData.getData();
+                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
+                shareFile();
+            }
+        }else if (requestCode == DELETE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            //Delete file
+            File file = new File(uri.getPath());
+            if (file.exists()) {
+                if (file.delete()) {
+                    LogManager.reportStatus(context, "FILEMANAGER", "deleteObject File has been deleted");
+                } else {
+                    LogManager.reportStatus(context, "FILEMANAGER", "deleteObject File was not deleted");
+                }
             }
         } else{
             LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult cancelled - resultCode is not RESULT_OK or requestCode does not equal the READ_REQUEST_CODE");
@@ -182,21 +212,8 @@ public class FileManager extends AppCompatActivity {
         Activity activity = this;
         LogManager.reportStatus(context, "FILEMANAGER", "deleteObject");
         //Call the SAF - Uri will be returned to global var uri
-        StorageAccess.performFileSearch(activity, bundle);
+        StorageAccess.performFileSearch(activity, bundle, DELETE_REQUEST_CODE);
         LogManager.reportStatus(context, "FILEMANAGER", "deleteObject post StorageAccess");
-        //Delete file
-        boolean confirmDelete = false;
-        //TODO Add confirmation of deletion below this comment to make if statement valid
-        File file = new File(uri.getPath());
-        if(!confirmDelete) {
-            if (file.exists()) {
-                if (file.delete()) {
-                    LogManager.reportStatus(context, "FILEMANAGER", "deleteObject File has been deleted");
-                } else {
-                    LogManager.reportStatus(context, "FILEMANAGER", "deleteObject File was not deleted");
-                }
-            }
-        }
     }
 
     //Updates the list of files found in the storage directory to be displayed in the UI
@@ -237,8 +254,33 @@ public class FileManager extends AppCompatActivity {
         this.finish();
     }
 
+    //show menu to input filename
     public void showFilename(View view){
         LinearLayout layout= findViewById(R.id.filename_layout);
         layout.setVisibility(View.VISIBLE);
+    }
+
+    //Sharing a file
+    private void shareFile() {
+        Context context = App.getContext();
+        String filePath = uri.getPath();
+        File fileToShare = new File(filePath);
+        LogManager.reportStatus(context, "FILEMANAGER", "fileShare: file path: " + filePath);
+        //bypass restrictions
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        if (fileToShare.exists()) {
+            LogManager.reportStatus(context, "FILEMANAGER", "fileShare: fileExists");
+            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+            intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intentShareFile.setType(URLConnection.guessContentTypeFromName(fileToShare.getName()));
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, "file://" + filePath);
+            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, "Inspect File Share: " + fileToShare.getName());
+            intentShareFile.putExtra(Intent.EXTRA_TEXT, "Inspect File Share: " + fileToShare.getName());
+            this.startActivity(Intent.createChooser(intentShareFile, fileToShare.getName()));
+        }
+        else{
+            LogManager.reportStatus(context, "FILEMANAGER", "fileShare: fileDoesNotExist");
+        }
     }
 }
