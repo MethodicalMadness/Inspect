@@ -12,18 +12,24 @@
         android:theme="@style/AppTheme"
         android:name="com.example.inspect.App"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".TemplateEditor"></activity>
-        <activity android:name=".LoadInspection"></activity>
+
+        <activity android:name=".Inspector"></activity>
+
         <activity android:name=".TemplateMenu"></activity>
+
         <activity android:name=".ManageTemplateMenu"></activity>
+
         <activity android:name=".PhotoManager"></activity>
+
         <activity
             android:name=".FileSelectActivity"
             android:label="/@File Selector" >
@@ -47,6 +53,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity android:name=".FileManager"></activity>
         <provider
             android:name="com.example.inspect.StorageAccess"
@@ -54,6 +61,9 @@
             android:exported="true"
             android:grantUriPermissions="true"
             android:permission="android.permission.MANAGE_DOCUMENTS">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
             <intent-filter>
                 <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
             </intent-filter>
@@ -63,11 +73,9 @@
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
 
-
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
 </manifest>

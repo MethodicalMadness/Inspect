@@ -64,7 +64,7 @@ public class PhotoManager extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         Context context = App.getContext();
-        data.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //data.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
@@ -209,7 +209,21 @@ public class PhotoManager extends AppCompatActivity {
         LogManager.reportStatus(context, "PHOTOMANAGER", "configureBackBtn");
     }
 
-
+    public void onAccept(View view){
+        Intent newIntent = new Intent(PhotoManager.this, Inspector.class);
+        Intent intent = this.getIntent();
+        String blueprint = intent.getExtras().getString("blueprint");
+        boolean isInspecting = intent.getExtras().getBoolean("isInspecting");
+        String filename = intent.getExtras().getString("filename");
+        newIntent.putExtra("blueprint", blueprint);
+        if (imageUri != null){
+            newIntent.putExtra("imageUriString", imageUri.toString());
+            newIntent.putExtra("isInspecting", isInspecting);
+            newIntent.putExtra("filename", filename);
+        }
+        startActivity(newIntent);
+        finish();
+    }
 
 
 }

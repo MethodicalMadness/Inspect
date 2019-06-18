@@ -75,14 +75,13 @@ public class MainActivity extends AppCompatActivity {
     private void shareFile(String filePath) {
         Context context = App.getContext();
         File f = new File(filePath);
-        File fileWithinMyDir = new File(filePath);
         Intent intentShareFile = new Intent(Intent.ACTION_SEND);
         intentShareFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         //bypass restrictions
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
-        if (fileWithinMyDir.exists()) {
+        if (f.exists()) {
             LogManager.reportStatus(context, "MAINACTIVITY", "fileExists");
             intentShareFile.setType("text/*");
             intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filePath));
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void toLoadInspection(View view) {
-        Intent intent = new Intent(MainActivity.this, LoadInspection.class);
+        Intent intent = new Intent(MainActivity.this, Inspector.class);
         startActivity(intent);
         Context context = App.getContext();
         LogManager.reportStatus(context, "MAINACTIVITY", "toLoadInspection");

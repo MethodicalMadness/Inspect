@@ -2,8 +2,8 @@
 <layout>
     <data>
         <variable
-            name="elementTextField"
-            type="com.example.inspect.ElementTextField" />
+            name="elementHeadingField"
+            type="com.example.inspect.ElementHeadingField" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,15 +19,7 @@
             android:ems="10"
             android:inputType="text"
             android:singleLine="true"
-            android:text="@={elementTextField.label}" />
+            android:text="@={elementHeadingField.label}" />
 
-        <EditText
-            android:id="@+id/text_field"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@={elementTextField.fill}"/>
     </LinearLayout>
 </layout>

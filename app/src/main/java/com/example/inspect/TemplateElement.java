@@ -1,7 +1,9 @@
 package com.example.inspect;
 
 
-public abstract class TemplateElement {
+import androidx.databinding.BaseObservable;
+
+public abstract class TemplateElement extends BaseObservable {
 
 
     private String type;

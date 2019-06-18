@@ -38,8 +38,9 @@
                             android:orientation="vertical" />
                     </ScrollView>
 
+
                     <Button
-                        android:id="@+id/add_field_button"
+                        android:id="@+id/inspectBack"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -47,12 +48,12 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginBottom="5dp"
                         android:background="#555"
-                        android:onClick="onAddField"
-                        android:text="Add Field"
+                        android:onClick="onBack"
+                        android:text="Back"
                         android:textColor="#FFF" />
 
                     <Button
-                        android:id="@+id/add_page_button"
+                        android:id="@+id/save"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -60,8 +61,8 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginBottom="5dp"
                         android:background="#555"
-                        android:onClick="onAddPage"
-                        android:text="Add Page"
+                        android:onClick="onSave"
+                        android:text="Save"
                         android:textColor="#FFF" />
 
                     <Button
@@ -73,7 +74,7 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginBottom="5dp"
                         android:background="#555"
-                        android:onClick="printPDF"
+                        android:onClick="printPdf"
                         android:text="Preview PDF"
                         android:textColor="#FFF" />
 
