@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -263,23 +264,25 @@ public class FileManager extends AppCompatActivity {
     //Sharing a file
     private void shareFile() {
         Context context = App.getContext();
-        String filePath = uri.getPath();
-        File fileToShare = new File(filePath);
-        LogManager.reportStatus(context, "FILEMANAGER", "fileShare: file path: " + filePath);
+
         //bypass restrictions
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-        if (fileToShare.exists()) {
+        //if file exists, start activity
+        try{
             LogManager.reportStatus(context, "FILEMANAGER", "fileShare: fileExists");
+            //create intent
             Intent intentShareFile = new Intent(Intent.ACTION_SEND);
             intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intentShareFile.setType(URLConnection.guessContentTypeFromName(fileToShare.getName()));
-            intentShareFile.putExtra(Intent.EXTRA_STREAM, "file://" + filePath);
-            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, "Inspect File Share: " + fileToShare.getName());
-            intentShareFile.putExtra(Intent.EXTRA_TEXT, "Inspect File Share: " + fileToShare.getName());
-            this.startActivity(Intent.createChooser(intentShareFile, fileToShare.getName()));
-        }
-        else{
+            //email requirements
+            intentShareFile.setType(URLConnection.guessContentTypeFromName(getFileName(uri)));
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
+            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, "Inspect File Share: " + getFileName(uri));
+            intentShareFile.putExtra(Intent.EXTRA_TEXT, "Inspect File Share: " + getFileName(uri));
+            //start activity
+            this.startActivity(Intent.createChooser(intentShareFile, getFileName(uri)));
+        } catch (Throwable t){
+            Toast.makeText(this, "Request failed try again: " + t.toString(), Toast.LENGTH_LONG).show();
             LogManager.reportStatus(context, "FILEMANAGER", "fileShare: fileDoesNotExist");
         }
     }
