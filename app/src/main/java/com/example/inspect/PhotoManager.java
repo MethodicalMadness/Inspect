@@ -1,6 +1,5 @@
 package com.example.inspect;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
@@ -30,7 +28,6 @@ public class PhotoManager extends AppCompatActivity {
     private static final int REQUEST_TAKE_PHOTO = 2;
 
 
-    //Allows you to take a photo with the camera or get a photo from the image gallery//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +55,6 @@ public class PhotoManager extends AppCompatActivity {
         });
 
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -93,8 +89,9 @@ public class PhotoManager extends AppCompatActivity {
         }
     }
 
-
-    //Allows you to get photo from image gallery//
+    /**
+     * Allows you to get photo from image gallery.
+     */
     private void openGallery(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
@@ -102,8 +99,11 @@ public class PhotoManager extends AppCompatActivity {
         LogManager.reportStatus(context, "PHOTOMANAGER", "getPhotoFromGallery");
     }
 
-
-    private File createImageFile() throws IOException {
+    /**
+     * Create an image file
+     * @return
+     */
+    private File createImageFile() {
         Context context = App.getContext();
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -123,7 +123,9 @@ public class PhotoManager extends AppCompatActivity {
         return image;
     }
 
-
+    /**
+     * Generate the intent and send
+     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -132,13 +134,8 @@ public class PhotoManager extends AppCompatActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
-            try {
-                photoFile = createImageFile();
-                LogManager.reportStatus(context, "PHOTOMANAGER", "createdImageFile");
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                LogManager.reportStatus(context, "PHOTOMANAGER", "failedToCreateImageFile");
-            }
+            photoFile = createImageFile();
+            LogManager.reportStatus(context, "PHOTOMANAGER", "createdImageFile");
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
@@ -152,18 +149,18 @@ public class PhotoManager extends AppCompatActivity {
         }
     }
 
-
-    //Add photo to gallery//
+    /**
+     * Adds picture to gallery
+     */
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(currentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
+        mediaScanIntent.setData(imageUri);
         this.sendBroadcast(mediaScanIntent);
     }
 
-
-    //Decode a scaled image//
+    /**
+     * Decode a scaled image
+     */
     private void setPic() {
         // Get the dimensions of the View
         int targetW = imageView.getWidth();
@@ -172,8 +169,8 @@ public class PhotoManager extends AppCompatActivity {
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.Options boptions = null;
-        BitmapFactory.decodeFile(currentPhotoPath, boptions);
+        //BitmapFactory.Options boptions = null;
+        BitmapFactory.decodeFile(currentPhotoPath, null);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
@@ -185,18 +182,13 @@ public class PhotoManager extends AppCompatActivity {
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, boptions);
+        Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath, null);
         imageView.setImageBitmap(bitmap);
     }
 
-
-    //Allows you to alter/edit the photo//
-    public static void alterPhoto() {
-        Context context = App.getContext();
-        LogManager.reportStatus(context, "PHOTOMANAGER", "alterPhoto");
-    }
-
-
+    /**
+     * Configures the back button
+     */
     public void configureBackBtn(){
         Button backBtn = (Button)findViewById(R.id.btnPhotoManagerBack);
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -209,6 +201,10 @@ public class PhotoManager extends AppCompatActivity {
         LogManager.reportStatus(context, "PHOTOMANAGER", "configureBackBtn");
     }
 
+    /**
+     * Pack the image Uri into the newIntent and open Inspector activity
+     * @param view
+     */
     public void onAccept(View view){
         Intent newIntent = new Intent(PhotoManager.this, Inspector.class);
         Intent intent = this.getIntent();
@@ -224,6 +220,4 @@ public class PhotoManager extends AppCompatActivity {
         startActivity(newIntent);
         finish();
     }
-
-
 }

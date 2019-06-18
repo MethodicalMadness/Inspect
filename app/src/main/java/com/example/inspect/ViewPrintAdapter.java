@@ -19,18 +19,35 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Used to preview and print to pdf.
+ * Makes a Bitmap of each TemplatePage's corresponding view and renders it in a pdf.
+ */
 public class ViewPrintAdapter extends PrintDocumentAdapter {
 
     private PrintedPdfDocument printedPdfDocument;
     private Context context;
     private ArrayList<View> viewsList;
 
+    /**
+     * Constructor. Requires a list of the views. Each view is a page.
+     * @param context
+     * @param viewsList
+     */
     public ViewPrintAdapter(Context context, ArrayList<View> viewsList) {
         this.context = context;
         this.viewsList = viewsList;
         LogManager.reportStatus(context, "VIEWPRINTADAPTER", "Constructor ViewPrintAdapter");
     }
 
+    /**
+     * Prepares the pdf documents layout and builds it so it can be written to.
+     * @param oldAttributes
+     * @param newAttributes
+     * @param cancellationSignal
+     * @param callback
+     * @param extras
+     */
     @Override
     public void onLayout(PrintAttributes oldAttributes, PrintAttributes newAttributes,
                          CancellationSignal cancellationSignal,
@@ -52,6 +69,13 @@ public class ViewPrintAdapter extends PrintDocumentAdapter {
         LogManager.reportStatus(context, "VIEWPRINTADAPTER", "onLayout");
     }
 
+    /**
+     * Renders a bitmap of each view and renders it on its corresponding page on the pdf.
+     * @param pages
+     * @param destination
+     * @param cancellationSignal
+     * @param callback
+     */
     @Override
     public void onWrite(PageRange[] pages, ParcelFileDescriptor destination,
                         CancellationSignal cancellationSignal,
@@ -84,7 +108,7 @@ public class ViewPrintAdapter extends PrintDocumentAdapter {
             pageCanvas.drawBitmap(bitmap, src, dst, null);
             printedPdfDocument.finishPage(page);
         }
-
+        // write to the file
         try {
             printedPdfDocument.writeTo(new FileOutputStream(
                     destination.getFileDescriptor()));

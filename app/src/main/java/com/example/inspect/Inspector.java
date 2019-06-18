@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import com.example.inspect.databinding.HeadingFieldBinding;
 import com.example.inspect.databinding.ParagraphFieldBinding;
 import com.example.inspect.databinding.TextFieldBinding;
@@ -23,7 +24,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
+/**
+ * Handles constructing templates from supplied blueprints.
+ */
 public class Inspector extends AppCompatActivity{
 
     private String filename;
@@ -34,7 +37,7 @@ public class Inspector extends AppCompatActivity{
     private LinearLayout linearLayoutBody;
     private ArrayList<View> pageViews = new ArrayList<>();
     private TemplatePage currentPage;
-    private TemplateExample templateExample = new TemplateExample(null);
+    private Template templateExample = new Template();
     private String blueprint = "0\n";
     /*
     // default value for testing
@@ -54,7 +57,6 @@ public class Inspector extends AppCompatActivity{
             "1\n" +
             "5,Image\n";
             */
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,7 +100,9 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "savedInstance");
     }
 
-    // add editing tools
+    /**
+     * Adds editing tools to the inspector.
+     */
     private void addTools(){
         if (!isInspecting){
             //inflater needed to "inflate" layouts
@@ -109,7 +113,10 @@ public class Inspector extends AppCompatActivity{
         }
     }
 
-    // Add the field
+    /**
+     * Adds the field to the TemplatePage, binds the data to a view, then adds view to existing hierarchy.
+     * @param label
+     */
     public void addHeadingField(String label) {
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -131,7 +138,11 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "onAddHeadingField");
     }
 
-    // Add the field
+    /**
+     * Adds the field to the TemplatePage, binds the data to a view, then adds view to existing hierarchy.
+     * @param label
+     * @param fill
+     */
     public void addTextField(String label, String fill) {
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -153,7 +164,11 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "onTextField");
     }
 
-    // Add the field
+    /**
+     * Adds the field to the TemplatePage, binds the data to a view, then adds view to existing hierarchy.
+     * @param label
+     * @param fill
+     */
     public void addParagraphField(String label, String fill) {
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -175,7 +190,9 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "onAddParagraphField");
     }
 
-    // Add a new page
+    /**
+     * Adds a page to the view hierarchy and a TemplatePage to the Template.
+     */
     public void addPage() {
         //get index for new current page
         int index;
@@ -204,7 +221,9 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "onAddPage");
     }
 
-    //add the field
+    /**
+     * Adds a spacer to the view hierarchy and a ElementSpacerField to the TemplatePage.
+     */
     public void addSpacer(){
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -219,7 +238,9 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "onAddSpacerField");
     }
 
-    // Add the field
+    /**
+     * Adds the field to the TemplatePage, binds the data to a view, then adds view to existing hierarchy.
+     */
     public void addImageField() {
         Context context = App.getContext();
         //inflater needed to "inflate" layouts
@@ -255,23 +276,32 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "onAddImageField");
     }
 
+    /**
+     * Starts PhotoManager activity, passing important details through the intent.
+     * @param view
+     */
     public void openCamera(View view){
         Intent intent = new Intent(Inspector.this, PhotoManager.class);
         intent.putExtra("blueprint", blueprint);
         intent.putExtra("isInspecting", isInspecting);
         intent.putExtra("filename", filename);
-        saveTemplate(filename);
         startActivity(intent);
     }
 
-    // Remove selected view
+    /**
+     * Deletes the supplied view
+     * @param view
+     */
     public void onDelete(View view) {
         linearLayoutBody.removeView((View) view.getParent());
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEEDITOR", "onDelete");
     }
 
-    //Print the scrollView that holds the linearLayoutBody
+    /**
+     * Print the scrollView that holds the linearLayoutBody.
+     * @param view
+     */
     public void printPdf(View view) {
         PrintManager printManager = (PrintManager) getSystemService(PRINT_SERVICE);
         printManager.print("print_job_name", new ViewPrintAdapter(this, pageViews), null);
@@ -279,15 +309,27 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "printPdf");
     }
 
-    //Saves templateExample//
+    /**
+     * Passes blueprint to FileManager for saving.
+     * @param Filename
+     */
     public void saveTemplate(String Filename){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "savingTemplate");
         blueprint = templateExample.createBlueprint();
-        FileManager.createTemplate(Filename, blueprint);
+        boolean hasSaved = FileManager.createTemplate(Filename, blueprint);
+        if (hasSaved){
+            Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(this, "Did not save", Toast.LENGTH_LONG).show();
+        }
+
     }
 
-    //parse blueprint and build layout hierarchy
+    /**
+     * Parses blueprint and builds layout hierarchy
+     * @param blueprint
+     */
     public void loadString(String blueprint){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "loading");
@@ -295,6 +337,7 @@ public class Inspector extends AppCompatActivity{
         String splitBy = ",";
         while (scanner.hasNextLine()) {
             String currentLine = scanner.nextLine();
+            //if it is just a number by itself, it is a page.
             if (currentLine.matches("\\d+")){
                 LogManager.reportStatus(context, "INSPECTOR", "addingPage");
                 addPage();
@@ -337,40 +380,77 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "finishedLoading");
     }
 
-    //button click on save
+    /**
+     * For ui to interact with saveTemplate().
+     * @param view
+     */
     public void onSave(View view){
         saveTemplate(filename);
+        Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
     }
 
-    //button click on back
+    /**
+     * To go back to MainActivity.
+     * @param view
+     */
     public void onBack(View view){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "Back");
         finish();
     }
 
+    /**
+     * For ui to interact with addPage()
+     * @param view
+     */
     public void onAddPage(View view){
         addPage();
+        Toast.makeText(this, "Page Added", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * For ui to interact with addTextField()
+     * @param view
+     */
     public void onAddText(View view){
         addTextField("label:", "");
+        Toast.makeText(this, "Short Query Added", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * For ui to interact with addHeadingField()
+     * @param view
+     */
     public void onAddHeading(View view){
         addHeadingField("HEADING");
+        Toast.makeText(this, "Heading Added", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * For ui to interact with addParagraphField()
+     * @param view
+     */
     public void onAddParagraph(View view){
         addParagraphField("Question?", "Answer");
+        Toast.makeText(this, "Long Query Added", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * For ui to interact with addImageField()
+     * @param view
+     */
     public void onAddCamera(View view){
         addImageField();
+        Toast.makeText(this, "Request Camera Added", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * For ui to interact with addSpacer()
+     * @param view
+     */
     public void onAddSpacer(View view){
         addSpacer();
+        Toast.makeText(this, "Space Added", Toast.LENGTH_LONG).show();
     }
 }
 

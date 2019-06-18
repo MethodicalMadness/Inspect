@@ -14,9 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -48,31 +46,43 @@ public class FileManager extends AppCompatActivity {
         LogManager.reportStatus(context, "FILEMANAGER", "onCreate");
     }
 
-    //Creates a new template
-    public static void createTemplate(String filename, String blueprint){
+    /**
+     * Creates a new template
+     * @param filename
+     * @param blueprint
+     * @return
+     */
+    public static boolean createTemplate(String filename, String blueprint){
+        boolean hasSaved = false;
         System.out.println("Called the createTemplate");
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "createTemplate");
-
         try{
             FileOutputStream fOut = new FileOutputStream(new File(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + filename), false);
             OutputStreamWriter osw = new OutputStreamWriter(fOut);
             osw.write(blueprint);
             osw.flush();
             osw.close();
+            hasSaved = true;
         } catch(FileNotFoundException e){
             LogManager.wtf("FILEMANAGER", "createTemplate FileNotFoundException caught", e);
             e.printStackTrace();
+            hasSaved = false;
         } catch(IOException e){
             LogManager.wtf("FILEMANAGER", "createTemplate IOException caught", e);
             e.printStackTrace();
+            hasSaved = false;
         }
+        return hasSaved;
     }
-    //Loads a template
+
+    /**
+     * Loads a template for an inspection
+     * @param view
+     */
     public void loadTemplateToInspect(View view) {
         Intent intent = new Intent(this, FileManager.class);
-        isInspecting = true;
-        intent.putExtra("isInspecting", isInspecting);
+        intent.putExtra("isInspecting", true);
         Bundle bundle = intent.getExtras();
         Context context = App.getContext();
         Activity activity = this;
@@ -81,11 +91,13 @@ public class FileManager extends AppCompatActivity {
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
     }
 
-    //Loads a template
+    /**
+     * Loads a template for to edit elements
+     * @param view
+     */
     public void loadTemplateToEdit(View view) {
         Intent intent = new Intent(this, FileManager.class);
-        isInspecting = false;
-        intent.putExtra("isInspecting", isInspecting);
+        intent.putExtra("isInspecting", true);
         Bundle bundle = intent.getExtras();
         Context context = App.getContext();
         Activity activity = this;
@@ -94,7 +106,10 @@ public class FileManager extends AppCompatActivity {
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
     }
 
-    //Share a file
+    /**
+     * Creates an intent and starts the file sharing activity
+     * @param view
+     */
     public void onShare(View view){
         Intent intent = new Intent(this, FileManager.class);
         Bundle bundle = intent.getExtras();
@@ -110,7 +125,7 @@ public class FileManager extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult closed SAF view");
-        // This should grab the URI value of the file selected in StorageAccess for use
+        // This grab the URI value of the file selected in StorageAccess for use depending on whic h request was made
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
             if (resultData != null) {
@@ -143,10 +158,12 @@ public class FileManager extends AppCompatActivity {
         } else{
             LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult cancelled - resultCode is not RESULT_OK or requestCode does not equal the READ_REQUEST_CODE");
         }
-
     }
 
-    //Loads the saved state of the template
+    /**
+     * Retrieves blueprint from file and starts the inspector activity.
+     * Depending on the mode it will determine if the Inspector is opened in editing mode or inspect mode.
+     */
     public void loadSavedState(){
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "loadSavedState");
@@ -181,7 +198,11 @@ public class FileManager extends AppCompatActivity {
         }
     }
 
-    //parse uri to retrieve filename
+    /**
+     * Get the filename from a Uri
+     * @param uri
+     * @return
+     */
     public String getFileName(Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {
@@ -204,7 +225,9 @@ public class FileManager extends AppCompatActivity {
         return result;
     }
 
-    //Deletes a template or pdf
+    /**
+     * Delete a file system object
+     */
     public void deleteObject(){
         //Get information for the SAF method call
         Intent intent = new Intent(this, FileManager.class);
@@ -217,18 +240,9 @@ public class FileManager extends AppCompatActivity {
         LogManager.reportStatus(context, "FILEMANAGER", "deleteObject post StorageAccess");
     }
 
-    //Updates the list of files found in the storage directory to be displayed in the UI
-    public static void updateDirectory(){
-        Context context = App.getContext();
-        LogManager.reportStatus(context, "FILEMANAGER", "updateDirectory");
-    }
-
-    //Opens the pdf file created from the template
-    public static void openPdf(){
-        Context context = App.getContext();
-        LogManager.reportStatus(context, "FILEMANAGER", "openPdf");
-    }
-
+    /**
+     * Configure the back button.
+     */
     public void configureBackBtn(){
         Button backBtn = (Button)findViewById(R.id.btnFileManagerBack);
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -242,6 +256,11 @@ public class FileManager extends AppCompatActivity {
     }
 
     //open inspect, passing blueprint and mode through the intent
+
+    /**
+     * Open inspect in editing mode with no blueprint.
+     * @param view
+     */
     public void onCreateNewTemplate(View view){
         Context context = App.getContext();
         EditText filenameEditText = findViewById(R.id.filename_text);
@@ -255,22 +274,26 @@ public class FileManager extends AppCompatActivity {
         this.finish();
     }
 
-    //show menu to input filename
+    /**
+     * Unhides filename view for user input.
+     * @param view
+     */
     public void showFilename(View view){
         LinearLayout layout= findViewById(R.id.filename_layout);
         layout.setVisibility(View.VISIBLE);
     }
 
-    //Sharing a file
+    /**
+     * When an activity result requests file share the retrived Uri is passed to the email through
+     * an intent which launches the share activity.
+     */
     private void shareFile() {
         Context context = App.getContext();
-
         //bypass restrictions
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-        //if file exists, start activity
+        //try start the activity
         try{
-            LogManager.reportStatus(context, "FILEMANAGER", "fileShare: fileExists");
             //create intent
             Intent intentShareFile = new Intent(Intent.ACTION_SEND);
             intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
