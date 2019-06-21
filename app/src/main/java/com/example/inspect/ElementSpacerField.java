@@ -1,7 +1,13 @@
 package com.example.inspect;
 
+/**
+ * A simple space element. Only needed to keep track of formatting.
+ */
 public class ElementSpacerField extends TemplateElement{
 
+    /**
+     * Constructor
+     */
     public ElementSpacerField() {
         setType("4");
     }

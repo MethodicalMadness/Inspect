@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/templateLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,92 +19,18 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/btnLoadTemplateEdit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:onClick="toTemplateMenu"
-            android:text="Create Template"
-            app:layout_constraintEnd_toEndOf="@+id/btnStartInspection"
-            app:layout_constraintStart_toStartOf="@+id/btnStartInspection"
-            app:layout_constraintTop_toBottomOf="@+id/btnStartInspection" />
-
-        <Button
-            android:id="@+id/btnManageTemplate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:onClick="toManageTemplates"
-            android:text="Manage Templates"
-            app:layout_constraintEnd_toEndOf="@+id/btnLoadTemplateEdit"
-            app:layout_constraintStart_toStartOf="@+id/btnLoadTemplateEdit"
-            app:layout_constraintTop_toBottomOf="@+id/btnLoadTemplateEdit" />
-
-        <Button
-            android:id="@+id/btnStartInspection"
+            android:id="@+id/btnFileManager"
             android:layout_width="210dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="50dp"
             android:layout_marginEnd="8dp"
-            android:onClick="toLoadInspection"
-            android:text="Start Inspection"
-            app:layout_constraintBottom_toTopOf="@+id/btnLoadTemplateEdit"
+            android:onClick="toFileManager"
+            android:text="File Manager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/btnFileManager"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:onClick="toFileManager"
-            android:text="File Manager"
-            app:layout_constraintEnd_toEndOf="@+id/btnPrintExample2"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/btnPrintExample2"
-            app:layout_constraintTop_toBottomOf="@+id/btnPrintExample2"
-            tools:layout_conversion_absoluteHeight="48dp"
-            tools:layout_conversion_absoluteWidth="411dp" />
-
-        <Button
-            android:id="@+id/btnPrintExample2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:onClick="newBlankTemplate"
-            android:text="Print Example"
-            app:layout_constraintEnd_toEndOf="@+id/btnManageTemplate"
-            app:layout_constraintStart_toStartOf="@+id/btnManageTemplate"
-            app:layout_constraintTop_toBottomOf="@+id/btnManageTemplate"
-            tools:layout_conversion_absoluteHeight="48dp"
-            tools:layout_conversion_absoluteWidth="411dp" />
-
-        <Button
-            android:id="@+id/btnPhotoManager"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            android:onClick="toPhotoManager"
-            android:text="Photo Manager"
-            app:layout_constraintEnd_toEndOf="@+id/btnFileManager"
-            app:layout_constraintStart_toStartOf="@+id/btnFileManager"
-            app:layout_constraintTop_toBottomOf="@+id/btnFileManager" />
-
-        <Button
-            android:id="@+id/btnShare"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Share"
-            app:layout_constraintEnd_toEndOf="@+id/btnPhotoManager"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/btnPhotoManager"
-            app:layout_constraintTop_toBottomOf="@+id/btnPhotoManager"
-            tools:layout_conversion_absoluteHeight="48dp"
-            tools:layout_conversion_absoluteWidth="411dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

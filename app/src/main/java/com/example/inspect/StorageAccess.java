@@ -11,16 +11,19 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.DocumentsProvider;
-
 import androidx.annotation.Nullable;
-
 import java.io.FileNotFoundException;
-
 import static androidx.core.app.ActivityCompat.startActivityForResult;
 
 
 public class StorageAccess extends DocumentsProvider {
 
+    /**
+     * Performs file search and returns uri for file through the intent.
+     * @param activity
+     * @param bundle
+     * @param requestCode
+     */
     public static void performFileSearch(Activity activity, Bundle bundle, int requestCode) {
         // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file browser
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
