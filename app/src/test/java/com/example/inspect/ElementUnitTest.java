@@ -5,6 +5,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Tests the "element" data objects that hold UI data across UI lifecycle changes.
+ *
+ */
 public class ElementUnitTest {
 
     private String label = "new label";
