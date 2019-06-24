@@ -82,6 +82,7 @@ public class FileManager extends AppCompatActivity {
      */
     public void loadTemplateToInspect(View view) {
         Intent intent = new Intent(this, FileManager.class);
+        this.isInspecting = true;
         intent.putExtra("isInspecting", true);
         Bundle bundle = intent.getExtras();
         Context context = App.getContext();
@@ -97,7 +98,8 @@ public class FileManager extends AppCompatActivity {
      */
     public void loadTemplateToEdit(View view) {
         Intent intent = new Intent(this, FileManager.class);
-        intent.putExtra("isInspecting", true);
+        this.isInspecting = false;
+        intent.putExtra("isInspecting", false);
         Bundle bundle = intent.getExtras();
         Context context = App.getContext();
         Activity activity = this;

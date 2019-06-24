@@ -349,17 +349,33 @@ public class Inspector extends AppCompatActivity{
                 //add text field
                 if (Integer.valueOf(element[0]) == 1){
                     LogManager.reportStatus(context, "INSPECTOR", "addingTextField");
-                    addTextField(element[1],element[2]);
+                    if (element.length == 3 ) {
+                        addTextField(element[1], element[2]);
+                    } else if (element.length == 2 ) {
+                        addTextField(element[1], "");
+                    } else{
+                        addTextField("", "");
+                    }
                 }
                 //add paragraph
                 else if (Integer.valueOf(element[0]) == 2) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingParaField");
-                    addParagraphField(element[1],element[2]);
+                    if (element.length == 3 ) {
+                        addParagraphField(element[1], element[2]);
+                    } else if (element.length == 2 ) {
+                        addParagraphField(element[1], "");
+                    } else {
+                        addParagraphField("","");
+                    }
                 }
                 //add heading
                 else if (Integer.valueOf(element[0]) == 3) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingHeadingField");
-                    addHeadingField(element[1]);
+                    if (element.length == 2 ) {
+                        addHeadingField(element[1]);
+                    } else {
+                        addHeadingField("");
+                    }
                 }
                 //add spacer
                 else if (Integer.valueOf(element[0]) == 4) {
