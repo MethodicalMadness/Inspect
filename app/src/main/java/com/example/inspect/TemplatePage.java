@@ -27,6 +27,15 @@ public class TemplatePage {
     }
 
     /**
+     * Returns if the page is empty
+     * @return
+     */
+    public boolean isPageEmpty(){
+        boolean result  = elements.size() == 0;
+        return result;
+    }
+
+    /**
      * Get the pages index.
      * @return
      */
