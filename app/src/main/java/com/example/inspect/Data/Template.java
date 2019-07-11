@@ -1,56 +1,36 @@
 package com.example.inspect.Data;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
-//Database
-@Entity (foreignKeys = {
-        @ForeignKey(
-                entity = TemplateModules.class,
-                parentColumns = "id",
-                childColumns = "moduleId",
-                onDelete = ForeignKey.CASCADE
-        )
-})
+@Entity
 public class Template {
     @PrimaryKey(autoGenerate = true)
-    private int templateId;
-    private String name;
-    private int moduleId;
+    private int template_Id;
+    private String template_Name;
 
     //constructor
-    public Template(int templateId, String name, int moduleId) {
-        this.templateId = templateId;
-        this.name = name;
-        this.moduleId = moduleId;
+    public Template(int template_Id, String template_Name) {
+        this.template_Id = template_Id;
+        this.template_Name = template_Name;
     }
 
     //setters and getters
-    public int getTemplateId() {
-        return templateId;
+    public int getTemplate_Id() {
+        return template_Id;
     }
 
-    public void setTemplateId(int templateId) {
-        this.templateId = templateId;
+    public void setTemplate_Id(int template_Id) {
+        this.template_Id = template_Id;
     }
 
-    public String getName() {
-        return name;
+    public String getTemplate_Name() {
+        return template_Name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTemplate_Name(String template_Name) {
+        this.template_Name = template_Name;
     }
 
-    public int getModuleId() {
-        return moduleId;
-    }
-
-    public void setModuleId(int moduleId) {
-        this.moduleId = moduleId;
-    }
 }
