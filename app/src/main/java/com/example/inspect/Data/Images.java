@@ -1,5 +1,7 @@
 package com.example.inspect.Data;
 
+import android.net.Uri;
+
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
@@ -27,11 +29,10 @@ public class Images {
     private int image_id;
     private int module_id;
     private int template_id;
-    //will need type converter
-    private String image_URI;
+    private Uri image_URI;
 
     //constructor
-    public Images(int image_id, int module_id, int template_id, String image_URI) {
+    public Images(int image_id, int module_id, int template_id, Uri image_URI) {
         this.image_id = image_id;
         this.module_id = module_id;
         this.template_id = template_id;
@@ -63,11 +64,11 @@ public class Images {
         this.template_id = template_id;
     }
 
-    public String getImage_URI() {
+    public Uri getImage_URI() {
         return image_URI;
     }
 
-    public void setImage_URI(String image_URI) {
+    public void setImage_URI(Uri image_URI) {
         this.image_URI = image_URI;
     }
 }
