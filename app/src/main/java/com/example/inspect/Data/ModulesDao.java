@@ -6,4 +6,8 @@ import androidx.room.Dao;
 
 @Dao
 public interface ModulesDao {
+    //Queries
+    //Insert
+    //Update
+    //Delete
 }
