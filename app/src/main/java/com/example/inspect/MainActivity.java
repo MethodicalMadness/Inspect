@@ -3,12 +3,10 @@ package com.example.inspect;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
-import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.core.content.FileProvider;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -17,18 +15,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URLConnection;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.example.inspect.Data.TemplateDatabase;
 
 
 public class MainActivity extends AppCompatActivity {
