@@ -8,18 +8,21 @@ import java.util.ArrayList;
 @Dao
 interface TemplateDao {
     //Queries
-    public int getTemplateId();
-    public String getTemplateName();
+    @Query("SELECT template_Id FROM Template WHERE template_Name = :tempName")
+    public int getTemplateId(String tempName);
+    @Query("SELECT template_Name FROM Template WHERE template_Id = :tempId")
+    public String getTemplateName(int tempId);
 
-    //Insert
-    public void setTemplateId();
-    public void setTemplateName();
-
-    //Update
-    public void updateTemplateName();
+    //Insert/Update
+    @Query("UPDATE template SET template_Id = :tempId")
+    public void setTemplateId(int tempId);
+    @Query("UPDATE template SET template_Name = :tempName WHERE template_Id = :tempId")
+    public void updateTemplateName(String tempName, int tempId);
 
     //Delete
-    public void removeTemplate();
+    @Query("DELETE FROM Template WHERE template_Id = :tempId")
+    public void removeTemplate(int tempId);
+    @Query("UPDATE template SET template_Name = ''")
     public void removeTemplateName();
 
 }
