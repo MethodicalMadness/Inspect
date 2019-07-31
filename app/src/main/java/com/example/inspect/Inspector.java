@@ -11,11 +11,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.print.PrintManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.Toolbar;
 import com.example.inspect.databinding.HeadingFieldBinding;
 import com.example.inspect.databinding.ParagraphFieldBinding;
 import com.example.inspect.databinding.TextFieldBinding;
@@ -65,6 +68,7 @@ public class Inspector extends AppCompatActivity{
         setContentView(R.layout.inspection_loaded);
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
+        //if no page exists
         if(currentPage == null){
             //add page to template
             currentPage = new TemplatePage(0);
