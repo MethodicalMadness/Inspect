@@ -7,31 +7,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvFileManagerHeader"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:focusableInTouchMode="false"
-            android:text="File Manager"
-            android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/warehouse"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
-        <Button
-            android:id="@+id/btnLoadTemplateInspect"
-            style="@android:style/Widget.DeviceDefault.Light.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:onClick="loadTemplateToInspect"
-            android:text="Load Template To Inspect"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvFileManagerHeader" />
+    <Button
+        android:id="@+id/btnLoadTemplateInspect"
+        style="@android:style/Widget.DeviceDefault.Light.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="16dp"
+        android:onClick="loadTemplateToInspect"
+        android:text="Load Template To Inspect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
     <Button
         android:id="@+id/btnNewTemplate"
@@ -48,19 +45,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnShare" />
 
-        <Button
-            android:id="@+id/btnLoadTemplateEdit"
-            style="@android:style/Widget.DeviceDefault.Light.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:onClick="loadTemplateToEdit"
-            android:text="Load Template To Edit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnLoadTemplateInspect" />
+    <Button
+        android:id="@+id/btnLoadTemplateEdit"
+        style="@android:style/Widget.DeviceDefault.Light.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:onClick="loadTemplateToEdit"
+        android:text="Load Template To Edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLoadTemplateInspect" />
 
     <Button
         android:id="@+id/btnShare"
@@ -90,7 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:orientation="horizontal"
         android:visibility="invisible"
@@ -100,31 +97,45 @@
 
         <EditText
             android:id="@+id/label"
-            android:layout_width="65dp"
-            android:layout_height="match_parent"
+            android:layout_width="73dp"
+            android:layout_height="50dp"
             android:layout_weight=".5"
+            android:background="#FFFFFF"
             android:ems="10"
+            android:focusable="false"
+            android:gravity="center_vertical"
             android:inputType="text"
             android:singleLine="true"
-            android:text="Filename:" />
+            android:text=" Filename:" />
 
         <EditText
             android:id="@+id/filename_text"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="196dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
+            android:background="#FFFFFF"
             android:ems="10"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
             android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
             android:text="NewTemplate" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5" />
 
         <Button
             android:id="@+id/accept_filename"
             android:layout_width="32dp"
-            android:layout_height="44dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
             android:background="@android:drawable/ic_input_add"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:onClick="onCreateNewTemplate"
+            android:text="GO!"
             android:textAlignment="center" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
