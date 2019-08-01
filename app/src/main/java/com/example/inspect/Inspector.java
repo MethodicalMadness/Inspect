@@ -11,14 +11,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.print.PrintManager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
 import com.example.inspect.databinding.HeadingFieldBinding;
 import com.example.inspect.databinding.ParagraphFieldBinding;
 import com.example.inspect.databinding.TextFieldBinding;
@@ -40,7 +38,7 @@ public class Inspector extends AppCompatActivity{
     private LinearLayout linearLayoutBody;
     private ArrayList<View> pageViews = new ArrayList<>();
     private TemplatePage currentPage;
-    private Template templateExample = new Template();
+    private Template currentTemplate = new Template();
     private String blueprint = "0\n";
     /*
     // default value for testing
@@ -71,8 +69,9 @@ public class Inspector extends AppCompatActivity{
         //if no page exists
         if(currentPage == null){
             //add page to template
-            currentPage = new TemplatePage(0);
-            templateExample.addPage(currentPage);
+            addPage();
+            //currentPage = new TemplatePage(0);
+            //currentTemplate.addPage(currentPage);
         }
         Intent intent = this.getIntent();
         //get blueprint from intent
@@ -102,7 +101,7 @@ public class Inspector extends AppCompatActivity{
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        blueprint = templateExample.createBlueprint();
+        blueprint = currentTemplate.createBlueprint();
         Intent intent = this.getIntent();
         intent.putExtra("blueprint", blueprint);
         Context context = App.getContext();
@@ -204,17 +203,17 @@ public class Inspector extends AppCompatActivity{
      */
     public void addPage() {
         Context context = App.getContext();
-        if (currentPage != null && !currentPage.isPageEmpty()) {
+        int index;
+        if (currentPage != null) {
             //get index for new current page
-            int index;
-            if (currentPage != null) {
-                index = currentPage.getIndex() + 1;
-            } else {
-                index = 0;
-            }
+            index = currentPage.getIndex() + 1;
+        } else {
+            index = 0;
+        }
+        if(currentPage == null || !currentPage.isPageEmpty()){
             //add page to template
             currentPage = new TemplatePage(index);
-            templateExample.addPage(currentPage);
+            currentTemplate.addPage(currentPage);
             //inflater needed to "inflate" layouts
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View newView = inflater.inflate(R.layout.new_page, null);
@@ -330,7 +329,7 @@ public class Inspector extends AppCompatActivity{
     public void saveTemplate(String Filename){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "savingTemplate");
-        blueprint = templateExample.createBlueprint();
+        blueprint = currentTemplate.createBlueprint();
         boolean hasSaved = FileManager.createTemplate(Filename, blueprint);
         if (hasSaved){
             Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
