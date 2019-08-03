@@ -294,11 +294,13 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void openCamera(View view){
-        Intent intent = new Intent(Inspector.this, PhotoManager.class);
-        intent.putExtra("blueprint", blueprint);
-        intent.putExtra("isInspecting", isInspecting);
-        intent.putExtra("filename", filename);
-        startActivity(intent);
+        if (isInspecting) {
+            Intent intent = new Intent(Inspector.this, PhotoManager.class);
+            intent.putExtra("blueprint", blueprint);
+            intent.putExtra("isInspecting", isInspecting);
+            intent.putExtra("filename", filename);
+            startActivity(intent);
+        }
     }
 
     /**
