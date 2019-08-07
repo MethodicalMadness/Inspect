@@ -186,7 +186,7 @@ public class FileManager extends AppCompatActivity {
             String ext = getFileExt(filename);
             LogManager.reportStatus(context, "FILEMANAGER", "extension: " + ext);
             //check that the correct filetype matches the mode we are launching
-            if (ext.contentEquals(".bp") && !this.isInspecting || ext.contentEquals(".in") && this.isInspecting) {
+            if (ext.contentEquals(".bp") || ext.contentEquals(".in")) {
                 //open inspect, passing blueprint through the intent
                 Intent intent = new Intent(FileManager.this, Inspector.class);
                 intent.putExtra("blueprint", blueprint);
