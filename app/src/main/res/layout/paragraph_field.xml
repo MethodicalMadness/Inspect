@@ -17,10 +17,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight=".5"
+            android:background="#00FFFFFF"
             android:ems="10"
             android:inputType="text"
             android:singleLine="true"
-            android:text="@={elementParagraghField.label}" />
+            android:text="@={elementParagraghField.label}"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/editText2"

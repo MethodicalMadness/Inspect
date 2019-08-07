@@ -326,19 +326,25 @@ public class Inspector extends AppCompatActivity{
 
     /**
      * Passes blueprint to FileManager for saving.
-     * @param Filename
+     * @param filename
      */
-    public void saveTemplate(String Filename){
+    public void saveTemplate(String filename){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "savingTemplate");
         blueprint = currentTemplate.createBlueprint();
-        boolean hasSaved = FileManager.createTemplate(Filename, blueprint);
+        //make sure we have correct extension
+        filename = FileManager.removeExtension(filename);
+        if (isInspecting){
+            filename = filename + ".in";
+        } else {
+            filename = filename + ".bp";
+        }
+        boolean hasSaved = FileManager.createTemplate(filename, blueprint);
         if (hasSaved){
             Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
         }else{
             Toast.makeText(this, "Did not save", Toast.LENGTH_LONG).show();
         }
-
     }
 
     /**

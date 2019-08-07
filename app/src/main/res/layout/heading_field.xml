@@ -20,7 +20,9 @@
             android:ems="10"
             android:inputType="text"
             android:singleLine="true"
-            android:text="@={elementHeadingField.label}" />
+            android:text="@={elementHeadingField.label}"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 </layout>
