@@ -201,14 +201,21 @@ public class FileManager extends AppCompatActivity {
             LogManager.reportStatus(context, "FILEMANAGER", "retrievedBlueprintFromFile");
             //get filename from uri
             String filename = getFileName(uri);
-            //open inspect, passing blueprint through the intent
-            Intent intent = new Intent(FileManager.this, Inspector.class);
-            intent.putExtra("blueprint", blueprint);
-            intent.putExtra("isInspecting", this.isInspecting);
-            intent.putExtra("filename", filename);
-            startActivity(intent);
-            LogManager.reportStatus(context, "FILEMANAGER", "openingInspector");
-            this.finish();
+            String ext = getFileExt(filename);
+            LogManager.reportStatus(context, "FILEMANAGER", "extension: " + ext);
+            //check that the correct filetype matches the mode we are launching
+            if (ext.contentEquals(".bp") || ext.contentEquals(".in")) {
+                //open inspect, passing blueprint through the intent
+                Intent intent = new Intent(FileManager.this, Inspector.class);
+                intent.putExtra("blueprint", blueprint);
+                intent.putExtra("isInspecting", this.isInspecting);
+                intent.putExtra("filename", filename);
+                startActivity(intent);
+                LogManager.reportStatus(context, "FILEMANAGER", "openingInspector");
+                this.finish();
+            } else {
+                Toast.makeText(this, "Incorrect File Type!", Toast.LENGTH_LONG).show();
+            }
         } catch(FileNotFoundException e){
             LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint:FileNotFound");
             e.printStackTrace();
@@ -241,6 +248,35 @@ public class FileManager extends AppCompatActivity {
             if (cut != -1) {
                 result = result.substring(cut + 1);
             }
+        }
+        return result;
+    }
+
+
+    /**
+     * Removes a file extension from a string
+     * @param filename
+     * @return
+     */
+    public static String removeExtension(String filename){
+        String result = filename;
+        int dotIndex = filename.lastIndexOf('.');
+        if(dotIndex >= 0) { // to prevent exception if there is no dot
+            result = filename.substring(0,dotIndex);
+        }
+        return result;
+    }
+
+    /**
+     * Retrieves a file extension from a string
+     * @param filename
+     * @return
+     */
+    public static String getFileExt(String filename){
+        String result = "";
+        int dotIndex = filename.lastIndexOf('.');
+        if(dotIndex >= 0) { // to prevent exception if there is no dot
+            result = filename.substring(dotIndex);
         }
         return result;
     }
@@ -283,8 +319,11 @@ public class FileManager extends AppCompatActivity {
      */
     public void onCreateNewTemplate(View view){
         Context context = App.getContext();
+        //get the filename from user
         EditText filenameEditText = findViewById(R.id.filename_text);
-        String filename = filenameEditText.getText().toString() + ".txt";
+        String filename = filenameEditText.getText().toString();
+        //remove extension a user gave and replace with ours
+        filename = removeExtension(filename) + ".bp";
         isInspecting = false;
         Intent intent = new Intent(FileManager.this, Inspector.class);
         intent.putExtra("isInspecting", isInspecting);

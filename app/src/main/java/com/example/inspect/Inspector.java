@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.example.inspect.databinding.HeadingFieldBinding;
 import com.example.inspect.databinding.ParagraphFieldBinding;
 import com.example.inspect.databinding.TextFieldBinding;
@@ -37,7 +38,7 @@ public class Inspector extends AppCompatActivity{
     private LinearLayout linearLayoutBody;
     private ArrayList<View> pageViews = new ArrayList<>();
     private TemplatePage currentPage;
-    private Template templateExample = new Template();
+    private Template currentTemplate = new Template();
     private String blueprint = "0\n";
     /*
     // default value for testing
@@ -65,10 +66,12 @@ public class Inspector extends AppCompatActivity{
         setContentView(R.layout.inspection_loaded);
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         linearLayoutBody = findViewById(R.id.linearLayoutBody);
+        //if no page exists
         if(currentPage == null){
             //add page to template
-            currentPage = new TemplatePage(0);
-            templateExample.addPage(currentPage);
+            addPage();
+            //currentPage = new TemplatePage(0);
+            //currentTemplate.addPage(currentPage);
         }
         Intent intent = this.getIntent();
         //get blueprint from intent
@@ -98,7 +101,7 @@ public class Inspector extends AppCompatActivity{
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        blueprint = templateExample.createBlueprint();
+        blueprint = currentTemplate.createBlueprint();
         Intent intent = this.getIntent();
         intent.putExtra("blueprint", blueprint);
         Context context = App.getContext();
@@ -200,17 +203,17 @@ public class Inspector extends AppCompatActivity{
      */
     public void addPage() {
         Context context = App.getContext();
-        if (currentPage != null && !currentPage.isPageEmpty()) {
+        int index;
+        if (currentPage != null) {
             //get index for new current page
-            int index;
-            if (currentPage != null) {
-                index = currentPage.getIndex() + 1;
-            } else {
-                index = 0;
-            }
+            index = currentPage.getIndex() + 1;
+        } else {
+            index = 0;
+        }
+        if(currentPage == null || !currentPage.isPageEmpty()){
             //add page to template
             currentPage = new TemplatePage(index);
-            templateExample.addPage(currentPage);
+            currentTemplate.addPage(currentPage);
             //inflater needed to "inflate" layouts
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View newView = inflater.inflate(R.layout.new_page, null);
@@ -291,11 +294,13 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void openCamera(View view){
-        Intent intent = new Intent(Inspector.this, PhotoManager.class);
-        intent.putExtra("blueprint", blueprint);
-        intent.putExtra("isInspecting", isInspecting);
-        intent.putExtra("filename", filename);
-        startActivity(intent);
+        if (isInspecting) {
+            Intent intent = new Intent(Inspector.this, PhotoManager.class);
+            intent.putExtra("blueprint", blueprint);
+            intent.putExtra("isInspecting", isInspecting);
+            intent.putExtra("filename", filename);
+            startActivity(intent);
+        }
     }
 
     /**
@@ -321,19 +326,25 @@ public class Inspector extends AppCompatActivity{
 
     /**
      * Passes blueprint to FileManager for saving.
-     * @param Filename
+     * @param filename
      */
-    public void saveTemplate(String Filename){
+    public void saveTemplate(String filename){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "savingTemplate");
-        blueprint = templateExample.createBlueprint();
-        boolean hasSaved = FileManager.createTemplate(Filename, blueprint);
+        blueprint = currentTemplate.createBlueprint();
+        //make sure we have correct extension
+        filename = FileManager.removeExtension(filename);
+        if (isInspecting){
+            filename = filename + ".in";
+        } else {
+            filename = filename + ".bp";
+        }
+        boolean hasSaved = FileManager.createTemplate(filename, blueprint);
         if (hasSaved){
             Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
         }else{
             Toast.makeText(this, "Did not save", Toast.LENGTH_LONG).show();
         }
-
     }
 
     /**
