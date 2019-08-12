@@ -8,3 +8,6 @@
     android:background="@android:drawable/ic_menu_camera"
     android:onClick="openCamera"
     android:scaleType="centerInside"></ImageButton>
+
+
+

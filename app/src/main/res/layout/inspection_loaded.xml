@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="5dp"
     android:orientation="vertical">
+
+    <Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </Toolbar>
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -82,5 +89,11 @@
             </ScrollView>
         </LinearLayout>
     </HorizontalScrollView>
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="30dp"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
 </LinearLayout>
