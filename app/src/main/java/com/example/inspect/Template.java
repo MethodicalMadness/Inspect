@@ -20,6 +20,8 @@ public class Template {
      * Adds a page to the Template.
      * @param templatePage
      */
+
+
     public void addPage(TemplatePage templatePage) {
         templatePages.add(templatePage);
     }
@@ -32,11 +34,15 @@ public class Template {
         templatePages.remove(index);
     }
 
+
     /**
      * Focus on a specific page.
      * @param index
      * @return
      */
+
+
+
     public TemplatePage focusPage(int index) {
         return templatePages.get(index);
     }
