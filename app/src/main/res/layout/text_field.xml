@@ -16,10 +16,12 @@
             android:layout_width="65dp"
             android:layout_height="match_parent"
             android:layout_weight=".5"
+            android:background="#00FFFFFF"
             android:ems="10"
             android:inputType="text"
             android:singleLine="true"
-            android:text="@={elementTextField.label}" />
+            android:text="@={elementTextField.label}"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/text_field"
