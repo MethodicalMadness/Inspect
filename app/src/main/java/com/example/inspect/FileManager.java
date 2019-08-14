@@ -27,6 +27,7 @@ import java.util.Scanner;
 
 public class FileManager extends AppCompatActivity {
     private boolean isInspecting = false;
+    private static final int EDIT_REQUEST_CODE = 0;
     private static final int READ_REQUEST_CODE = 1;
     private static final int SHARE_REQUEST_CODE = 2;
     private static final int DELETE_REQUEST_CODE = 3;
@@ -58,7 +59,15 @@ public class FileManager extends AppCompatActivity {
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "createTemplate");
         try{
-            FileOutputStream fOut = new FileOutputStream(new File(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + filename), false);
+            //Testing to check the path this gives - Seems correct
+            System.out.println(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/Inspect/" + filename));
+
+            //Current working line for saving the file
+            //FileOutputStream fOut = new FileOutputStream(new File(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + filename), false);
+
+            //This is supposed to get the public documents folder location as printed from above on L63
+            FileOutputStream fOut = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Inspect/" + filename), false);
+            
             OutputStreamWriter osw = new OutputStreamWriter(fOut);
             osw.write(blueprint);
             osw.flush();
@@ -104,7 +113,7 @@ public class FileManager extends AppCompatActivity {
         Context context = App.getContext();
         Activity activity = this;
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
-        StorageAccess.performFileSearch(activity, bundle, READ_REQUEST_CODE);
+        StorageAccess.performFileSearch(activity, bundle, EDIT_REQUEST_CODE);
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
     }
 
@@ -127,8 +136,20 @@ public class FileManager extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult closed SAF view");
+
         // This grab the URI value of the file selected in StorageAccess for use depending on whic h request was made
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
+            if (resultData != null) {
+                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData not null");
+                //uri is to be used to access files within other sections of the program ie. loading a specific template or sharing an output
+                uri = resultData.getData();
+                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
+                loadSavedState();
+            } else {
+                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData is null. Operation cancelled");
+            }
+        } else if (requestCode == EDIT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
             if (resultData != null) {
                 LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData not null");

@@ -146,6 +146,8 @@ public class Inspector extends AppCompatActivity{
         LogManager.reportStatus(context, "INSPECTOR", "onAddHeadingField");
     }
 
+
+
     /**
      * Adds the field to the TemplatePage, binds the data to a view, then adds view to existing hierarchy.
      * @param label
