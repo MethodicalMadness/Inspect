@@ -137,7 +137,7 @@ public class FileManager extends AppCompatActivity {
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult closed SAF view");
 
-        // This grab the URI value of the file selected in StorageAccess for use depending on whic h request was made
+        // This grab the URI value of the file selected in StorageAccess for use depending on which request was made
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
             if (resultData != null) {

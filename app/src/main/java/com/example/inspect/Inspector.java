@@ -65,13 +65,16 @@ public class Inspector extends AppCompatActivity{
         Context context = App.getContext();
         setContentView(R.layout.inspection_loaded);
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
-        linearLayoutBody = findViewById(R.id.linearLayoutBody);
+        //linearLayoutBody = findViewById(R.id.linearLayoutBody);
         //if no page exists
         if(currentPage == null){
             //add page to template
             addPage();
             //currentPage = new TemplatePage(0);
             //currentTemplate.addPage(currentPage);
+        } else {
+            //load bp
+            loadString(blueprint);
         }
         Intent intent = this.getIntent();
         //get blueprint from intent
@@ -92,9 +95,9 @@ public class Inspector extends AppCompatActivity{
             filename = intent.getExtras().getString("filename");
         }
         //template editor needs editing tools
-        addTools();
-        //load bp
-        loadString(blueprint);
+        //todo fix this
+        //addTools();
+
         LogManager.reportStatus(context, "INSPECTOR", "onCreate");
     }
 
@@ -205,12 +208,10 @@ public class Inspector extends AppCompatActivity{
      */
     public void addPage() {
         Context context = App.getContext();
-        int index;
+        //get index for new current page
+        int index = 0;
         if (currentPage != null) {
-            //get index for new current page
             index = currentPage.getIndex() + 1;
-        } else {
-            index = 0;
         }
         if(currentPage == null || !currentPage.isPageEmpty()){
             //add page to template
@@ -219,17 +220,20 @@ public class Inspector extends AppCompatActivity{
             //inflater needed to "inflate" layouts
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View newView = inflater.inflate(R.layout.new_page, null);
-            //Add ScrollView to the list so we keep track of the pages for printing
-            pageViews.add(newView.findViewById(R.id.scrollViewPage));
+            //Add page to the list so we keep track of the pages for printing
+            pageViews.add(newView.findViewById(R.id.linearLayoutBody));
             //Add new page under last
-            int children = 3;
-            if (!isInspecting) {
-                children = 4;
-            }
-            linearLayoutPdf.addView(newView, linearLayoutPdf.getChildCount() - children);
+            linearLayoutPdf.addView(newView, linearLayoutPdf.getChildCount());
             //focus on new page
             linearLayoutBody = newView.findViewById(R.id.linearLayoutBody);
             LogManager.reportStatus(context, "INSPECTOR", "onAddPage");
+            if(!isInspecting){
+                int slot = 16;
+                while (slot > 0){
+                    addSpacer();
+                    slot = slot - 1;
+                }
+            }
         } else{
             //do nothing, current page is empty
             LogManager.reportStatus(context, "INSPECTOR", "pageNotAdded:PageEmpty");

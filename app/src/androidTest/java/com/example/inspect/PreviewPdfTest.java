@@ -9,7 +9,6 @@ import android.view.ViewParent;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.hamcrest.Description;
@@ -101,7 +100,7 @@ public class PreviewPdfTest {
         appCompatButton4.perform(scrollTo(), click());
 
         ViewInteraction appCompatButton5 = onView(
-                allOf(withId(R.id.camera1), withText("Preview PDF"),
+                allOf(withId(R.id.pdf), withText("Preview PDF"),
                         childAtPosition(
                                 allOf(withId(R.id.linearLayoutPdf),
                                         childAtPosition(

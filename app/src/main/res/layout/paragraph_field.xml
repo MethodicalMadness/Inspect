@@ -15,8 +15,7 @@
         <EditText
             android:id="@+id/label"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
+            android:layout_height="52dp"
             android:background="#00FFFFFF"
             android:ems="10"
             android:inputType="text"
@@ -27,11 +26,11 @@
         <EditText
             android:id="@+id/editText2"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="104dp"
             android:layout_weight="1"
             android:ems="10"
             android:inputType="textPersonName"
-            android:textAlignment="viewStart"
-            android:text="@={elementParagraghField.fill}" />
+            android:text="@={elementParagraghField.fill}"
+            android:textAlignment="viewStart" />
     </LinearLayout>
 </layout>
