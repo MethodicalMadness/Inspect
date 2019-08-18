@@ -60,13 +60,13 @@ public class FileManager extends AppCompatActivity {
         LogManager.reportStatus(context, "FILEMANAGER", "createTemplate");
         try{
             //Testing to check the path this gives - Seems correct
-            System.out.println(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/Inspect/" + filename));
+            //System.out.println(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/Inspect/" + filename));
 
             //Current working line for saving the file
-            //FileOutputStream fOut = new FileOutputStream(new File(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + filename), false);
+            FileOutputStream fOut = new FileOutputStream(new File(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + filename), false);
 
             //This is supposed to get the public documents folder location as printed from above on L63
-            FileOutputStream fOut = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Inspect/" + filename), false);
+            //FileOutputStream fOut = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Inspect/" + filename), false);
             
             OutputStreamWriter osw = new OutputStreamWriter(fOut);
             osw.write(blueprint);
