@@ -16,10 +16,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.example.inspect.databinding.HeadingFieldBinding;
 import com.example.inspect.databinding.ParagraphFieldBinding;
 import com.example.inspect.databinding.TextFieldBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -128,7 +129,7 @@ public class Inspector extends AppCompatActivity{
      * Adds the field to the TemplatePage, binds the data to a view, then adds view to existing hierarchy.
      * @param label
      */
-    public void addHeadingField(String label) {
+    public void addHeadingField(String label,int index) {
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //instantiate our data object.
@@ -144,7 +145,7 @@ public class Inspector extends AppCompatActivity{
             EditText editText = newView.findViewById(R.id.label);
             editText.setFocusable(false);
         }
-        linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
+        linearLayoutBody.addView(newView, index);
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "onAddHeadingField");
     }
@@ -156,7 +157,7 @@ public class Inspector extends AppCompatActivity{
      * @param label
      * @param fill
      */
-    public void addTextField(String label, String fill) {
+    public void addTextField(String label, String fill, int index) {
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //instantiate our data object.
@@ -172,7 +173,7 @@ public class Inspector extends AppCompatActivity{
             EditText editText = newView.findViewById(R.id.label);
             editText.setFocusable(false);
         }
-        linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
+        linearLayoutBody.addView(newView, index);
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "onTextField");
     }
@@ -182,7 +183,7 @@ public class Inspector extends AppCompatActivity{
      * @param label
      * @param fill
      */
-    public void addParagraphField(String label, String fill) {
+    public void addParagraphField(String label, String fill, int index) {
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //instantiate our data object.
@@ -198,7 +199,7 @@ public class Inspector extends AppCompatActivity{
             EditText editText = newView.findViewById(R.id.label);
             editText.setFocusable(false);
         }
-        linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
+        linearLayoutBody.addView(newView, index);
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "onAddParagraphField");
     }
@@ -230,7 +231,7 @@ public class Inspector extends AppCompatActivity{
             if(!isInspecting){
                 int slot = 16;
                 while (slot > 0){
-                    addSpacer();
+                    addSpacer(0);
                     slot = slot - 1;
                 }
             }
@@ -243,7 +244,7 @@ public class Inspector extends AppCompatActivity{
     /**
      * Adds a spacer to the view hierarchy and a ElementSpacerField to the TemplatePage.
      */
-    public void addSpacer(){
+    public void addSpacer(int index){
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //instantiate our data object.
@@ -252,7 +253,7 @@ public class Inspector extends AppCompatActivity{
         currentPage.addElement(elementSpacerField);
         //get new view (our xml fragment -the text field) and add it to current view
         View newView = inflater.inflate(R.layout.spacer_field, null);
-        linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
+        linearLayoutBody.addView(newView, index);
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "onAddSpacerField");
     }
@@ -260,7 +261,7 @@ public class Inspector extends AppCompatActivity{
     /**
      * Adds the field to the TemplatePage, binds the data to a view, then adds view to existing hierarchy.
      */
-    public void addImageField() {
+    public void addImageField(int index) {
         Context context = App.getContext();
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -270,7 +271,7 @@ public class Inspector extends AppCompatActivity{
         currentPage.addElement(elementImageField);
         //get new view (our xml fragment -the text field) and add it to current view
         View newView = inflater.inflate(R.layout.image_field, null);
-        linearLayoutBody.addView(newView, linearLayoutBody.getChildCount());
+        linearLayoutBody.addView(newView, index);
         //set listener
         imageButton = (ImageButton)findViewById(R.id.camera_button);
         //set image if we have one defined
@@ -310,13 +311,18 @@ public class Inspector extends AppCompatActivity{
     }
 
     /**
-     * Deletes the supplied view
+     * Deletes the supplied view, returns the index it was located at
      * @param view
+     * @return
      */
-    public void onDelete(View view) {
-        linearLayoutBody.removeView((View) view.getParent());
+    public int deleteView(View view) {
+        LinearLayout parentPage = (LinearLayout) view.getParent().getParent().getParent();
+        LinearLayout slot = (LinearLayout) view.getParent().getParent();
+        int index = parentPage.indexOfChild(slot);
+        parentPage.removeViewAt(index);
         Context context = App.getContext();
         LogManager.reportStatus(context, "TEMPLATEEDITOR", "onDelete");
+        return index;
     }
 
     /**
@@ -360,6 +366,7 @@ public class Inspector extends AppCompatActivity{
     public void loadString(String blueprint){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "loading");
+        int index = 0;
         Scanner scanner = new Scanner(blueprint);
         String splitBy = ",";
         while (scanner.hasNextLine()) {
@@ -368,6 +375,7 @@ public class Inspector extends AppCompatActivity{
             if (currentLine.matches("\\d+")){
                 LogManager.reportStatus(context, "INSPECTOR", "addingPage");
                 addPage();
+                index = 0;
             }
             //else it is an element
             else {
@@ -377,42 +385,47 @@ public class Inspector extends AppCompatActivity{
                 if (Integer.valueOf(element[0]) == 1){
                     LogManager.reportStatus(context, "INSPECTOR", "addingTextField");
                     if (element.length == 3 ) {
-                        addTextField(element[1], element[2]);
+                        addTextField(element[1], element[2], index);
                     } else if (element.length == 2 ) {
-                        addTextField(element[1], "");
+                        addTextField(element[1], "", index);
                     } else{
-                        addTextField("", "");
+                        addTextField("", "", index);
                     }
+                    index = index + 1;
                 }
                 //add paragraph
                 else if (Integer.valueOf(element[0]) == 2) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingParaField");
                     if (element.length == 3 ) {
-                        addParagraphField(element[1], element[2]);
+                        addParagraphField(element[1], element[2], index);
                     } else if (element.length == 2 ) {
-                        addParagraphField(element[1], "");
+                        addParagraphField(element[1], "", index);
                     } else {
-                        addParagraphField("","");
+                        addParagraphField("","", index);
                     }
+                    index = index + 1;
                 }
                 //add heading
                 else if (Integer.valueOf(element[0]) == 3) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingHeadingField");
                     if (element.length == 2 ) {
-                        addHeadingField(element[1]);
+                        addHeadingField(element[1], index);
                     } else {
-                        addHeadingField("");
+                        addHeadingField("", index);
                     }
+                    index = index + 1;
                 }
                 //add spacer
                 else if (Integer.valueOf(element[0]) == 4) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingSpacerField");
-                    addSpacer();
+                    addSpacer(index);
+                    index = index + 1;
                 }
                 //add photo
                 else if (Integer.valueOf(element[0]) == 5) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingImageField");
-                    addImageField();
+                    addImageField(index);
+                    index = index + 1;
                 }
                 //shouldn't get here ever
                 else{
@@ -456,7 +469,8 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void onAddText(View view){
-        addTextField("label:", "");
+        int index = deleteView(view);
+        addTextField("label:", "", index);
         Toast.makeText(this, "Short Query Added", Toast.LENGTH_LONG).show();
     }
 
@@ -465,7 +479,8 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void onAddHeading(View view){
-        addHeadingField("HEADING");
+        int index = deleteView(view);
+        addHeadingField("HEADING", index);
         Toast.makeText(this, "Heading Added", Toast.LENGTH_LONG).show();
     }
 
@@ -474,7 +489,8 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void onAddParagraph(View view){
-        addParagraphField("Question?", "Answer");
+        int index = deleteView(view);
+        addParagraphField("Question?", "Answer", index);
         Toast.makeText(this, "Long Query Added", Toast.LENGTH_LONG).show();
     }
 
@@ -483,7 +499,8 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void onAddCamera(View view){
-        addImageField();
+        int index = deleteView(view);
+        addImageField(index);
         Toast.makeText(this, "Request Camera Added", Toast.LENGTH_LONG).show();
     }
 
@@ -492,8 +509,22 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void onAddSpacer(View view){
-        addSpacer();
+        int index = deleteView(view);
+        addSpacer(index);
         Toast.makeText(this, "Space Added", Toast.LENGTH_LONG).show();
+    }
+
+    public void editSlotVisibilityToggle(View view){
+        LinearLayout slot = (LinearLayout) view.getParent();
+        LinearLayout editPanel = (LinearLayout) slot.getChildAt(1);
+        FloatingActionButton fab = (FloatingActionButton) view;
+        if (editPanel.getVisibility() == View.VISIBLE){
+            editPanel.setVisibility(View.INVISIBLE);
+            //Todo: deal with icon
+            //fab.setImageDrawable(R.drawable.ic_);
+        } else if (editPanel.getVisibility() == View.INVISIBLE){
+            editPanel.setVisibility(View.VISIBLE);
+        }
     }
 }
 
