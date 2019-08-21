@@ -466,6 +466,7 @@ public class Inspector extends AppCompatActivity{
      */
     public void onAddPage(View view){
         addPage();
+        view.setVisibility(View.GONE);
         Toast.makeText(this, "Page Added", Toast.LENGTH_LONG).show();
     }
 

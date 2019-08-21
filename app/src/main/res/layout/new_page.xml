@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linearLayoutBody"
     android:layout_width="595dp"
     android:layout_height="842dp"
@@ -8,6 +9,17 @@
     <TextView
         android:id="@+id/footer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
+        android:gravity="center_vertical"
         android:text="Page n" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_page_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:clickable="true"
+        android:onClick="onAddPage"
+        app:fabSize="mini"
+        app:srcCompat="@android:drawable/ic_menu_add" />
 </LinearLayout>
