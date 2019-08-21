@@ -3,4 +3,11 @@
     android:id="@+id/linearLayoutBody"
     android:layout_width="595dp"
     android:layout_height="842dp"
-    android:orientation="vertical"></LinearLayout>
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Page n" />
+</LinearLayout>

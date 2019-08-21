@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.inspect.databinding.HeadingFieldBinding;
 import com.example.inspect.databinding.ParagraphFieldBinding;
@@ -38,6 +39,7 @@ public class Inspector extends AppCompatActivity{
     private LinearLayout linearLayoutPdf;
     private LinearLayout linearLayoutBody;
     private ArrayList<View> pageViews = new ArrayList<>();
+    private int pageNum = 0;
     private TemplatePage currentPage;
     private Template currentTemplate = new Template();
     private String blueprint = "0\n";
@@ -66,13 +68,10 @@ public class Inspector extends AppCompatActivity{
         Context context = App.getContext();
         setContentView(R.layout.inspection_loaded);
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
-        //linearLayoutBody = findViewById(R.id.linearLayoutBody);
         //if no page exists
         if(currentPage == null){
             //add page to template
             addPage();
-            //currentPage = new TemplatePage(0);
-            //currentTemplate.addPage(currentPage);
         } else {
             //load bp
             loadString(blueprint);
@@ -94,6 +93,8 @@ public class Inspector extends AppCompatActivity{
         //get filename from intent
         if(intent.hasExtra("filename")){
             filename = intent.getExtras().getString("filename");
+            TextView docTitle = findViewById(R.id.filename);
+            docTitle.setText(FileManager.removeExtension(filename));
         }
         //template editor needs editing tools
         //todo fix this
@@ -227,6 +228,10 @@ public class Inspector extends AppCompatActivity{
             linearLayoutPdf.addView(newView, linearLayoutPdf.getChildCount());
             //focus on new page
             linearLayoutBody = newView.findViewById(R.id.linearLayoutBody);
+            //Number the page
+            TextView footer = linearLayoutBody.findViewById(R.id.footer);
+            footer.setText("Page " + (index + 1));
+            //log
             LogManager.reportStatus(context, "INSPECTOR", "onAddPage");
             if(!isInspecting){
                 int slot = 16;

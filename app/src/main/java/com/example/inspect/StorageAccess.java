@@ -58,7 +58,8 @@ public class StorageAccess extends DocumentsProvider {
         LogManager.reportStatus(context, "STORAGEACCESS", "performFileSearch");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.getDataDirectory());
+            Uri uri = Uri.parse(Environment.getExternalStorageDirectory() + "/Documents/");
+            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri);
         }
 
         startActivityForResult(activity, intent, requestCode, bundle);
