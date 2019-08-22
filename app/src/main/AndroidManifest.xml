@@ -24,7 +24,9 @@
 
         <activity android:name=".PhotoManager"></activity>
 
-        <activity android:name=".FileManager"></activity>
+        <activity android:name=".FileManager">
+            android:configChanges="orientation|screenSize"
+        </activity>
 
         <provider
             android:name="com.example.inspect.StorageAccess"

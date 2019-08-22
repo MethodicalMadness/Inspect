@@ -8,13 +8,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.os.health.SystemHealthManager;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.codekidlabs.storagechooser.StorageChooser;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,6 +37,8 @@ public class FileManager extends AppCompatActivity {
     private static final int SHARE_REQUEST_CODE = 2;
     private static final int DELETE_REQUEST_CODE = 3;
     Uri uri;
+    StorageChooser chooser;
+    String globalPath;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,13 +67,13 @@ public class FileManager extends AppCompatActivity {
         LogManager.reportStatus(context, "FILEMANAGER", "createTemplate");
         try{
             //Testing to check the path this gives - Seems correct
-            System.out.println(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/Inspect/" + filename));
+            //System.out.println(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/Inspect/" + filename));
 
             //Current working line for saving the file
-            //FileOutputStream fOut = new FileOutputStream(new File(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + filename), false);
+            FileOutputStream fOut = new FileOutputStream(new File(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + filename), false);
 
             //This is supposed to get the public documents folder location as printed from above on L63
-            FileOutputStream fOut = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Inspect/" + filename), false);
+            //FileOutputStream fOut = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Inspect/" + filename), false);
             
             OutputStreamWriter osw = new OutputStreamWriter(fOut);
             osw.write(blueprint);
@@ -90,6 +97,47 @@ public class FileManager extends AppCompatActivity {
      * @param view
      */
     public void loadTemplateToInspect(View view) {
+
+
+        //Implementing storage-chooser by codekidX
+        // https://android-arsenal.com/details/1/5336
+        // Initialize Builder
+        chooser = new StorageChooser.Builder()
+
+                .withActivity(this)
+                //Below forces the app to keep the same path (currently what we have with SAF)
+                //.shouldResumeSession(true)
+                .withFragmentManager(getFragmentManager())
+                .withMemoryBar(true)
+                .setType(StorageChooser.FILE_PICKER)
+                .allowCustomPath(true)
+                //PredefinedPath is not working correctly - Checked documentation and unable to find solution
+                .withPredefinedPath("/storage/emulated/0/Android/data/com.example.inspect/files/Documents/")
+                /* Attempted variations of the path and could not get it to work as intended
+                * /storage/emulated/0/Android/data/com.example.inspect/files/Documents/
+                * */
+                .disableMultiSelect()
+                .build();
+
+        // Show dialog whenever you want by
+        chooser.show();
+
+        // get path that the user has chosen
+        chooser.setOnSelectListener(new StorageChooser.OnSelectListener() {
+            @Override
+            public void onSelect(String path) {
+                globalPath = path;
+                Log.e("SELECTED_PATH", path);
+                System.out.println(path);
+                uri = Uri.fromFile(new File (path));
+                Context context = App.getContext();
+                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
+                loadSavedState();
+            }
+        });
+
+
+/*      //ORIGINAL SAF IMPLEMENTATION
         Intent intent = new Intent(this, FileManager.class);
         this.isInspecting = true;
         intent.putExtra("isInspecting", true);
@@ -99,6 +147,8 @@ public class FileManager extends AppCompatActivity {
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
         StorageAccess.performFileSearch(activity, bundle, READ_REQUEST_CODE);
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
+
+ */
     }
 
     /**
