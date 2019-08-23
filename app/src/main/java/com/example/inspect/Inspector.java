@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -21,11 +22,11 @@ import com.example.inspect.databinding.HeadingFieldBinding;
 import com.example.inspect.databinding.ParagraphFieldBinding;
 import com.example.inspect.databinding.TextFieldBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 
 /**
  * Handles constructing templates from supplied blueprints.
@@ -39,7 +40,6 @@ public class Inspector extends AppCompatActivity{
     private LinearLayout linearLayoutPdf;
     private LinearLayout linearLayoutBody;
     private ArrayList<View> pageViews = new ArrayList<>();
-    private int pageNum = 0;
     private TemplatePage currentPage;
     private Template currentTemplate = new Template();
     private String blueprint = "0\n";
@@ -97,8 +97,15 @@ public class Inspector extends AppCompatActivity{
             docTitle.setText(FileManager.removeExtension(filename));
         }
         //template editor needs editing tools
-        //todo fix this
-        //addTools();
+        ViewGroup vg = this.findViewById(R.id.linearLayoutBody);
+        if (isInspecting) {
+            LogManager.reportStatus(context, "INSPECTOR", "searching for tools");
+            ArrayList<View> views = getViewsByTag(vg, "editor");
+            for (View v : views) {
+                v.setVisibility(View.GONE);
+                LogManager.reportStatus(context, "INSPECTOR", "editor tool hidden");
+            }
+        }
 
         LogManager.reportStatus(context, "INSPECTOR", "onCreate");
     }
@@ -520,17 +527,41 @@ public class Inspector extends AppCompatActivity{
         Toast.makeText(this, "Space Added", Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * toggles the edit menu within each slot
+     * @param view
+     */
     public void editSlotVisibilityToggle(View view){
         LinearLayout slot = (LinearLayout) view.getParent();
         LinearLayout editPanel = (LinearLayout) slot.getChildAt(1);
         FloatingActionButton fab = (FloatingActionButton) view;
         if (editPanel.getVisibility() == View.VISIBLE){
             editPanel.setVisibility(View.INVISIBLE);
-            //Todo: deal with icon
-            //fab.setImageDrawable(R.drawable.ic_);
         } else if (editPanel.getVisibility() == View.INVISIBLE){
             editPanel.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * Traverses heirarchy searching for views with supplied tag
+     * @param root
+     * @param tag
+     * @return
+     */
+    private static ArrayList<View> getViewsByTag(ViewGroup root, String tag){
+        ArrayList<View> views = new ArrayList<>();
+        final int childCount = root.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            final View child = root.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                views.addAll(getViewsByTag((ViewGroup) child, tag));
+            }
+            final Object tagObj = child.getTag();
+            if (tagObj != null && tagObj.toString().equals(tag)) {
+                views.add(child);
+            }
+        }
+        return views;
     }
 }
 
