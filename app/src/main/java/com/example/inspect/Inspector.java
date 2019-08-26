@@ -78,7 +78,7 @@ public class Inspector extends AppCompatActivity{
             isInspecting = intent.getExtras().getBoolean("isInspecting");
         }
         //template editor needs editing tools
-        ViewGroup vg = this.findViewById(R.id.linearLayoutBody);
+        ViewGroup vg = this.findViewById(R.id.linearLayoutPdf);
         if (isInspecting) {
             LogManager.reportStatus(context, "INSPECTOR", "searching for tools");
             ArrayList<View> views = getViewsByTag(vg, "editor");
