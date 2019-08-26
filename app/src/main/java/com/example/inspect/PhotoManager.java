@@ -1,6 +1,9 @@
 package com.example.inspect;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -61,17 +64,20 @@ public class PhotoManager extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Context context = App.getContext();
         //data.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //WHAT?
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
             LogManager.reportStatus(context, "PHOTOMANAGER", "imagePickedFromGallery");
         }
+        //ADD IMAGE TO VIEW?
         else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
             LogManager.reportStatus(context, "PHOTOMANAGER", "gotPhotoFromCamera");
         }
+        //TAKE PHOTO?
         else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK){
             if(data.getData() != null) {
                 imageUri = data.getData();
@@ -92,6 +98,7 @@ public class PhotoManager extends AppCompatActivity {
     /**
      * Allows you to get photo from image gallery.
      */
+    //KEEP
     private void openGallery(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
@@ -103,6 +110,7 @@ public class PhotoManager extends AppCompatActivity {
      * Create an image file
      * @return
      */
+    //IMAGE FILE FOR WHAT??
     private File createImageFile() {
         Context context = App.getContext();
         // Create an image file name
@@ -152,6 +160,7 @@ public class PhotoManager extends AppCompatActivity {
     /**
      * Adds picture to gallery
      */
+    //THIS ADDING PHOTOTAKEN TO GALLERY?
     private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         mediaScanIntent.setData(imageUri);
@@ -161,6 +170,7 @@ public class PhotoManager extends AppCompatActivity {
     /**
      * Decode a scaled image
      */
+    //NO IDEA WHAT THIS DOES, ASSUME SHOW IN VIEW (PROBS CAN BE REMOVED)
     private void setPic() {
         // Get the dimensions of the View
         int targetW = imageView.getWidth();
@@ -189,6 +199,8 @@ public class PhotoManager extends AppCompatActivity {
     /**
      * Configures the back button
      */
+
+    //NOT NEEDED NOW
     public void configureBackBtn(){
         Button backBtn = (Button)findViewById(R.id.btnPhotoManagerBack);
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -220,4 +232,32 @@ public class PhotoManager extends AppCompatActivity {
         startActivity(newIntent);
         finish();
     }
+
+    //Implement this to the template editor
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Photo Options");
+        alert.setMessage("Load photo from:")
+                .setPositiveButton("Camera", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dispatchTakePictureIntent();
+                    }
+                })
+                .setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        openGallery();
+                    }
+                })
+                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        // Create the AlertDialog object and return it
+        return alert.create();
+    }
+
+
 }
