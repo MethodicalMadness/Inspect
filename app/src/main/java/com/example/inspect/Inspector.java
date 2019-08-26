@@ -42,25 +42,8 @@ public class Inspector extends AppCompatActivity{
     private ArrayList<View> pageViews = new ArrayList<>();
     private TemplatePage currentPage;
     private Template currentTemplate = new Template();
-    private String blueprint = "0\n";
-    /*
-    // default value for testing
-    private String blueprint = "0\n" +
-            "3,Inspection\n" +
-            "4,Spacer\n" +
-            "1,Inspector,Name\n" +
-            "1,Employee ID,XXX-XXX\n" +
-            "4,Spacer\n" +
-            "3,Address\n" +
-            "1,Street,*\n" +
-            "1,Suburb,*\n" +
-            "1,State,*\n" +
-            "1,Postcode,XXXX\n" +
-            "4,Spacer\n" +
-            "2,Details,Description of problem\n" +
-            "1\n" +
-            "5,Image\n";
-            */
+    private boolean isLoading = false;
+    private String blueprint;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,33 +51,31 @@ public class Inspector extends AppCompatActivity{
         Context context = App.getContext();
         setContentView(R.layout.inspection_loaded);
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
-        //if no page exists
-        if(currentPage == null){
-            //add page to template
-            addPage();
-        } else {
-            //load bp
-            loadString(blueprint);
-        }
         Intent intent = this.getIntent();
-        //get blueprint from intent
-        if(intent.hasExtra("blueprint")) {
-            blueprint = intent.getExtras().getString("blueprint");
-        }
         //get image from intent
-        if(intent.hasExtra("imageUriString")) {
+        if (intent.hasExtra("imageUriString")) {
             imageUriString = intent.getExtras().getString("imageUriString");
             LogManager.reportStatus(context, "INSPECTOR", "imageUriStringRetrieved");
+        }
+        //get filename from intent
+        if (intent.hasExtra("filename")) {
+            filename = intent.getExtras().getString("filename");
+            TextView docTitle = findViewById(R.id.filename);
+            docTitle.setText(FileManager.removeExtension(filename));
+        }
+        //get blueprint from intent
+        if (intent.hasExtra("blueprint")) {
+            blueprint = intent.getExtras().getString("blueprint");
+            isLoading = true;
+            loadString(blueprint);
+            isLoading = false;
+        //if no page exists if no page exists
+        }else{
+            addPage();
         }
         //get mode from intent
         if(intent.hasExtra("isInspecting")){
             isInspecting = intent.getExtras().getBoolean("isInspecting");
-        }
-        //get filename from intent
-        if(intent.hasExtra("filename")){
-            filename = intent.getExtras().getString("filename");
-            TextView docTitle = findViewById(R.id.filename);
-            docTitle.setText(FileManager.removeExtension(filename));
         }
         //template editor needs editing tools
         ViewGroup vg = this.findViewById(R.id.linearLayoutBody);
@@ -121,29 +102,20 @@ public class Inspector extends AppCompatActivity{
     }
 
     /**
-     * Adds editing tools to the inspector.
-     */
-    private void addTools(){
-        if (!isInspecting){
-            //inflater needed to "inflate" layouts
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View newView = inflater.inflate(R.layout.edit_menu, null);
-            //Add tools under doc
-            linearLayoutPdf.addView(newView, linearLayoutPdf.getChildCount()-3);
-        }
-    }
-
-    /**
      * Adds the field to the TemplatePage, binds the data to a view, then adds view to existing hierarchy.
      * @param label
      */
-    public void addHeadingField(String label,int index) {
+    public void addHeadingField(String label, int index) {
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //instantiate our data object.
         ElementHeadingField elementHeadingField = new ElementHeadingField(label);
-        //add element data object to page
-        currentPage.addElement(elementHeadingField);
+        //insert element data object in slot on page
+        if (isLoading){
+            currentPage.addElement(elementHeadingField);
+        }else{
+            currentPage.insertElement(index, elementHeadingField);
+        }
         //we need to instantiate our xml fragment (text field) and bind it to the data object
         HeadingFieldBinding headingFieldBinding = HeadingFieldBinding.inflate(inflater, null,false);
         headingFieldBinding.setElementHeadingField(elementHeadingField);
@@ -170,8 +142,12 @@ public class Inspector extends AppCompatActivity{
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //instantiate our data object.
         ElementTextField elementTextField = new ElementTextField(label, fill);
-        //add element data object to page
-        currentPage.addElement(elementTextField);
+        //insert element data object in slot on page
+        if (isLoading){
+            currentPage.addElement(elementTextField);
+        }else{
+            currentPage.insertElement(index, elementTextField);
+        }
         //we need to instantiate our xml fragment (text field) and bind it to the data object
         TextFieldBinding textFieldBinding = TextFieldBinding.inflate(inflater, null,false);
         textFieldBinding.setElementTextField(elementTextField);
@@ -196,8 +172,12 @@ public class Inspector extends AppCompatActivity{
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //instantiate our data object.
         ElementParagraphField elementParagraphField = new ElementParagraphField(label, fill);
-        //add element data object to page
-        currentPage.addElement(elementParagraphField);
+        //insert element data object in slot on page
+        if (isLoading){
+            currentPage.addElement(elementParagraphField);
+        }else{
+            currentPage.insertElement(index, elementParagraphField);
+        }
         //we need to instantiate our xml fragment (text field) and bind it to the data object
         ParagraphFieldBinding paragraphFieldBinding = ParagraphFieldBinding.inflate(inflater, null,false);
         paragraphFieldBinding.setElementParagraghField(elementParagraphField);
@@ -236,16 +216,20 @@ public class Inspector extends AppCompatActivity{
             //focus on new page
             linearLayoutBody = newView.findViewById(R.id.linearLayoutBody);
             //Number the page
+            linearLayoutBody.setTag(currentPage);
             TextView footer = linearLayoutBody.findViewById(R.id.footer);
             footer.setText("Page " + (index + 1));
             //log
             LogManager.reportStatus(context, "INSPECTOR", "onAddPage");
-            if(!isInspecting){
+            //add slots
+            if(!isLoading){
+                isLoading = true;
                 int slot = 16;
                 while (slot > 0){
                     addSpacer(0);
                     slot = slot - 1;
                 }
+                isLoading = false;
             }
         } else{
             //do nothing, current page is empty
@@ -261,8 +245,12 @@ public class Inspector extends AppCompatActivity{
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //instantiate our data object.
         ElementSpacerField elementSpacerField = new ElementSpacerField();
-        //add element data object to page
-        currentPage.addElement(elementSpacerField);
+        //if loading, add element data object to page, else we are editing and insert it
+        if(isLoading) {
+            currentPage.addElement(elementSpacerField);
+        }else{
+            currentPage.insertElement(index, elementSpacerField);
+        }
         //get new view (our xml fragment -the text field) and add it to current view
         View newView = inflater.inflate(R.layout.spacer_field, null);
         linearLayoutBody.addView(newView, index);
@@ -279,8 +267,12 @@ public class Inspector extends AppCompatActivity{
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //instantiate our data object.
         ElementImageField elementImageField = new ElementImageField();
-        //add element data object to page
-        currentPage.addElement(elementImageField);
+        //insert element data object in slot on page
+        if (isLoading){
+            currentPage.addElement(elementImageField);
+        }else{
+            currentPage.insertElement(index, elementImageField);
+        }
         //get new view (our xml fragment -the text field) and add it to current view
         View newView = inflater.inflate(R.layout.image_field, null);
         linearLayoutBody.addView(newView, index);
@@ -482,6 +474,7 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void onAddText(View view){
+        setPage(view);
         int index = deleteView(view);
         addTextField("label:", "", index);
         Toast.makeText(this, "Short Query Added", Toast.LENGTH_LONG).show();
@@ -492,6 +485,7 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void onAddHeading(View view){
+        setPage(view);
         int index = deleteView(view);
         addHeadingField("HEADING", index);
         Toast.makeText(this, "Heading Added", Toast.LENGTH_LONG).show();
@@ -502,6 +496,7 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void onAddParagraph(View view){
+        setPage(view);
         int index = deleteView(view);
         addParagraphField("Question?", "Answer", index);
         Toast.makeText(this, "Long Query Added", Toast.LENGTH_LONG).show();
@@ -512,6 +507,7 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void onAddCamera(View view){
+        setPage(view);
         int index = deleteView(view);
         addImageField(index);
         Toast.makeText(this, "Request Camera Added", Toast.LENGTH_LONG).show();
@@ -522,9 +518,20 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void onAddSpacer(View view){
+        setPage(view);
         int index = deleteView(view);
         addSpacer(index);
         Toast.makeText(this, "Space Added", Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * sets page supplied view is on
+     * @param view
+     */
+    public void setPage(View view){
+        //page is always the great grand parent
+        linearLayoutBody = (LinearLayout) view.getParent().getParent().getParent();
+        currentPage = (TemplatePage) linearLayoutBody.getTag();
     }
 
     /**
@@ -532,9 +539,13 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void editSlotVisibilityToggle(View view){
+        //get slot and panel
         LinearLayout slot = (LinearLayout) view.getParent();
         LinearLayout editPanel = (LinearLayout) slot.getChildAt(1);
         FloatingActionButton fab = (FloatingActionButton) view;
+        //focus on the page
+        linearLayoutBody = (LinearLayout) slot.getParent();
+        //toggle visibility
         if (editPanel.getVisibility() == View.VISIBLE){
             editPanel.setVisibility(View.INVISIBLE);
         } else if (editPanel.getVisibility() == View.INVISIBLE){
