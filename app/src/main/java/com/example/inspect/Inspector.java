@@ -518,8 +518,11 @@ public class Inspector extends AppCompatActivity{
      * @param view
      */
     public void onAddSpacer(View view){
-        setPage(view);
-        int index = deleteView(view);
+        linearLayoutBody = (LinearLayout) view.getParent().getParent();
+        currentPage = (TemplatePage) linearLayoutBody.getTag();
+        View slot = (View) view.getParent();
+        int index = linearLayoutBody.indexOfChild(slot);
+        linearLayoutBody.removeViewAt(index);
         addSpacer(index);
         Toast.makeText(this, "Space Added", Toast.LENGTH_LONG).show();
     }
