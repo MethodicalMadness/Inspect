@@ -11,15 +11,15 @@ import androidx.databinding.ObservableField;
  */
 public class ElementImageField extends TemplateElement {
 
-    //TODO: Fix databinding.
     private final ObservableField<String> imageUriString = new ObservableField<>();
     private final ObservableField<Drawable> image = new ObservableField<>();
 
     /**
      * Constructor.
      */
-    public ElementImageField() {
+    public ElementImageField(String uriString) {
         setType("5");
+        setImageUriString(uriString);
     }
 
     /**
@@ -40,7 +40,6 @@ public class ElementImageField extends TemplateElement {
         if (!this.imageUriString.equals(imageUriString)){
             this.imageUriString.set(imageUriString);
             //notifyPropertyChanged(BR.imageUriString);
-            //todo: convert URI into bitmap image, then drawable. setImage(drawable).
         }
     }
 
@@ -64,10 +63,9 @@ public class ElementImageField extends TemplateElement {
         }
     }
 
-    //TODO: include Uri string in deconstruction
     @Override
     public String deconstructElement() {
-        String blueprintFragment = getType() + "," + "imageString";
+        String blueprintFragment = getType() + "," + getImageUriString();
         return blueprintFragment;
     }
 }

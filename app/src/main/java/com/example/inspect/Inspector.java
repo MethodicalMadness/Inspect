@@ -36,7 +36,7 @@ public class Inspector extends AppCompatActivity{
     private String filename;
     private boolean isInspecting = false;
     private ImageButton imageButton;
-    private String imageUriString;
+    private int cameraID = 0;
     private LinearLayout linearLayoutPdf;
     private LinearLayout linearLayoutBody;
     private ArrayList<View> pageViews = new ArrayList<>();
@@ -52,11 +52,6 @@ public class Inspector extends AppCompatActivity{
         setContentView(R.layout.inspection_loaded);
         linearLayoutPdf = findViewById(R.id.linearLayoutPdf);
         Intent intent = this.getIntent();
-        //get image from intent
-        if (intent.hasExtra("imageUriString")) {
-            imageUriString = intent.getExtras().getString("imageUriString");
-            LogManager.reportStatus(context, "INSPECTOR", "imageUriStringRetrieved");
-        }
         //get filename from intent
         if (intent.hasExtra("filename")) {
             filename = intent.getExtras().getString("filename");
@@ -72,6 +67,26 @@ public class Inspector extends AppCompatActivity{
         //if no page exists if no page exists
         }else{
             addPage();
+        }
+        //get image from intent
+        if (intent.hasExtra("imageUriString")) {
+            String imageUriString = intent.getExtras().getString("imageUriString");
+            LogManager.reportStatus(context, "INSPECTOR", "imageUriStringRetrieved");
+            ViewGroup vg = this.findViewById(R.id.linearLayoutPdf);
+            String tag = intent.getExtras().getString("cameraID");
+            LogManager.reportStatus(context, "INSPECTOR", "tag = " + tag);
+            ArrayList<View> views = getViewsByTag(vg, tag);
+            for (View v : views) {
+                linearLayoutBody = (LinearLayout) v.getParent();
+                currentPage = (TemplatePage) linearLayoutBody.getTag();
+                int index = linearLayoutBody.indexOfChild(v);
+                linearLayoutBody.removeViewAt(index);
+                addImageField(index, imageUriString);
+                blueprint = currentTemplate.createBlueprint();
+                intent.putExtra("blueprint", blueprint);
+            }
+
+
         }
         //get mode from intent
         if(intent.hasExtra("isInspecting")){
@@ -261,12 +276,12 @@ public class Inspector extends AppCompatActivity{
     /**
      * Adds the field to the TemplatePage, binds the data to a view, then adds view to existing hierarchy.
      */
-    public void addImageField(int index) {
+    public void addImageField(int index, String uriString) {
         Context context = App.getContext();
         //inflater needed to "inflate" layouts
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //instantiate our data object.
-        ElementImageField elementImageField = new ElementImageField();
+        ElementImageField elementImageField = new ElementImageField(uriString);
         //insert element data object in slot on page
         if (isLoading){
             currentPage.addElement(elementImageField);
@@ -276,12 +291,17 @@ public class Inspector extends AppCompatActivity{
         //get new view (our xml fragment -the text field) and add it to current view
         View newView = inflater.inflate(R.layout.image_field, null);
         linearLayoutBody.addView(newView, index);
+        //set tag
+        String tag = ("camera " + cameraID);
+        newView.setTag(tag);
+        LogManager.reportStatus(context, "INSPECTOR", "cameraID = " + newView.getTag().toString());
+        cameraID = cameraID + 1; //for next camera
         //set listener
-        imageButton = (ImageButton)findViewById(R.id.camera_button);
+        imageButton = newView.findViewById(R.id.camera_button);
         //set image if we have one defined
-        if (imageUriString != null){
-            Uri uri = Uri.parse(imageUriString);
-            LogManager.reportStatus(context, "INSPECTOR", "parsingImageUri");
+        if (uriString != ""){
+            Uri uri = Uri.parse(uriString);
+            LogManager.reportStatus(context, "INSPECTOR", "parsingImageUri = " + uriString);
             try{
                 InputStream inputStream = this.getContentResolver().openInputStream(uri);
                 BitmapFactory.Options options = new BitmapFactory.Options();
@@ -306,10 +326,15 @@ public class Inspector extends AppCompatActivity{
      */
     public void openCamera(View view){
         if (isInspecting) {
+            Context context = App.getContext();
             Intent intent = new Intent(Inspector.this, PhotoManager.class);
             intent.putExtra("blueprint", blueprint);
             intent.putExtra("isInspecting", isInspecting);
             intent.putExtra("filename", filename);
+            View parent = (View) view.getParent();
+            String tag = parent.getTag().toString();
+            intent.putExtra("cameraID", tag);
+            LogManager.reportStatus(context, "INSPECTOR", "parent tag = " + tag);
             startActivity(intent);
         }
     }
@@ -428,7 +453,11 @@ public class Inspector extends AppCompatActivity{
                 //add photo
                 else if (Integer.valueOf(element[0]) == 5) {
                     LogManager.reportStatus(context, "INSPECTOR", "addingImageField");
-                    addImageField(index);
+                    if (element.length == 2 ) {
+                        addImageField(index, element[1]);
+                    } else{
+                        addImageField(index, "");
+                    }
                     index = index + 1;
                 }
                 //shouldn't get here ever
@@ -509,7 +538,7 @@ public class Inspector extends AppCompatActivity{
     public void onAddCamera(View view){
         setPage(view);
         int index = deleteView(view);
-        addImageField(index);
+        addImageField(index, "");
         Toast.makeText(this, "Request Camera Added", Toast.LENGTH_LONG).show();
     }
 

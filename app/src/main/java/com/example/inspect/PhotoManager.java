@@ -1,5 +1,6 @@
 package com.example.inspect;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -60,7 +61,6 @@ public class PhotoManager extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         Context context = App.getContext();
-        //data.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK){
             imageUri = data.getData();
             imageView.setImageURI(imageUri);
@@ -94,6 +94,7 @@ public class PhotoManager extends AppCompatActivity {
      */
     private void openGallery(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        gallery.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
         startActivityForResult(gallery, PICK_IMAGE);
         Context context = App.getContext();
         LogManager.reportStatus(context, "PHOTOMANAGER", "getPhotoFromGallery");
@@ -211,7 +212,9 @@ public class PhotoManager extends AppCompatActivity {
         String blueprint = intent.getExtras().getString("blueprint");
         boolean isInspecting = intent.getExtras().getBoolean("isInspecting");
         String filename = intent.getExtras().getString("filename");
+        String cameraID = intent.getExtras().getString("cameraID");
         newIntent.putExtra("blueprint", blueprint);
+        newIntent.putExtra("cameraID", cameraID);
         if (imageUri != null){
             newIntent.putExtra("imageUriString", imageUri.toString());
             newIntent.putExtra("isInspecting", isInspecting);
