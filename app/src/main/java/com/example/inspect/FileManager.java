@@ -97,7 +97,14 @@ public class FileManager extends AppCompatActivity {
      * @param view
      */
     public void loadTemplateToInspect(View view) {
+        Intent intent = new Intent(this, FileManager.class);
+        this.isInspecting = true;
+        intent.putExtra("isInspecting", true);
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
 
+        String environment;
+        String path = "/Documents";
 
         //Implementing storage-chooser by codekidX
         // https://android-arsenal.com/details/1/5336
@@ -108,13 +115,14 @@ public class FileManager extends AppCompatActivity {
                 //Below forces the app to keep the same path (currently what we have with SAF)
                 //.shouldResumeSession(true)
                 .withFragmentManager(getFragmentManager())
-                .withMemoryBar(true)
-                .setType(StorageChooser.FILE_PICKER)
+                //.withMemoryBar(true)
+                .setType(StorageChooser.DIRECTORY_CHOOSER)
                 .allowCustomPath(true)
                 //PredefinedPath is not working correctly - Checked documentation and unable to find solution
-                .withPredefinedPath("/storage/emulated/0/Android/data/com.example.inspect/files/Documents/")
+                .withPredefinedPath(path)
                 /* Attempted variations of the path and could not get it to work as intended
                 * /storage/emulated/0/Android/data/com.example.inspect/files/Documents/
+                * App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).toString(
                 * */
                 .disableMultiSelect()
                 .build();
@@ -138,13 +146,8 @@ public class FileManager extends AppCompatActivity {
 
 
 /*      //ORIGINAL SAF IMPLEMENTATION
-        Intent intent = new Intent(this, FileManager.class);
-        this.isInspecting = true;
-        intent.putExtra("isInspecting", true);
         Bundle bundle = intent.getExtras();
-        Context context = App.getContext();
         Activity activity = this;
-        LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
         StorageAccess.performFileSearch(activity, bundle, READ_REQUEST_CODE);
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
 
