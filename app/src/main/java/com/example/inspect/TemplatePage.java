@@ -66,4 +66,14 @@ public class TemplatePage {
     public void removeElement(int index){
         elements.remove(index);
     }
+
+    /**
+     * Adds element at index
+     * @param index
+     * @param element
+     */
+    public void insertElement(int index, TemplateElement element){
+        removeElement(index);
+        elements.add(index,element);
+    }
 }

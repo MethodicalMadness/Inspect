@@ -1,10 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:orientation="horizontal">
 
-    <Space
-        android:id="@+id/spacerField"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:onClick="editSlotVisibilityToggle"
+        android:tag="editor"
+        app:fabSize="mini"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
+
+    <LinearLayout
+        android:id="@+id/edit_panel"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center_vertical"
+        android:visibility="invisible">
+
+        <Button
+            android:id="@+id/add_heading_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="1"
+            android:background="#555"
+            android:onClick="onAddHeading"
+            android:text="Heading"
+            android:textColor="#FFF" />
+
+        <Button
+            android:id="@+id/add_text_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="1"
+            android:background="#555"
+            android:onClick="onAddText"
+            android:text="Short Q"
+            android:textColor="#FFF" />
+
+        <Button
+            android:id="@+id/add_para_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="1"
+            android:background="#555"
+            android:onClick="onAddParagraph"
+            android:text="Long Q"
+            android:textColor="#FFF" />
+
+        <Button
+            android:id="@+id/add_camera_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="1"
+            android:background="#555"
+            android:onClick="onAddCamera"
+            android:text="Camera"
+            android:textColor="#FFF" />
+
+    </LinearLayout>
 </LinearLayout>

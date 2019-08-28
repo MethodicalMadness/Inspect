@@ -38,7 +38,7 @@ public class ElementHeadingField extends TemplateElement {
     public void setLabel(String label) {
         if (!this.label.equals(label)){
             this.label.set(label);
-            notifyPropertyChanged(BR.label);
+            //notifyPropertyChanged(BR.label);
         }
     }
 

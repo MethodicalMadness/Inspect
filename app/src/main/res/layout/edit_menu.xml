@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:background="#555"
         android:onClick="onAddPage"
-        android:text="Add Page"
+        android:text="Page"
         android:textColor="#FFF" />
 
     <Button
@@ -28,7 +28,7 @@
         android:layout_weight="1"
         android:background="#555"
         android:onClick="onAddHeading"
-        android:text="Add Heading"
+        android:text="Heading"
         android:textColor="#FFF" />
 
     <Button
@@ -42,7 +42,7 @@
         android:layout_weight="1"
         android:background="#555"
         android:onClick="onAddText"
-        android:text="Add Short Q"
+        android:text="Short Q"
         android:textColor="#FFF" />
 
     <Button
@@ -56,21 +56,7 @@
         android:layout_weight="1"
         android:background="#555"
         android:onClick="onAddParagraph"
-        android:text="Add Long Q"
-        android:textColor="#FFF" />
-
-    <Button
-        android:id="@+id/add_space_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_weight="1"
-        android:background="#555"
-        android:onClick="onAddSpacer"
-        android:text="Add Space"
+        android:text="Long Q"
         android:textColor="#FFF" />
 
     <Button
@@ -84,7 +70,7 @@
         android:layout_weight="1"
         android:background="#555"
         android:onClick="onAddCamera"
-        android:text="Add Camera"
+        android:text="Camera"
         android:textColor="#FFF" />
 
 </LinearLayout>

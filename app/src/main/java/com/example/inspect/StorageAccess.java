@@ -44,8 +44,8 @@ public class StorageAccess extends DocumentsProvider {
         // Filter to show all files. Will filter when we have the MIME type for what files we will be using
         // Will become intent.setType("MIMEDATATYPE/*")
         if(requestCode == 0){
-            //Fiddling with this code and trying to figure how to make it specific extensions so we can seperate saved state, blueprint state, and pdf state
-            intent.setType("text/*");
+            //Fiddling with this code and trying to figure how to make it specific extensions so we can separate saved state, blueprint state, and pdf state
+            intent.setType("*/*");
             //intent.setType("text/plain");
         } else if(requestCode == 2) {
             //requestCode 2 is the share activity - MIME type works fine and no issue unless we want to share blueprints as well
@@ -58,7 +58,8 @@ public class StorageAccess extends DocumentsProvider {
         LogManager.reportStatus(context, "STORAGEACCESS", "performFileSearch");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.getDataDirectory());
+            Uri uri = Uri.parse(Environment.getExternalStorageDirectory() + "/Documents/");
+            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri);
         }
 
         startActivityForResult(activity, intent, requestCode, bundle);
