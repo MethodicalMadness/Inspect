@@ -9,12 +9,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.obsez.android.lib.filechooser.ChooserDialog;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -95,10 +99,38 @@ public class FileManager extends AppCompatActivity {
         intent.putExtra("isInspecting", true);
         Bundle bundle = intent.getExtras();
         Context context = App.getContext();
-        Activity activity = this;
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
+
+
+        // Implementing android-file-chooser by Hedzr
+        // https://libraries.io/github/hedzr/android-file-chooser
+        String startingDir = "/storage/emulated/0/Android/data/com.example.inspect/files/Documents/";
+        new ChooserDialog().with(this)
+                //.withFilter(true, false)
+                .withStartFile(startingDir)
+                .withChosenListener(new ChooserDialog.Result() {
+                    @Override
+                    public void onChoosePath(String path, File pathFile) {
+                        //Toast.makeText(this, "FOLDER: " + path, Toast.LENGTH_SHORT).show();
+                        Log.e("SELECTED_PATH", path);
+                        System.out.println(path);
+                        uri = Uri.fromFile(new File (path));
+                        Context context = App.getContext();
+                        LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
+                        LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult file path is: " + pathFile);
+                        loadSavedState();
+                    }
+                })
+                .build()
+                .show();
+
+
+        /* Original SAF Implementation
+        Activity activity = this;
         StorageAccess.performFileSearch(activity, bundle, READ_REQUEST_CODE);
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
+
+         */
     }
 
     /**

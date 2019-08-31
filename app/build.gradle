@@ -46,4 +46,6 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.0.0'
     implementation 'com.google.code.gson:gson:2.8.2'
     androidTestImplementation 'androidx.test:rules:1.3.0-alpha01'
+
+    implementation 'com.obsez.android.lib.filechooser:filechooser:1.1.4'
 }
