@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.URLConnection;
+import java.util.Objects;
 import java.util.Scanner;
 
 
@@ -35,6 +36,7 @@ public class FileManager extends AppCompatActivity {
     private static final int READ_REQUEST_CODE = 1;
     private static final int SHARE_REQUEST_CODE = 2;
     private static final int DELETE_REQUEST_CODE = 3;
+    private static String fileSaveLocation = Objects.requireNonNull(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).toString();
     Uri uri;
 
     @Override
@@ -63,14 +65,7 @@ public class FileManager extends AppCompatActivity {
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "createTemplate");
         try{
-            //Testing to check the path this gives - Seems correct
-            //System.out.println(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS + "/Inspect/" + filename));
-
-            //Current working line for saving the file
-            FileOutputStream fOut = new FileOutputStream(new File(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + filename), false);
-
-            //This is supposed to get the public documents folder location as printed from above on L63
-            //FileOutputStream fOut = new FileOutputStream(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/Inspect/" + filename), false);
+            FileOutputStream fOut = new FileOutputStream(new File(fileSaveLocation + "/" + filename), false);
             
             OutputStreamWriter osw = new OutputStreamWriter(fOut);
             osw.write(blueprint);
@@ -97,27 +92,22 @@ public class FileManager extends AppCompatActivity {
         Intent intent = new Intent(this, FileManager.class);
         this.isInspecting = true;
         intent.putExtra("isInspecting", true);
-        Bundle bundle = intent.getExtras();
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
 
 
         // Implementing android-file-chooser by Hedzr
         // https://libraries.io/github/hedzr/android-file-chooser
-        String startingDir = "/storage/emulated/0/Android/data/com.example.inspect/files/Documents/";
+        String startingDir = fileSaveLocation;
         new ChooserDialog().with(this)
-                //.withFilter(true, false)
+                .withFilter(false, false, "bp", "in")
                 .withStartFile(startingDir)
                 .withChosenListener(new ChooserDialog.Result() {
                     @Override
                     public void onChoosePath(String path, File pathFile) {
-                        //Toast.makeText(this, "FOLDER: " + path, Toast.LENGTH_SHORT).show();
-                        Log.e("SELECTED_PATH", path);
-                        System.out.println(path);
                         uri = Uri.fromFile(new File (path));
                         Context context = App.getContext();
                         LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
-                        LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult file path is: " + pathFile);
                         loadSavedState();
                     }
                 })
@@ -127,9 +117,9 @@ public class FileManager extends AppCompatActivity {
 
         /* Original SAF Implementation
         Activity activity = this;
+        Bundle bundle = intent.getExtras();
         StorageAccess.performFileSearch(activity, bundle, READ_REQUEST_CODE);
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
-
          */
     }
 
@@ -141,12 +131,32 @@ public class FileManager extends AppCompatActivity {
         Intent intent = new Intent(this, FileManager.class);
         this.isInspecting = false;
         intent.putExtra("isInspecting", false);
-        Bundle bundle = intent.getExtras();
         Context context = App.getContext();
-        Activity activity = this;
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint");
+
+
+        String startingDir = fileSaveLocation;
+        new ChooserDialog().with(this)
+                .withFilter(false, false, "bp", "in")
+                .withStartFile(startingDir)
+                .withChosenListener(new ChooserDialog.Result() {
+                    @Override
+                    public void onChoosePath(String path, File pathFile) {
+                        uri = Uri.fromFile(new File (path));
+                        Context context = App.getContext();
+                        LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
+                        loadSavedState();
+                    }
+                })
+                .build()
+                .show();
+
+        /* Original SAF Implementation
+        Activity activity = this;
+        Bundle bundle = intent.getExtras();
         StorageAccess.performFileSearch(activity, bundle, EDIT_REQUEST_CODE);
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
+         */
     }
 
     /**
@@ -170,29 +180,7 @@ public class FileManager extends AppCompatActivity {
         LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult closed SAF view");
 
         // This grab the URI value of the file selected in StorageAccess for use depending on which request was made
-        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
-            if (resultData != null) {
-                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData not null");
-                //uri is to be used to access files within other sections of the program ie. loading a specific template or sharing an output
-                uri = resultData.getData();
-                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
-                loadSavedState();
-            } else {
-                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData is null. Operation cancelled");
-            }
-        } else if (requestCode == EDIT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
-            if (resultData != null) {
-                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData not null");
-                //uri is to be used to access files within other sections of the program ie. loading a specific template or sharing an output
-                uri = resultData.getData();
-                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
-                loadSavedState();
-            } else {
-                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData is null. Operation cancelled");
-            }
-        } else if (requestCode == SHARE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == SHARE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
             if (resultData != null) {
                 LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData not null");
