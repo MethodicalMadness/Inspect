@@ -164,13 +164,35 @@ public class FileManager extends AppCompatActivity {
      * @param view
      */
     public void onShare(View view){
+        Context context = App.getContext();
+        LogManager.reportStatus(context, "FILEMANAGER", "retrieveFileToShare");
+
+        String startingDir = "storage/emulated/0/Download";
+        new ChooserDialog().with(this)
+                .withFilter(false, false, "pdf")
+                .withStartFile(startingDir)
+                .withChosenListener(new ChooserDialog.Result() {
+                    @Override
+                    public void onChoosePath(String path, File pathFile) {
+                        uri = Uri.fromFile(new File (path));
+                        Context context = App.getContext();
+                        LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
+                        shareFile();
+                    }
+                })
+                .build()
+                .show();
+
+/*
+
         Intent intent = new Intent(this, FileManager.class);
         Bundle bundle = intent.getExtras();
-        Context context = App.getContext();
         Activity activity = this;
-        LogManager.reportStatus(context, "FILEMANAGER", "retrieveFileToShare");
         StorageAccess.performFileSearch(activity, bundle, SHARE_REQUEST_CODE);
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveFileToShare post StorageAccess");
+
+
+ */
     }
 
 
