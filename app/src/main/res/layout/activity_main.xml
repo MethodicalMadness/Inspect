@@ -5,6 +5,7 @@
     android:id="@+id/templateLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#3F51B5"
     android:orientation="vertical">
 
     <ImageView
@@ -12,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/clipboardn1" />
+        app:srcCompat="@drawable/clipboardnb1" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

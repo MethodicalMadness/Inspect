@@ -5,16 +5,8 @@
     android:id="@+id/ParentConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#3F51B5"
     android:orientation="vertical">
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/clipboardn2"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
 
     <Button
         android:id="@+id/btnLoadTemplateInspect"
@@ -72,15 +64,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLoadTemplateEdit" />
 
-        <Button
-            android:id="@+id/btnFileManagerBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="Back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <Button
+        android:id="@+id/btnFileManagerBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/clipboardnb2"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <LinearLayout
         android:id="@+id/filename_layout"
@@ -95,18 +96,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnNewTemplate">
 
-        <EditText
-            android:id="@+id/label"
-            android:layout_width="73dp"
+        <Button
+            android:id="@+id/accept_filename"
+            android:layout_width="32dp"
             android:layout_height="50dp"
-            android:layout_weight=".5"
-            android:background="#FFFFFF"
-            android:ems="10"
-            android:focusable="false"
+            android:layout_weight="1"
+            android:background="@android:drawable/ic_input_add"
             android:gravity="center_vertical"
-            android:inputType="text"
-            android:singleLine="true"
-            android:text=" Filename:" />
+            android:onClick="onCreateNewTemplate"
+            android:text="GO!"
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/filename_text"
@@ -122,20 +121,22 @@
             android:singleLine="true"
             android:text="NewTemplate" />
 
+        <EditText
+            android:id="@+id/label"
+            android:layout_width="73dp"
+            android:layout_height="50dp"
+            android:layout_weight=".5"
+            android:background="#FFFFFF"
+            android:ems="10"
+            android:focusable="false"
+            android:gravity="center_vertical"
+            android:inputType="text"
+            android:singleLine="true"
+            android:text=" Filename:" />
+
         <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".5" />
-
-        <Button
-            android:id="@+id/accept_filename"
-            android:layout_width="32dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@android:drawable/ic_input_add"
-            android:gravity="center_vertical"
-            android:onClick="onCreateNewTemplate"
-            android:text="GO!"
-            android:textAlignment="center" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
