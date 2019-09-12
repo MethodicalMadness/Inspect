@@ -1,6 +1,5 @@
 package com.example.inspect;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.OpenableColumns;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,10 +30,6 @@ import java.util.Scanner;
 
 public class FileManager extends AppCompatActivity {
     private boolean isInspecting = false;
-    private static final int EDIT_REQUEST_CODE = 0;
-    private static final int READ_REQUEST_CODE = 1;
-    private static final int SHARE_REQUEST_CODE = 2;
-    private static final int DELETE_REQUEST_CODE = 3;
     private static String fileSaveLocation = Objects.requireNonNull(App.getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).toString();
     Uri uri;
 
@@ -113,14 +107,6 @@ public class FileManager extends AppCompatActivity {
                 })
                 .build()
                 .show();
-
-
-        /* Original SAF Implementation
-        Activity activity = this;
-        Bundle bundle = intent.getExtras();
-        StorageAccess.performFileSearch(activity, bundle, READ_REQUEST_CODE);
-        LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
-         */
     }
 
     /**
@@ -150,13 +136,6 @@ public class FileManager extends AppCompatActivity {
                 })
                 .build()
                 .show();
-
-        /* Original SAF Implementation
-        Activity activity = this;
-        Bundle bundle = intent.getExtras();
-        StorageAccess.performFileSearch(activity, bundle, EDIT_REQUEST_CODE);
-        LogManager.reportStatus(context, "FILEMANAGER", "retrieveBlueprint post StorageAccess");
-         */
     }
 
     /**
@@ -166,11 +145,11 @@ public class FileManager extends AppCompatActivity {
     public void onShare(View view){
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveFileToShare");
-
         String startingDir = "storage/emulated/0/Download";
+        System.out.println(startingDir);
         new ChooserDialog().with(this)
-                .withFilter(false, false, "pdf")
-                .withStartFile(startingDir)
+                //.withFilter(false, false, "pdf")
+                //.withStartFile(startingDir)
                 .withChosenListener(new ChooserDialog.Result() {
                     @Override
                     public void onChoosePath(String path, File pathFile) {
@@ -182,47 +161,6 @@ public class FileManager extends AppCompatActivity {
                 })
                 .build()
                 .show();
-
-/*
-
-        Intent intent = new Intent(this, FileManager.class);
-        Bundle bundle = intent.getExtras();
-        Activity activity = this;
-        StorageAccess.performFileSearch(activity, bundle, SHARE_REQUEST_CODE);
-        LogManager.reportStatus(context, "FILEMANAGER", "retrieveFileToShare post StorageAccess");
-
-
- */
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-        Context context = App.getContext();
-        LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult closed SAF view");
-
-        // This grab the URI value of the file selected in StorageAccess for use depending on which request was made
-        if (requestCode == SHARE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult RESULT_OK true");
-            if (resultData != null) {
-                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData not null");
-                uri = resultData.getData();
-                LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
-                shareFile();
-            }
-        }else if (requestCode == DELETE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            //Delete file
-            File file = new File(uri.getPath());
-            if (file.exists()) {
-                if (file.delete()) {
-                    LogManager.reportStatus(context, "FILEMANAGER", "deleteObject File has been deleted");
-                } else {
-                    LogManager.reportStatus(context, "FILEMANAGER", "deleteObject File was not deleted");
-                }
-            }
-        } else{
-            LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult cancelled - resultCode is not RESULT_OK or requestCode does not equal the READ_REQUEST_CODE");
-        }
     }
 
     /**
@@ -324,21 +262,6 @@ public class FileManager extends AppCompatActivity {
             result = filename.substring(dotIndex);
         }
         return result;
-    }
-
-    /**
-     * Delete a file system object
-     */
-    public void deleteObject(){
-        //Get information for the SAF method call
-        Intent intent = new Intent(this, FileManager.class);
-        Bundle bundle = intent.getExtras();
-        Context context = App.getContext();
-        Activity activity = this;
-        LogManager.reportStatus(context, "FILEMANAGER", "deleteObject");
-        //Call the SAF - Uri will be returned to global var uri
-        StorageAccess.performFileSearch(activity, bundle, DELETE_REQUEST_CODE);
-        LogManager.reportStatus(context, "FILEMANAGER", "deleteObject post StorageAccess");
     }
 
     /**
