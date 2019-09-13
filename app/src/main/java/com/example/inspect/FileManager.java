@@ -145,7 +145,7 @@ public class FileManager extends AppCompatActivity {
     public void onShare(View view){
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveFileToShare");
-        String startingDir = fileSaveLocation;
+        String startingDir = "storage/emulated/0/Download";
         System.out.println(startingDir);
         new ChooserDialog().with(this)
                 .withFilter(false, false, "pdf")
