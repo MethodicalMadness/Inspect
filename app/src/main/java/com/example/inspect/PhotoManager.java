@@ -55,6 +55,7 @@ public class PhotoManager extends AppCompatActivity {
             }
         });
 
+        dispatchTakePictureIntent();
     }
 
     @Override
@@ -87,6 +88,7 @@ public class PhotoManager extends AppCompatActivity {
         else if (requestCode != RESULT_OK){
             LogManager.reportStatus(context, "PHOTOMANAGER", "couldNotGetPhoto");
         }
+        onAccept(null  );
     }
 
     /**
