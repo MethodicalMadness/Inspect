@@ -1,6 +1,5 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;

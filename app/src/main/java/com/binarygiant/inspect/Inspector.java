@@ -1,4 +1,4 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
 import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,9 +18,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.inspect.databinding.HeadingFieldBinding;
-import com.example.inspect.databinding.ParagraphFieldBinding;
-import com.example.inspect.databinding.TextFieldBinding;
+import com.binarygiant.inspect.databinding.HeadingFieldBinding;
+import com.binarygiant.inspect.databinding.ParagraphFieldBinding;
+import com.binarygiant.inspect.databinding.TextFieldBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.FileNotFoundException;
 import java.io.InputStream;

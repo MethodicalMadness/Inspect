@@ -1,4 +1,4 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
 import androidx.databinding.Bindable;
 import androidx.databinding.ObservableField;
