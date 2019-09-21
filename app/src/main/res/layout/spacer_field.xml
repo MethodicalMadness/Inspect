@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="52dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:tag="space">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -91,4 +92,5 @@
             android:textColor="#FFF" />
 
     </LinearLayout>
+
 </LinearLayout>

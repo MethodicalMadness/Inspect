@@ -141,7 +141,7 @@ public class PhotoManager extends AppCompatActivity {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.inspect.fileprovider",
+                        "com.binarygiant.inspect.fileprovider",
                         photoFile);
                 LogManager.reportStatus(context, "PHOTOMANAGER", "photoUriRetrieved: " + photoURI);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
