@@ -148,7 +148,7 @@ public class FileManager extends AppCompatActivity {
         String startingDir = "storage/emulated/0/Download";
         System.out.println(startingDir);
         new ChooserDialog().with(this)
-                .withFilter(false, false, "pdf")
+                .withFilter(false, false, "pdf", "bp")
                 .withStartFile(startingDir)
                 .withChosenListener(new ChooserDialog.Result() {
                     @Override
