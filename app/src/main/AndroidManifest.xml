@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.inspect">
+    package="com.binarygiant.inspect">
 
     <application
         android:allowBackup="true"
@@ -10,25 +10,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
-        android:name="com.example.inspect.App"
+        android:name="com.binarygiant.inspect.App"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".MainActivity">
+        <activity android:name="com.binarygiant.inspect.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".Inspector"></activity>
+        <activity android:name="com.binarygiant.inspect.Inspector"></activity>
 
-        <activity android:name=".PhotoManager"></activity>
+        <activity android:name="com.binarygiant.inspect.PhotoManager"></activity>
 
-        <activity android:name=".FileManager"></activity>
+        <activity android:name="com.binarygiant.inspect.FileManager"></activity>
 
         <provider
-            android:name="com.example.inspect.StorageAccess"
-            android:authorities="com.example.Inspect"
+            android:name="com.binarygiant.inspect.StorageAccess"
+            android:authorities="com.binarygiant.Inspect"
             android:exported="true"
             android:grantUriPermissions="true"
             android:permission="android.permission.MANAGE_DOCUMENTS">
@@ -42,7 +42,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.inspect.fileprovider"
+            android:authorities="com.binarygiant.inspect.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

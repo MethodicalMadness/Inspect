@@ -1,4 +1,4 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,7 +14,6 @@ import android.provider.DocumentsContract;
 import android.provider.DocumentsProvider;
 import androidx.annotation.Nullable;
 import java.io.FileNotFoundException;
-import java.net.URI;
 
 import static android.provider.DocumentsContract.Root.COLUMN_ROOT_ID;
 import static androidx.core.app.ActivityCompat.startActivityForResult;

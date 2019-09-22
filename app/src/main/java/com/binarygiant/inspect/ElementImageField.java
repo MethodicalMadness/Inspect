@@ -1,4 +1,4 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
 import android.graphics.drawable.Drawable;
 import androidx.databinding.Bindable;

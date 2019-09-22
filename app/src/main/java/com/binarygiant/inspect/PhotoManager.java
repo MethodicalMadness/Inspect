@@ -1,6 +1,5 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -55,6 +54,7 @@ public class PhotoManager extends AppCompatActivity {
             }
         });
 
+        dispatchTakePictureIntent();
     }
 
     @Override
@@ -87,6 +87,7 @@ public class PhotoManager extends AppCompatActivity {
         else if (requestCode != RESULT_OK){
             LogManager.reportStatus(context, "PHOTOMANAGER", "couldNotGetPhoto");
         }
+        onAccept(null  );
     }
 
     /**
@@ -140,7 +141,7 @@ public class PhotoManager extends AppCompatActivity {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.inspect.fileprovider",
+                        "com.binarygiant.inspect.fileprovider",
                         photoFile);
                 LogManager.reportStatus(context, "PHOTOMANAGER", "photoUriRetrieved: " + photoURI);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);

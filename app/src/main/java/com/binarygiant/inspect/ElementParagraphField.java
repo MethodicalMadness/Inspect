@@ -1,14 +1,14 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
 import androidx.databinding.Bindable;
 import androidx.databinding.ObservableField;
 
 /**
- * Text field data object. Data binding ensures that changes in the corresponding view are
+ * Paragraph field data object. Data binding ensures that changes in the corresponding view are
  * replicated here so that when the elements are deconstructed the users input makes it into the
  * resulting blueprint.
  */
-public class ElementTextField extends TemplateElement{
+public class ElementParagraphField extends TemplateElement {
 
     private final ObservableField<String> label = new ObservableField<>();
     private final ObservableField<String> fill = new ObservableField<>();
@@ -18,10 +18,10 @@ public class ElementTextField extends TemplateElement{
      * @param label
      * @param fill
      */
-    public ElementTextField(String label, String fill) {
+    public ElementParagraphField(String label, String fill) {
         this.label.set(label);
         this.fill.set(fill);
-        setType("1");
+        setType("2");
     }
 
     /**
@@ -41,7 +41,7 @@ public class ElementTextField extends TemplateElement{
     public void setLabel(String label) {
         if (!this.label.equals(label)){
             this.label.set(label);
-            notifyPropertyChanged(BR.label);
+            //notifyPropertyChanged(BR.label);
         }
     }
 
@@ -62,7 +62,7 @@ public class ElementTextField extends TemplateElement{
     public void setFill(String fill) {
         if (!this.fill.equals(fill)) {
             this.fill.set(fill);
-            notifyPropertyChanged(BR.fill);
+            //notifyPropertyChanged(BR.fill);
         }
     }
 
@@ -71,4 +71,5 @@ public class ElementTextField extends TemplateElement{
         String blueprintFragment = getType() + "," + getLabel() + "," + getFill();
         return blueprintFragment;
     }
+
 }

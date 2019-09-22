@@ -1,4 +1,4 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
 import android.content.Context;
 import android.graphics.Bitmap;

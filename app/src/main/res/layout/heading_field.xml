@@ -5,7 +5,7 @@
     <data>
         <variable
             name="elementHeadingField"
-            type="com.example.inspect.ElementHeadingField" />
+            type="com.binarygiant.inspect.ElementHeadingField" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
