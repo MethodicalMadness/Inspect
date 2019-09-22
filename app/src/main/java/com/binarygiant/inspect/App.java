@@ -1,4 +1,4 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
 import android.app.Application;
 import android.content.Context;

@@ -1,8 +1,7 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
 import static org.junit.Assert.*;
-import org.junit.After;
-import org.junit.Before;
+
 import org.junit.Test;
 
 /**

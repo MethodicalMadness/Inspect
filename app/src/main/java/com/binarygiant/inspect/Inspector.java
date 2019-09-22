@@ -1,4 +1,4 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
 import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,14 +13,15 @@ import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.inspect.databinding.HeadingFieldBinding;
-import com.example.inspect.databinding.ParagraphFieldBinding;
-import com.example.inspect.databinding.TextFieldBinding;
+import com.binarygiant.inspect.databinding.HeadingFieldBinding;
+import com.binarygiant.inspect.databinding.ParagraphFieldBinding;
+import com.binarygiant.inspect.databinding.TextFieldBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -205,6 +206,26 @@ public class Inspector extends AppCompatActivity{
         linearLayoutBody.addView(newView, index);
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "onAddParagraphField");
+    }
+
+    /**
+     * Removes spaces to make space for larger elements
+     * @param weight
+     */
+    public void makeSpace(int weight){
+        // make some space
+        ViewGroup vg = this.findViewById(R.id.linearLayoutPdf);
+        ArrayList<View> views = getViewsByTag(vg, "space");
+        int j = weight - 1;
+        if (views.size() < weight){
+            j = views.size()-1;
+        }
+        for (int i = j; i >= 0; i--) {
+            View v = views.get(i);
+            LinearLayout parent = (LinearLayout) v.getParent();
+            int index = parent.indexOfChild(v);
+            parent.removeViewAt(index);
+        }
     }
 
     /**

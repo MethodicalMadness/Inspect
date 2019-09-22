@@ -1,4 +1,4 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
 /**
  * A simple space element. Only needed to keep track of formatting.

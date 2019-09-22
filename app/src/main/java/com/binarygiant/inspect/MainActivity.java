@@ -1,4 +1,4 @@
-package com.example.inspect;
+package com.binarygiant.inspect;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
