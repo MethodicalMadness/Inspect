@@ -156,7 +156,7 @@ public class FileManager extends AppCompatActivity {
                         uri = Uri.fromFile(new File (path));
                         Context context = App.getContext();
                         LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
-                        loadSavedState();
+                        shareFile();
                     }
                 })
                 .build()
