@@ -500,13 +500,15 @@ public class Inspector extends AppCompatActivity{
     }
 
     /**
-     * To go back to MainActivity.
+     * To go back to Filemanager.
      * @param view
      */
     public void onBack(View view){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "Back");
-        finish();
+        saveTemplate(filename);
+        Intent intent = new Intent(this, FileManager.class);
+        startActivity(intent);
     }
 
     /**
