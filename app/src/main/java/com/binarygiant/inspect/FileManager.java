@@ -322,6 +322,7 @@ public class FileManager extends AppCompatActivity {
         //try start the activity
         try{
             //create intent
+            //Intent intentShareFile = new Intent(Intent.ACTION_SEND);
             Intent intentShareFile = new Intent(Intent.ACTION_SEND);
             intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             //email requirements
@@ -329,6 +330,7 @@ public class FileManager extends AppCompatActivity {
             intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
             intentShareFile.putExtra(Intent.EXTRA_SUBJECT, "Inspect File Share: " + getFileName(uri));
             intentShareFile.putExtra(Intent.EXTRA_TEXT, "Inspect File Share: " + getFileName(uri));
+
             //start activity
             this.startActivity(Intent.createChooser(intentShareFile, getFileName(uri)));
         } catch (Throwable t){

@@ -326,7 +326,7 @@ public class Inspector extends AppCompatActivity{
             try{
                 InputStream inputStream = this.getContentResolver().openInputStream(uri);
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 1;
+                options.inSampleSize = 4;
                 Bitmap preview_bitmap = BitmapFactory.decodeStream(inputStream,null,options);
                 Drawable image = new BitmapDrawable(getResources(),preview_bitmap);
                 imageButton.setBackground(image);
