@@ -145,10 +145,12 @@ public class FileManager extends AppCompatActivity {
     public void onShare(View view){
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveFileToShare");
-        String startingDir = "storage/emulated/0/Download";
+        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        String startingDir = file.getAbsolutePath();
+        //String startingDir = "storage/emulated/0/Download";
         System.out.println(startingDir);
         new ChooserDialog().with(this)
-                .withFilter(false, false, "pdf", "bp")
+                //.withFilter(false, false, "bp", "pdf")
                 .withStartFile(startingDir)
                 .withChosenListener(new ChooserDialog.Result() {
                     @Override
