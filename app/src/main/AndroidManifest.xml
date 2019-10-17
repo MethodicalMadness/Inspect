@@ -11,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
         android:name="com.binarygiant.inspect.App"
+
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity android:name="com.binarygiant.inspect.MainActivity">
@@ -20,11 +21,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.binarygiant.inspect.Inspector"></activity>
+        <activity
+            android:name="com.binarygiant.inspect.Inspector"
+            android:exported="true" />
 
-        <activity android:name="com.binarygiant.inspect.PhotoManager"></activity>
+        <activity
+            android:name="com.binarygiant.inspect.PhotoManager"
+            android:exported="true" />
 
-        <activity android:name="com.binarygiant.inspect.FileManager"></activity>
+        <activity
+            android:name="com.binarygiant.inspect.FileManager"
+            android:exported="true" />
 
         <provider
             android:name="com.binarygiant.inspect.StorageAccess"

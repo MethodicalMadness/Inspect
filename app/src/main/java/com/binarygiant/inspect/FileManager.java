@@ -145,10 +145,12 @@ public class FileManager extends AppCompatActivity {
     public void onShare(View view){
         Context context = App.getContext();
         LogManager.reportStatus(context, "FILEMANAGER", "retrieveFileToShare");
-        String startingDir = "storage/emulated/0/Download";
+        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        String startingDir = file.getAbsolutePath();
+        //String startingDir = "storage/emulated/0/Download";
         System.out.println(startingDir);
         new ChooserDialog().with(this)
-                .withFilter(false, false, "pdf", "bp")
+                //.withFilter(false, false, "bp", "pdf")
                 .withStartFile(startingDir)
                 .withChosenListener(new ChooserDialog.Result() {
                     @Override
@@ -156,7 +158,7 @@ public class FileManager extends AppCompatActivity {
                         uri = Uri.fromFile(new File (path));
                         Context context = App.getContext();
                         LogManager.reportStatus(context, "FILEMANAGER", "onActivityResult resultData URI is: " + uri);
-                        loadSavedState();
+                        shareFile();
                     }
                 })
                 .build()
@@ -322,6 +324,7 @@ public class FileManager extends AppCompatActivity {
         //try start the activity
         try{
             //create intent
+            //Intent intentShareFile = new Intent(Intent.ACTION_SEND);
             Intent intentShareFile = new Intent(Intent.ACTION_SEND);
             intentShareFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             //email requirements
@@ -329,6 +332,7 @@ public class FileManager extends AppCompatActivity {
             intentShareFile.putExtra(Intent.EXTRA_STREAM, uri);
             intentShareFile.putExtra(Intent.EXTRA_SUBJECT, "Inspect File Share: " + getFileName(uri));
             intentShareFile.putExtra(Intent.EXTRA_TEXT, "Inspect File Share: " + getFileName(uri));
+
             //start activity
             this.startActivity(Intent.createChooser(intentShareFile, getFileName(uri)));
         } catch (Throwable t){

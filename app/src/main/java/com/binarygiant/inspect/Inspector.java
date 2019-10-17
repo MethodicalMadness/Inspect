@@ -326,7 +326,7 @@ public class Inspector extends AppCompatActivity{
             try{
                 InputStream inputStream = this.getContentResolver().openInputStream(uri);
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 1;
+                options.inSampleSize = 4;
                 Bitmap preview_bitmap = BitmapFactory.decodeStream(inputStream,null,options);
                 Drawable image = new BitmapDrawable(getResources(),preview_bitmap);
                 imageButton.setBackground(image);
@@ -500,13 +500,15 @@ public class Inspector extends AppCompatActivity{
     }
 
     /**
-     * To go back to MainActivity.
+     * To go back to Filemanager.
      * @param view
      */
     public void onBack(View view){
         Context context = App.getContext();
         LogManager.reportStatus(context, "INSPECTOR", "Back");
-        finish();
+        saveTemplate(filename);
+        Intent intent = new Intent(this, FileManager.class);
+        startActivity(intent);
     }
 
     /**
