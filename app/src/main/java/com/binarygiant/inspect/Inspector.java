@@ -348,6 +348,7 @@ public class Inspector extends AppCompatActivity{
     public void openCamera(View view){
         if (isInspecting) {
             Context context = App.getContext();
+            saveTemplate(filename);
             Intent intent = new Intent(Inspector.this, PhotoManager.class);
             intent.putExtra("blueprint", blueprint);
             intent.putExtra("isInspecting", isInspecting);
